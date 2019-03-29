@@ -1,7 +1,7 @@
 package aveek.com.management.application
 
 import android.app.Activity
-import android.support.multidex.MultiDexApplication
+import androidx.multidex.MultiDexApplication
 import aveek.com.management.di.AppInjector
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector

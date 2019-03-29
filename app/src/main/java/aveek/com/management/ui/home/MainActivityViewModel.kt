@@ -1,8 +1,8 @@
 package aveek.com.management.ui.home
 
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
-import android.databinding.ObservableField
+import androidx.databinding.ObservableField
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 
 class MainActivityViewModel : ViewModel() {
     val data = MutableLiveData<Boolean>()

@@ -2,7 +2,7 @@ package aveek.com.management.ui.home
 
 import dagger.Module
 import dagger.Provides
-import android.arch.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProviders
 
 
 @Module

@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">VM LiveData</string>
+    <string name="title_activity_base">BaseActivity</string>
+</resources>

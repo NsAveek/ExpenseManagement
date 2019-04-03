@@ -1,4 +1,4 @@
-package aveek.com.management.application
+package aveek.com.management
 
 import android.app.Activity
 import android.support.multidex.MultiDexApplication

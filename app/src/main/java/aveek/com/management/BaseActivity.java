@@ -1,4 +1,4 @@
-package aveek.com.management.activities;
+package aveek.com.management;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;

@@ -51,16 +51,15 @@
             android:id="@+id/incomeText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Expense"
             app:layout_constraintBottom_toBottomOf="@+id/incomeImage"
             app:layout_constraintEnd_toEndOf="@+id/incomeImage"
             app:layout_constraintStart_toStartOf="@+id/incomeImage"
             app:layout_constraintTop_toTopOf="@+id/incomeImage"
-            android:clickable="true"
-            android:onClick="@{() -> viewmodel.clickData()}"/>
+            tools:text="Income"
+            />
 
         <ImageView
-            android:id="@+id/expenseImage"
+            android:id="@+id/transactionHistoryImage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -75,18 +74,23 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0"
-            app:srcCompat="@drawable/ic_launcher_background" />
+            app:srcCompat="@drawable/ic_launcher_background"
+            android:clickable="true"
+            android:onClick="@{() -> viewmodel.clickData()}"
+            />
 
         <TextView
-            android:id="@+id/expenseText"
+            android:id="@+id/transactionHistoryText"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:text="Transaction History"
+
             android:gravity="center"
-            app:layout_constraintBottom_toBottomOf="@+id/expenseImage"
-            app:layout_constraintEnd_toEndOf="@+id/expenseImage"
-            app:layout_constraintStart_toStartOf="@+id/expenseImage"
-            app:layout_constraintTop_toTopOf="@+id/expenseImage" />
+            app:layout_constraintBottom_toBottomOf="@+id/transactionHistoryImage"
+            app:layout_constraintEnd_toEndOf="@+id/transactionHistoryImage"
+            app:layout_constraintStart_toStartOf="@+id/transactionHistoryImage"
+            app:layout_constraintTop_toTopOf="@+id/transactionHistoryImage"
+            tools:text="Transaction History"
+            />
 
         <ImageView
             android:id="@+id/categoryImage"
@@ -104,7 +108,11 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="1.0"
-            app:srcCompat="@drawable/ic_launcher_background" />
+            app:srcCompat="@drawable/ic_launcher_background"
+            android:clickable="true"
+            android:onClick="@{() -> viewmodel.clickCategory()}"
+
+            />
 
         <TextView
             android:id="@+id/categoryText"
@@ -114,10 +122,11 @@
             app:layout_constraintBottom_toBottomOf="@+id/categoryImage"
             app:layout_constraintEnd_toEndOf="@+id/categoryImage"
             app:layout_constraintStart_toStartOf="@+id/categoryImage"
-            app:layout_constraintTop_toTopOf="@+id/categoryImage" />
+            app:layout_constraintTop_toTopOf="@+id/categoryImage"
+            tools:text = "Category"/>
 
         <ImageView
-            android:id="@+id/transactionImage"
+            android:id="@+id/expenseImage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -132,17 +141,19 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="1.0"
-            app:srcCompat="@drawable/ic_launcher_background" />
+            app:srcCompat="@drawable/ic_launcher_background"
+            android:clickable="true"
+            android:onClick="@{() -> viewmodel.clickExpense()}"/>
 
         <TextView
-            android:id="@+id/transationText"
+            android:id="@+id/expenseText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="TextView"
-            app:layout_constraintBottom_toBottomOf="@+id/transactionImage"
-            app:layout_constraintEnd_toEndOf="@+id/transactionImage"
-            app:layout_constraintStart_toStartOf="@+id/transactionImage"
-            app:layout_constraintTop_toTopOf="@+id/transactionImage" />
+            app:layout_constraintBottom_toBottomOf="@+id/expenseImage"
+            app:layout_constraintEnd_toEndOf="@+id/expenseImage"
+            app:layout_constraintStart_toStartOf="@+id/expenseImage"
+            app:layout_constraintTop_toTopOf="@+id/expenseImage"
+            tools:text = "Expense"/>
 
     </android.support.constraint.ConstraintLayout>
 </layout>

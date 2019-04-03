@@ -2,7 +2,7 @@ package aveek.com.management.di
 
 import android.app.Application
 import android.content.Context
-import aveek.com.management.application.BaseApp
+import aveek.com.management.BaseApp
 import aveek.com.management.ui.home.MainActivity
 import aveek.com.management.ui.home.MainActivityModule
 import dagger.BindsInstance

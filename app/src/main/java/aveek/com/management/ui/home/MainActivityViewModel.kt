@@ -10,4 +10,10 @@ class MainActivityViewModel : ViewModel() {
     fun clickData(){
         data.value = false
     }
+    fun clickTransactionHistory(){
+
+    }
+    fun clickCategory(){
+
+    }
 }

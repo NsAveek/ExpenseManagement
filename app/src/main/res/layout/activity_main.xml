@@ -14,7 +14,7 @@
         android:layout_height="match_parent"
         tools:context=".ui.home.MainActivity">
 
-        <!-- Income Expense Transaction Category Balance -->
+        <!-- Transaction Expense Transaction Category Balance -->
 
         <TextView
 

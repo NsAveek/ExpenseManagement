@@ -35,7 +35,11 @@ class MainActivity : AppCompatActivity(),LifecycleOwner {
             this.viewmodel?.let {
                 it.balanceText.set( "Aveek testing")
                 it.data.observe(this@MainActivity, Observer {
-                    Toast.makeText(this@MainActivity, "Data is now : $it", Toast.LENGTH_SHORT).show()
+                    it?.let {
+                       if (it){
+
+                       }
+                    }
                 })
             }
         }

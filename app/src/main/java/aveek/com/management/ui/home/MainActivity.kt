@@ -1,19 +1,21 @@
 package aveek.com.management.ui.home
 
+
 import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.LifecycleRegistry
 import android.arch.lifecycle.Observer
 import android.databinding.DataBindingUtil
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.widget.Toast
 import aveek.com.management.R
 import aveek.com.management.databinding.ActivityMainBinding
 import dagger.android.AndroidInjection
+
 import javax.inject.Inject
 
-class MainActivity : AppCompatActivity(),LifecycleOwner {
+class MainActivity : AppCompatActivity(), LifecycleOwner {
 
     @Inject
     lateinit var viewModel: MainActivityViewModel

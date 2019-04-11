@@ -55,7 +55,7 @@
             app:layout_constraintEnd_toEndOf="@+id/incomeImage"
             app:layout_constraintStart_toStartOf="@+id/incomeImage"
             app:layout_constraintTop_toTopOf="@+id/incomeImage"
-            tools:text="Income"
+            android:text="Income"
             />
 
         <ImageView
@@ -76,7 +76,7 @@
             app:layout_constraintVertical_bias="0.0"
             app:srcCompat="@drawable/ic_launcher_background"
             android:clickable="true"
-            android:onClick="@{() -> viewmodel.clickData()}"
+            android:onClick="@{() -> viewmodel.clickTransactionHistory()}"
             />
 
         <TextView

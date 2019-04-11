@@ -8,8 +8,9 @@ import android.databinding.ObservableField
 class MainActivityViewModel : ViewModel() {
     val data = MutableLiveData<Boolean>()
     val balanceText = ObservableField<String>()
+
     fun clickData(){
-        data.value = false
+        data.value = true
     }
     fun clickTransactionHistory(){
 
@@ -17,4 +18,8 @@ class MainActivityViewModel : ViewModel() {
     fun clickCategory(){
 
     }
+    fun clickExpense(){
+
+    }
+
 }

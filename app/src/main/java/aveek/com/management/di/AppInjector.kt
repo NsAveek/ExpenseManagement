@@ -3,7 +3,7 @@ package aveek.com.management.di
 import android.app.Activity
 import android.app.Application
 import android.os.Bundle
-import aveek.com.management.application.BaseApp
+import aveek.com.management.BaseApp
 
 object AppInjector {
     fun init(app : BaseApp){

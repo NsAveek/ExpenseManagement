@@ -4,7 +4,9 @@ buildscript {
     ext{
         kotlin_version = '1.2.31'
         androidPluginVersion = '3.1.0'
-        daggerVersion = '2.13'
+        daggerVersion = '2.15'
+        roomVersion = '1.1.1'
+        archLifecycleVersion = '1.1.1'
     }
     repositories {
         google()

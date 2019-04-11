@@ -7,6 +7,7 @@ import android.arch.lifecycle.LifecycleRegistry
 import android.arch.lifecycle.Observer
 import android.arch.persistence.room.Room
 import android.databinding.DataBindingUtil
+import android.os.AsyncTask
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.widget.Toast
@@ -55,8 +56,9 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
                             @ColumnInfo(name = "date") var date : String? // Date to add the transaction
                             */
 
-
-                            database.transactionDao().insert(Transaction(UUID.randomUUID().toString(),"credit","shopping","DIY",25.50,"2019-04-11"))
+                            AsyncTask.execute {
+                                database.transactionDao().insert(Transaction(UUID.randomUUID().toString(),"credit","shopping","DIY",25.50,"2019-04-11"))
+                            }
                        }
                     }
                 })
@@ -65,11 +67,11 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
     }
 
     private fun initDatabase() {
-        database = Room.databaseBuilder(
-                applicationContext,
-                AppDatabase::class.java, "expense.db"
-        ).build()
-//        database = AppDatabase(this)
+//        database = Room.databaseBuilder(
+//                applicationContext,
+//                AppDatabase::class.java, "expense.db"
+//        ).build()
+        database = AppDatabase.getAppDataBase(this)!!
     }
 
     private fun initBinding() {

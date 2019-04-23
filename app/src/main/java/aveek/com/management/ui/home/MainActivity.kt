@@ -48,14 +48,6 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
                 it.data.observe(this@MainActivity, Observer {
                     it?.let {
                        if (it){
-                           /*
-                            @ColumnInfo(name = "payment_type") var paymentType : String?, // Cash or Card or Bank transaction
-                            @ColumnInfo(name = "category") var category : String?, // Category of the income, i.e : Salary
-                            @ColumnInfo(name = "purpose") var purpose : String?, // Note on the transaction
-                            @ColumnInfo(name = "amount") var amount : Double?, // Amount to be credited
-                            @ColumnInfo(name = "date") var date : String? // Date to add the transaction
-                            */
-
                             AsyncTask.execute {
                                 database.transactionDao().insert(Transaction(UUID.randomUUID().toString(),"credit","shopping","DIY",25.50,"2019-04-11"))
                             }

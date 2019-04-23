@@ -45,13 +45,37 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
         with(binding){
             this.viewmodel?.let {
                 it.balanceText.set( "Aveek testing")
-                it.data.observe(this@MainActivity, Observer {
+                it.creditData.observe(this@MainActivity, Observer {
                     it?.let {
                        if (it){
                             AsyncTask.execute {
                                 database.transactionDao().insert(Transaction(UUID.randomUUID().toString(),"credit","shopping","DIY",25.50,"2019-04-11"))
                             }
                        }
+                    }
+                })
+                it.transactionHistory.observe(this@MainActivity, Observer {
+                    it?.let {
+                        // TODO : Generate history list
+                        if (it){
+                            Toast.makeText(this@MainActivity, " Transaction History ",Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                })
+                it.category.observe(this@MainActivity, Observer {
+                    it?.let {
+                        // TODO : Generate Category
+                        if (it){
+                            Toast.makeText(this@MainActivity, " Category ",Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                })
+                it.expense.observe(this@MainActivity, Observer {
+                    it?.let {
+                        // TODO : Generate Expense
+                        if (it){
+                            Toast.makeText(this@MainActivity, " Expense ",Toast.LENGTH_SHORT).show()
+                        }
                     }
                 })
             }

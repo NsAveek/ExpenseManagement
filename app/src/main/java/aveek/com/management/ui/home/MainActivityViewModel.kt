@@ -6,20 +6,24 @@ import android.databinding.ObservableField
 
 
 class MainActivityViewModel : ViewModel() {
-    val data = MutableLiveData<Boolean>()
+    val creditData = MutableLiveData<Boolean>()
+    val transactionHistory = MutableLiveData<Boolean>()
+    val category = MutableLiveData<Boolean>()
+    val expense = MutableLiveData<Boolean>()
+
     val balanceText = ObservableField<String>()
 
-    fun clickData(){
-        data.value = true
+    fun clickCreditData(){
+        creditData.value = true
     }
     fun clickTransactionHistory(){
-
+        transactionHistory.value = true
     }
     fun clickCategory(){
-
+        category.value = true
     }
     fun clickExpense(){
-
+        expense.value = true
     }
 
 }

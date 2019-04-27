@@ -43,26 +43,24 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
             markState(Lifecycle.State.CREATED)
         }
         with(binding){
-            this.viewmodel?.let {
-                it.balanceText.set( "Aveek testing")
-                it.creditData.observe(this@MainActivity, Observer {
+            this.viewmodel?.let { localViewModel ->
+                localViewModel.balanceText.set( "Aveek testing")
+                localViewModel.creditData.observe(this@MainActivity, Observer {
                     it?.let {
-                       if (it){
-                            AsyncTask.execute {
-                                database.transactionDao().insert(Transaction(UUID.randomUUID().toString(),"credit","shopping","DIY",25.50,"2019-04-11"))
-                            }
+                       if (it) AsyncTask.execute {
+                           database.transactionDao().insert(Transaction(UUID.randomUUID().toString(),"credit","shopping","DIY",25.50,"2019-04-11"))
                        }
                     }
                 })
-                it.transactionHistory.observe(this@MainActivity, Observer {
+                localViewModel.transactionHistory.observe(this@MainActivity, Observer {
                     it?.let {
-                        // TODO : Generate history list
+                        // TODO : Generate History list
                         if (it){
                             Toast.makeText(this@MainActivity, " Transaction History ",Toast.LENGTH_SHORT).show()
                         }
                     }
                 })
-                it.category.observe(this@MainActivity, Observer {
+                localViewModel.category.observe(this@MainActivity, Observer {
                     it?.let {
                         // TODO : Generate Category
                         if (it){
@@ -70,7 +68,7 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
                         }
                     }
                 })
-                it.expense.observe(this@MainActivity, Observer {
+                localViewModel.expense.observe(this@MainActivity, Observer {
                     it?.let {
                         // TODO : Generate Expense
                         if (it){

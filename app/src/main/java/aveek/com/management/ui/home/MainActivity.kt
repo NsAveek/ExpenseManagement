@@ -5,19 +5,24 @@ import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.LifecycleRegistry
 import android.arch.lifecycle.Observer
-import android.arch.persistence.room.Room
 import android.databinding.DataBindingUtil
 import android.os.AsyncTask
 import android.os.Bundle
+import android.support.design.widget.BottomSheetBehavior
+import android.support.design.widget.BottomSheetBehavior.from
 import android.support.v7.app.AppCompatActivity
+import android.view.View
 import android.widget.Toast
 import aveek.com.management.R
+import aveek.com.management.R.layout.bottom_sheet
 import aveek.com.management.databinding.ActivityMainBinding
 import aveek.com.management.ui.db.AppDatabase
 import aveek.com.management.ui.db.entity.Transaction
 import dagger.android.AndroidInjection
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 import java.util.*
-
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity(), LifecycleOwner {
@@ -31,9 +36,15 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
 
     private lateinit var database : AppDatabase
 
+    private lateinit var compositeDisposable : CompositeDisposable
+
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
+
+        compositeDisposable = CompositeDisposable()
+
+//        var bottomSheetBehavior = from(findViewById<View>(R.id.bottom_sheet))
 
         initDatabase()
 
@@ -42,12 +53,13 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
         mLifecycleRegistry = LifecycleRegistry(this).apply {
             markState(Lifecycle.State.CREATED)
         }
+
         with(binding){
             this.viewmodel?.let { localViewModel ->
                 localViewModel.balanceText.set( "Aveek testing")
                 localViewModel.creditData.observe(this@MainActivity, Observer {
                     it?.let {
-                       if (it) AsyncTask.execute {
+                       if (it) {
                            database.transactionDao().insert(Transaction(UUID.randomUUID().toString(),"credit","shopping","DIY",25.50,"2019-04-11"))
                        }
                     }
@@ -56,10 +68,15 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
                     it?.let {
                         // TODO : Generate History list
                         if (it){
-                            Toast.makeText(this@MainActivity, " Transaction History ",Toast.LENGTH_SHORT).show()
+
+                            val disposable = database.transactionDao().getAllTransactions()
+                                        .subscribeOn(Schedulers.io())
+                                        .observeOn(AndroidSchedulers.mainThread())
+                                        .subscribe(this@MainActivity::onSuccess, this@MainActivity::onError)
+                            compositeDisposable.add(disposable)
+                            }
                         }
-                    }
-                })
+                    })
                 localViewModel.category.observe(this@MainActivity, Observer {
                     it?.let {
                         // TODO : Generate Category
@@ -116,5 +133,17 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
     override fun onDestroy() {
         super.onDestroy()
         mLifecycleRegistry.markState(Lifecycle.State.DESTROYED)
+        compositeDisposable.dispose()
+    }
+
+
+    private fun onSuccess(transactionList : List<Transaction>) {
+        for (transaction in transactionList){
+            Toast.makeText(this, transaction.uid,Toast.LENGTH_LONG).show()
+        }
+    }
+
+    private fun onError(throwable : Throwable){
+
     }
 }

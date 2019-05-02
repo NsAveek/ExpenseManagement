@@ -6,15 +6,12 @@ import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.LifecycleRegistry
 import android.arch.lifecycle.Observer
 import android.databinding.DataBindingUtil
-import android.os.AsyncTask
 import android.os.Bundle
 import android.support.design.widget.BottomSheetBehavior
 import android.support.design.widget.BottomSheetBehavior.from
 import android.support.v7.app.AppCompatActivity
-import android.view.View
 import android.widget.Toast
 import aveek.com.management.R
-import aveek.com.management.R.layout.bottom_sheet
 import aveek.com.management.databinding.ActivityMainBinding
 import aveek.com.management.ui.db.AppDatabase
 import aveek.com.management.ui.db.entity.Transaction
@@ -60,6 +57,9 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
                 localViewModel.creditData.observe(this@MainActivity, Observer {
                     it?.let {
                        if (it) {
+                           OperationsBottomSheetFragment.getOperationsBottomSheetFragment().apply {
+
+                           }
                            database.transactionDao().insert(Transaction(UUID.randomUUID().toString(),"credit","shopping","DIY",25.50,"2019-04-11"))
                        }
                     }

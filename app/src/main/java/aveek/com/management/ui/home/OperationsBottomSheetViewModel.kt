@@ -1,19 +1,21 @@
 package aveek.com.management.ui.home
 
 import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel;
+import android.arch.lifecycle.ViewModel
 
 class OperationsBottomSheetViewModel : ViewModel() {
-    fun add() : MutableLiveData<Boolean>{
+
+    val addData = MutableLiveData<Boolean>().apply { value = false }
+    val dismissData = MutableLiveData<Boolean>().apply { value = false }
+
+    fun add(){
         // TODO : add data from the user input and pass to the fragment
-        val data : MutableLiveData<Boolean> = MutableLiveData()
-            data.value = true
-        return data
+        addData.value = true
+        dismissData.value = false
     }
-    fun dismiss(): MutableLiveData<Boolean>{
+    fun dismiss(){
         // TODO : send dismiss notification
-        val data : MutableLiveData<Boolean> = MutableLiveData()
-            data.value = true
-        return data
+        addData.value = false
+        dismissData.value = true
     }
 }

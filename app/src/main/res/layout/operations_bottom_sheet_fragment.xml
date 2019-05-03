@@ -112,7 +112,7 @@
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
         android:clickable="true"
-        android:onClick="@{()->viewmodel.add()}"
+        android:onClick="@{()-> viewmodel.add()}"
         app:backgroundTint="@color/colorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

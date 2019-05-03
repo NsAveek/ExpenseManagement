@@ -26,10 +26,6 @@ import javax.inject.Inject
 
 class MainActivity : AppCompatActivity(), LifecycleOwner {
 
-
-//    @Inject
-//    lateinit var fragmentInjector: DispatchingAndroidInjector<Fragment>
-
     @Inject
     lateinit var viewModel: MainActivityViewModel
 
@@ -61,34 +57,7 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
                 localViewModel.creditData.observe(this@MainActivity, Observer {
                     it?.let {
                        if (it) {
-                           OperationsBottomSheetFragment.getOperationsBottomSheetFragment().apply {
-                                show(supportFragmentManager,null)
-                                dismissOrProceedEvent.observe(this@MainActivity, Observer {
-                                    it?.let { pair ->
-                                        when(pair.first.type){
-                                            EnumEventState.PROCEED.type -> {
-
-                                             // TODO : Add the received data from the Bottom Sheet Fragment
-                                        Completable.fromAction {
-                                                    Action {
-                                                        kotlin.run {
-                                                            database.transactionDao().insert(Transaction(UUID.randomUUID().toString(), "credit", "shopping", "DIY", 25.50, "2019-04-11"))
-                                                        }
-                                                    }
-                                                }.subscribeOn(Schedulers.io())
-                                                .observeOn(AndroidSchedulers.mainThread())
-                                                .subscribe(this@MainActivity::onSuccess, this@MainActivity::onError)
-                                            }
-                                            EnumEventState.DISMISS.type -> {
-                                                dismiss()
-                                            }
-                                            else ->{
-                                                dismiss()
-                                            }
-                                        }
-                                    }
-                                })
-                           }
+                           addExpenseOperation()
                        }
                     }
                 })
@@ -96,11 +65,7 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
                     it?.let {
                         // TODO : Generate History list
                         if (it){
-                            val disposable = database.transactionDao().getAllTransactions()
-                                        .subscribeOn(Schedulers.io())
-                                        .observeOn(AndroidSchedulers.mainThread())
-                                        .subscribe(this@MainActivity::onSuccess, this@MainActivity::onError)
-                            compositeDisposable.add(disposable)
+                            getExpenseOperation()
                             }
                         }
                     })
@@ -108,7 +73,7 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
                     it?.let {
                         // TODO : Generate Category
                         if (it){
-                            Toast.makeText(this@MainActivity, " Category ",Toast.LENGTH_SHORT).show()
+                            getCategoriesOperation()
                         }
                     }
                 })
@@ -121,6 +86,50 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
                     }
                 })
             }
+        }
+    }
+
+    private fun getCategoriesOperation() {
+        Toast.makeText(this@MainActivity, " Category ", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun getExpenseOperation() {
+        val disposable = database.transactionDao().getAllTransactions()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this@MainActivity::onSuccess, this@MainActivity::onError)
+        compositeDisposable.add(disposable)
+    }
+
+    private fun addExpenseOperation() {
+        OperationsBottomSheetFragment.getOperationsBottomSheetFragment().apply {
+            isCancelable = false
+            show(supportFragmentManager, null)
+            dismissOrProceedEvent.observe(this@MainActivity, Observer {
+                it?.let { pair ->
+                    when (pair.first.type) {
+                        EnumEventState.PROCEED.type -> {
+
+                            // TODO : Add the received data from the Bottom Sheet Fragment
+                        compositeDisposable.add(Completable.fromAction {
+                                Action {
+                                    kotlin.run {
+                                        database.transactionDao().insert(Transaction(UUID.randomUUID().toString(), "credit", "shopping", "DIY", 25.50, "2019-04-11"))
+                                    }
+                                }
+                            }.subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(this@MainActivity::onSuccess, this@MainActivity::onError))
+                        }
+                        EnumEventState.DISMISS.type -> {
+                            dismiss()
+                        }
+                        else -> {
+                            dismiss()
+                        }
+                    }
+                }
+            })
         }
     }
 

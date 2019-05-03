@@ -7,22 +7,28 @@ import android.arch.lifecycle.LifecycleRegistry
 import android.arch.lifecycle.Observer
 import android.databinding.DataBindingUtil
 import android.os.Bundle
-import android.support.design.widget.BottomSheetBehavior
-import android.support.design.widget.BottomSheetBehavior.from
 import android.support.v7.app.AppCompatActivity
 import android.widget.Toast
 import aveek.com.management.R
 import aveek.com.management.databinding.ActivityMainBinding
 import aveek.com.management.ui.db.AppDatabase
 import aveek.com.management.ui.db.entity.Transaction
+import aveek.com.management.util.EnumEventState
 import dagger.android.AndroidInjection
+import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.functions.Action
 import io.reactivex.schedulers.Schedulers
 import java.util.*
 import javax.inject.Inject
 
+
 class MainActivity : AppCompatActivity(), LifecycleOwner {
+
+
+//    @Inject
+//    lateinit var fragmentInjector: DispatchingAndroidInjector<Fragment>
 
     @Inject
     lateinit var viewModel: MainActivityViewModel
@@ -41,8 +47,6 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
 
         compositeDisposable = CompositeDisposable()
 
-//        var bottomSheetBehavior = from(findViewById<View>(R.id.bottom_sheet))
-
         initDatabase()
 
         initBinding()
@@ -58,9 +62,33 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
                     it?.let {
                        if (it) {
                            OperationsBottomSheetFragment.getOperationsBottomSheetFragment().apply {
+                                show(supportFragmentManager,null)
+                                dismissOrProceedEvent.observe(this@MainActivity, Observer {
+                                    it?.let { pair ->
+                                        when(pair.first.type){
+                                            EnumEventState.PROCEED.type -> {
 
+                                             // TODO : Add the received data from the Bottom Sheet Fragment
+                                        Completable.fromAction {
+                                                    Action {
+                                                        kotlin.run {
+                                                            database.transactionDao().insert(Transaction(UUID.randomUUID().toString(), "credit", "shopping", "DIY", 25.50, "2019-04-11"))
+                                                        }
+                                                    }
+                                                }.subscribeOn(Schedulers.io())
+                                                .observeOn(AndroidSchedulers.mainThread())
+                                                .subscribe(this@MainActivity::onSuccess, this@MainActivity::onError)
+                                            }
+                                            EnumEventState.DISMISS.type -> {
+                                                dismiss()
+                                            }
+                                            else ->{
+                                                dismiss()
+                                            }
+                                        }
+                                    }
+                                })
                            }
-                           database.transactionDao().insert(Transaction(UUID.randomUUID().toString(),"credit","shopping","DIY",25.50,"2019-04-11"))
                        }
                     }
                 })
@@ -68,7 +96,6 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
                     it?.let {
                         // TODO : Generate History list
                         if (it){
-
                             val disposable = database.transactionDao().getAllTransactions()
                                         .subscribeOn(Schedulers.io())
                                         .observeOn(AndroidSchedulers.mainThread())
@@ -137,6 +164,13 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
     }
 
 
+//    override fun fragmentInjector(): AndroidInjector<Fragment> {
+//        return fragmentInjector
+//    }
+
+    private fun onSuccess(){
+        Toast.makeText(this, "Successfully inserted",Toast.LENGTH_LONG).show()
+    }
     private fun onSuccess(transactionList : List<Transaction>) {
         for (transaction in transactionList){
             Toast.makeText(this, transaction.uid,Toast.LENGTH_LONG).show()
@@ -146,4 +180,8 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
     private fun onError(throwable : Throwable){
 
     }
+
+//    override fun getLifecycle(): Lifecycle {
+//        return mLifecycleRegistry
+//    }
 }

@@ -48,13 +48,21 @@ internal class AppModule{
 @Module
 internal abstract class LocalDependencyBuilder{
 
-    @ContributesAndroidInjector(modules = [MainActivityModule::class])
+    @ContributesAndroidInjector(modules = [MainActivityModule::class, OperationsBottomSheetFragmentProvider::class])
     abstract fun bindMainActivity() : MainActivity
 
 //    @ContributesAndroidInjector(modules = arrayOf(DetailActivityModule::class, DetailFragmentProvider::class))
 //    internal abstract fun bindDetailActivity(): DetailActivity
 
+//    @ContributesAndroidInjector(modules = [OperationsBottomSheetFragmentModule::class])
+//    abstract fun bindOperationsBottomSheetFragment() : OperationsBottomSheetFragment
+}
+
+@Module
+internal abstract class OperationsBottomSheetFragmentProvider{
     @ContributesAndroidInjector(modules = [OperationsBottomSheetFragmentModule::class])
     abstract fun bindOperationsBottomSheetFragment() : OperationsBottomSheetFragment
 }
+
+
 

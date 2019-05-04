@@ -12,6 +12,7 @@ import aveek.com.management.R
 import aveek.com.management.databinding.OperationsBottomSheetFragmentBinding
 import aveek.com.management.util.EnumEventState
 import dagger.android.support.AndroidSupportInjection
+import javax.inject.Inject
 
 
 class OperationsBottomSheetFragment : BottomSheetDialogFragment() {
@@ -23,7 +24,8 @@ class OperationsBottomSheetFragment : BottomSheetDialogFragment() {
     val dismissOrProceedEvent = MutableLiveData<Pair<EnumEventState,Any>>()
 
 
-    private lateinit var viewModel: OperationsBottomSheetViewModel
+    @Inject
+    lateinit var viewModel: OperationsBottomSheetViewModel
 
     private lateinit var binding: OperationsBottomSheetFragmentBinding
 
@@ -39,7 +41,7 @@ class OperationsBottomSheetFragment : BottomSheetDialogFragment() {
         super.onCreate(savedInstanceState)
         mLifecycleRegistry = LifecycleRegistry(this)
         mLifecycleRegistry.markState(Lifecycle.State.CREATED)
-        viewModel = ViewModelProviders.of(this).get(OperationsBottomSheetViewModel::class.java)
+//        viewModel = ViewModelProviders.of(this).get(OperationsBottomSheetViewModel::class.java)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -48,7 +50,6 @@ class OperationsBottomSheetFragment : BottomSheetDialogFragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.operations_bottom_sheet_fragment, container, false)
         binding.viewmodel = viewModel
         binding.setLifecycleOwner(this) // To enable Live Data object to update the XML on update
-//        return inflater.inflate(R.layout.operations_bottom_sheet_fragment, container, false)
         return binding.root
     }
 

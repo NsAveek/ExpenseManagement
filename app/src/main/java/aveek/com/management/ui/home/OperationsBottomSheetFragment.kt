@@ -32,7 +32,6 @@ class OperationsBottomSheetFragment : BottomSheetDialogFragment() {
     private lateinit var mLifecycleRegistry: LifecycleRegistry
 
     override fun onAttach(context: Context?) {
-
         AndroidSupportInjection.inject(this);
         super.onAttach(context)
     }
@@ -41,7 +40,6 @@ class OperationsBottomSheetFragment : BottomSheetDialogFragment() {
         super.onCreate(savedInstanceState)
         mLifecycleRegistry = LifecycleRegistry(this)
         mLifecycleRegistry.markState(Lifecycle.State.CREATED)
-//        viewModel = ViewModelProviders.of(this).get(OperationsBottomSheetViewModel::class.java)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -61,24 +59,26 @@ class OperationsBottomSheetFragment : BottomSheetDialogFragment() {
         super.onStart()
         mLifecycleRegistry.markState(Lifecycle.State.STARTED)
 
-
-
-        binding.viewmodel!!.addData.observe(this, Observer {
-            it?.let {
-                if (it){
-                    dismissOrProceedEvent.value = Pair(EnumEventState.PROCEED,"nothing new")
-                    dismiss()
-                }
+        binding.viewmodel?.let {localViewModel ->
+            with(localViewModel){
+                addData.observe(this@OperationsBottomSheetFragment, Observer {
+                    it?.let {
+                        if (it){
+                            dismissOrProceedEvent.value = Pair(EnumEventState.PROCEED,"nothing new")
+                            dismiss()
+                        }
+                    }
+                })
+                dismissData.observe(this@OperationsBottomSheetFragment, Observer {
+                    it?.let {
+                        if (it){
+                            dismissOrProceedEvent.value = Pair(EnumEventState.DISMISS,"nothing new")
+                            dismiss()
+                        }
+                    }
+                })
             }
-        })
-        binding.viewmodel!!.dismissData.observe(this, Observer {
-            it?.let {
-                if (it){
-                    dismissOrProceedEvent.value = Pair(EnumEventState.DISMISS,"nothing new")
-                    dismiss()
-                }
-            }
-        })
+        }
     }
 
     override fun onResume() {
@@ -94,7 +94,6 @@ class OperationsBottomSheetFragment : BottomSheetDialogFragment() {
         super.onDestroy()
         mLifecycleRegistry.markState(Lifecycle.State.DESTROYED)
     }
-
 
     /*
     * Lifecycle aware handling methods
@@ -112,7 +111,4 @@ class OperationsBottomSheetFragment : BottomSheetDialogFragment() {
     override fun onPause() {
         super.onPause()
     }
-
-
-
 }

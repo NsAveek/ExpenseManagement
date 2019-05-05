@@ -59,38 +59,40 @@ class MainActivity : AppCompatActivity(), LifecycleOwner, HasSupportFragmentInje
 
         with(binding){
             this.viewmodel?.let { localViewModel ->
-                localViewModel.balanceText.set( "Aveek testing")
-                localViewModel.creditData.observe(this@MainActivity, Observer {
-                    it?.let {
-                       if (it) {
-                           addExpenseOperation()
-                       }
-                    }
-                })
-                localViewModel.transactionHistory.observe(this@MainActivity, Observer {
-                    it?.let {
-                        // TODO : Generate History list
-                        if (it){
-                            getExpenseOperation()
+                with(localViewModel) {
+                    balanceText.set("Aveek testing")
+                    creditData.observe(this@MainActivity, Observer {
+                        it?.let {
+                            if (it) {
+                                addExpenseOperation()
                             }
                         }
                     })
-                localViewModel.category.observe(this@MainActivity, Observer {
-                    it?.let {
-                        // TODO : Generate Category
-                        if (it){
-                            getCategoriesOperation()
+                    transactionHistory.observe(this@MainActivity, Observer {
+                        it?.let {
+                            // TODO : Generate History list
+                            if (it) {
+                                getExpenseOperation()
+                            }
                         }
-                    }
-                })
-                localViewModel.expense.observe(this@MainActivity, Observer {
-                    it?.let {
-                        // TODO : Generate Expense
-                        if (it){
-                            Toast.makeText(this@MainActivity, " Expense ",Toast.LENGTH_SHORT).show()
+                    })
+                    category.observe(this@MainActivity, Observer {
+                        it?.let {
+                            // TODO : Generate Category
+                            if (it) {
+                                getCategoriesOperation()
+                            }
                         }
-                    }
-                })
+                    })
+                    expense.observe(this@MainActivity, Observer {
+                        it?.let {
+                            // TODO : Generate Expense
+                            if (it) {
+                                Toast.makeText(this@MainActivity, " Expense ", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                    })
+                }
             }
         }
     }

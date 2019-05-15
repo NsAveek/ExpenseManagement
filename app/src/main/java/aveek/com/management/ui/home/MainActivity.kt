@@ -7,6 +7,7 @@ import android.arch.lifecycle.LifecycleRegistry
 import android.arch.lifecycle.Observer
 import android.databinding.DataBindingUtil
 import android.os.Bundle
+import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.widget.Toast
 import aveek.com.management.R
@@ -15,6 +16,8 @@ import aveek.com.management.ui.db.AppDatabase
 import aveek.com.management.ui.db.entity.Transaction
 import aveek.com.management.util.EnumEventState
 import dagger.android.AndroidInjection
+import dagger.android.AndroidInjector
+import dagger.android.support.HasSupportFragmentInjector
 import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -22,12 +25,15 @@ import io.reactivex.functions.Action
 import io.reactivex.schedulers.Schedulers
 import java.util.*
 import javax.inject.Inject
+import dagger.android.DispatchingAndroidInjector
 
-
-class MainActivity : AppCompatActivity(), LifecycleOwner {
+class MainActivity : AppCompatActivity(), LifecycleOwner, HasSupportFragmentInjector {
 
     @Inject
     lateinit var viewModel: MainActivityViewModel
+
+    @Inject
+    lateinit var fragmentDispatchingAndroidInjector: DispatchingAndroidInjector<Fragment>
 
     private lateinit var mLifecycleRegistry: LifecycleRegistry
 
@@ -53,40 +59,47 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
 
         with(binding){
             this.viewmodel?.let { localViewModel ->
-                localViewModel.balanceText.set( "Aveek testing")
-                localViewModel.creditData.observe(this@MainActivity, Observer {
-                    it?.let {
-                       if (it) {
-                           addExpenseOperation()
-                       }
-                    }
-                })
-                localViewModel.transactionHistory.observe(this@MainActivity, Observer {
-                    it?.let {
-                        // TODO : Generate History list
-                        if (it){
-                            getExpenseOperation()
+                with(localViewModel) {
+                    balanceText.set("Aveek testing")
+                    creditData.observe(this@MainActivity, Observer {
+                        it?.let {
+                            if (it) {
+                                addExpenseOperation()
                             }
                         }
                     })
-                localViewModel.category.observe(this@MainActivity, Observer {
-                    it?.let {
-                        // TODO : Generate Category
-                        if (it){
-                            getCategoriesOperation()
+                    transactionHistory.observe(this@MainActivity, Observer {
+                        it?.let {
+                            // TODO : Generate History list
+                            if (it) {
+                                getExpenseOperation()
+                            }
                         }
-                    }
-                })
-                localViewModel.expense.observe(this@MainActivity, Observer {
-                    it?.let {
-                        // TODO : Generate Expense
-                        if (it){
-                            Toast.makeText(this@MainActivity, " Expense ",Toast.LENGTH_SHORT).show()
+                    })
+                    category.observe(this@MainActivity, Observer {
+                        it?.let {
+                            // TODO : Generate Category
+                            if (it) {
+                                getCategoriesOperation()
+                            }
                         }
-                    }
-                })
+                    })
+                    expense.observe(this@MainActivity, Observer {
+                        it?.let {
+                            // TODO : Generate Expense
+                            if (it) {
+                                Toast.makeText(this@MainActivity, " Expense ", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                    })
+                }
             }
         }
+    }
+
+
+    override fun supportFragmentInjector(): AndroidInjector<Fragment> {
+        return fragmentDispatchingAndroidInjector
     }
 
     private fun getCategoriesOperation() {
@@ -109,11 +122,10 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
                 it?.let { pair ->
                     when (pair.first.type) {
                         EnumEventState.PROCEED.type -> {
-
-                            // TODO : Add the received data from the Bottom Sheet Fragment
                         compositeDisposable.add(Completable.fromAction {
                                 Action {
                                     kotlin.run {
+                                        // TODO : Add the received data from the Bottom Sheet Fragment
                                         database.transactionDao().insert(Transaction(UUID.randomUUID().toString(), "credit", "shopping", "DIY", 25.50, "2019-04-11"))
                                     }
                                 }

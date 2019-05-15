@@ -48,7 +48,6 @@ class OperationsBottomSheetFragment : BottomSheetDialogFragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.operations_bottom_sheet_fragment, container, false)
         binding.viewmodel = viewModel
         binding.setLifecycleOwner(this) // To enable Live Data object to update the XML on update
-//        return inflater.inflate(R.layout.operations_bottom_sheet_fragment, container, false)
         return binding.root
     }
 

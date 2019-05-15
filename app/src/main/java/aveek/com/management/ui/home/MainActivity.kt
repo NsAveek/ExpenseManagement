@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.widget.Toast
+import aveek.com.management.BaseActivity
 import aveek.com.management.R
 import aveek.com.management.databinding.ActivityMainBinding
 import aveek.com.management.ui.db.AppDatabase

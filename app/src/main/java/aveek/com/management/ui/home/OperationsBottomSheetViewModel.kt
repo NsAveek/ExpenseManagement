@@ -10,11 +10,16 @@ class OperationsBottomSheetViewModel : ViewModel() {
 
     fun add(){
         // TODO : add data from the user input and pass to the fragment
+
+        // TODO : Add Text watcher for Edit Text
+        // TODO : On add () function call, get all data from the fragment
+        // TODO : Move all of the operation code from the activity ( i.e : Database operation )
         addData.value = true
         dismissData.value = false
+
+
     }
-    fun dismiss(){
-        // TODO : send dismiss notification
+    fun dismissBottomSheet(){
         addData.value = false
         dismissData.value = true
     }

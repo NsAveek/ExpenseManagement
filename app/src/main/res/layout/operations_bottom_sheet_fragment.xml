@@ -17,7 +17,7 @@
     app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
 
     <EditText
-        android:id="@+id/editText"
+        android:id="@+id/amountEditText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -26,13 +26,15 @@
         android:layout_marginBottom="8dp"
         android:ems="10"
         android:inputType="number"
+        android:hint="Insert Amount"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.0"
+        />
 
     <EditText
-        android:id="@+id/editText2"
+        android:id="@+id/purposeEditText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -43,11 +45,11 @@
         android:layout_marginBottom="343dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Purpose"
+        android:hint="Purpose"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText" />
+        app:layout_constraintTop_toBottomOf="@+id/amountEditText" />
 
     <Spinner
         android:id="@+id/spinner"
@@ -59,11 +61,11 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/editText2"
+        app:layout_constraintBottom_toTopOf="@+id/purposeEditText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/editText"
-        app:layout_constraintTop_toBottomOf="@+id/editText" />
+        app:layout_constraintStart_toEndOf="@+id/purposeEditText"
+        app:layout_constraintTop_toBottomOf="@+id/amountEditText" />
 
     <Spinner
         android:id="@+id/spinner2"
@@ -78,12 +80,12 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/editText2"
-        app:layout_constraintTop_toBottomOf="@+id/editText2"
+        app:layout_constraintStart_toEndOf="@+id/purposeEditText"
+        app:layout_constraintTop_toBottomOf="@+id/purposeEditText"
         app:layout_constraintVertical_bias="0.13999999" />
 
     <EditText
-        android:id="@+id/editText4"
+        android:id="@+id/dateEditText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -94,12 +96,12 @@
         android:layout_marginBottom="8dp"
         android:ems="10"
         android:inputType="date"
-        android:text="date"
+        android:hint="date"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText2" />
+        app:layout_constraintTop_toBottomOf="@+id/purposeEditText" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/floatingActionButton"
@@ -130,10 +132,10 @@
         android:layout_marginLeft="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:onClick="@{() -> viewmodel.dismiss()}"
+        android:onClick="@{() -> viewmodel.dismissBottomSheet()}"
         android:text="Dismiss"
-        app:layout_constraintBaseline_toBaselineOf="@+id/editText4"
+        app:layout_constraintBaseline_toBaselineOf="@+id/dateEditText"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/editText4" />
+        app:layout_constraintStart_toEndOf="@+id/dateEditText" />
 </android.support.constraint.ConstraintLayout>
 </layout>

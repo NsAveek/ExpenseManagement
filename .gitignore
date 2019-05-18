@@ -7,7 +7,11 @@
 /.idea/workspace.xml
 /.idea
 /.idea/misc.xml
+/.idea/encodings.xml
 .DS_Store
 /build
 /captures
 .externalNativeBuild
+app/src/main/java/aveek/com/management/binding/
+app/src/main/java/aveek/com/management/repository/
+app/src/main/java/aveek/com/management/ui/common/

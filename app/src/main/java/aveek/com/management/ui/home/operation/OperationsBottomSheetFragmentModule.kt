@@ -1,4 +1,4 @@
-package aveek.com.management.ui.home
+package aveek.com.management.ui.home.operation
 
 import dagger.Module
 import dagger.Provides

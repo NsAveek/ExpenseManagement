@@ -5,18 +5,19 @@ import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.LifecycleRegistry
 import android.arch.lifecycle.Observer
+import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v7.app.AppCompatActivity
 import android.widget.Toast
 import aveek.com.management.BaseActivity
 import aveek.com.management.R
 import aveek.com.management.databinding.ActivityMainBinding
 import aveek.com.management.ui.db.AppDatabase
 import aveek.com.management.ui.db.entity.Transaction
+import aveek.com.management.ui.home.operation.OperationsBottomSheetFragment
+import aveek.com.management.ui.transactions.TransactionActivity
 import aveek.com.management.util.EnumEventState
-import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
 import io.reactivex.Completable
@@ -28,7 +29,7 @@ import java.util.*
 import javax.inject.Inject
 import dagger.android.DispatchingAndroidInjector
 
-class MainActivity : AppCompatActivity(), LifecycleOwner, HasSupportFragmentInjector {
+class MainActivity : BaseActivity(), LifecycleOwner, HasSupportFragmentInjector {
 
     @Inject
     lateinit var viewModel: MainActivityViewModel
@@ -40,12 +41,12 @@ class MainActivity : AppCompatActivity(), LifecycleOwner, HasSupportFragmentInje
 
     private lateinit var binding : ActivityMainBinding
 
+    // TODO : Inject Database
     private lateinit var database : AppDatabase
 
     private lateinit var compositeDisposable : CompositeDisposable
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
 
         compositeDisposable = CompositeDisposable()
@@ -73,7 +74,7 @@ class MainActivity : AppCompatActivity(), LifecycleOwner, HasSupportFragmentInje
                         it?.let {
                             // TODO : Generate History list
                             if (it) {
-                                getExpenseOperation()
+                                loadTransactionHistory()
                             }
                         }
                     })
@@ -107,12 +108,10 @@ class MainActivity : AppCompatActivity(), LifecycleOwner, HasSupportFragmentInje
         Toast.makeText(this@MainActivity, " Category ", Toast.LENGTH_SHORT).show()
     }
 
-    private fun getExpenseOperation() {
-        val disposable = database.transactionDao().getAllTransactions()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this@MainActivity::onSuccess, this@MainActivity::onError)
-        compositeDisposable.add(disposable)
+    private fun loadTransactionHistory() {
+        Intent(this,TransactionActivity::class.java).also {
+            startActivity(it)
+        }
     }
 
     private fun addExpenseOperation() {
@@ -125,7 +124,7 @@ class MainActivity : AppCompatActivity(), LifecycleOwner, HasSupportFragmentInje
                         EnumEventState.PROCEED.type -> {
                         compositeDisposable.add(Completable.fromAction {
                                 Action {
-                                    kotlin.run {
+                                    suspend {
                                         // TODO : Add the received data from the Bottom Sheet Fragment
                                         database.transactionDao().insert(Transaction(UUID.randomUUID().toString(), "credit", "shopping", "DIY", 25.50, "2019-04-11"))
                                     }
@@ -157,7 +156,7 @@ class MainActivity : AppCompatActivity(), LifecycleOwner, HasSupportFragmentInje
     private fun initBinding() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         binding.viewmodel = viewModel
-        binding.setLifecycleOwner(this) // To enable Live Data object to update the XML on update
+        binding.lifecycleOwner=this // To enable Live Data object to update the XML on update
     }
 
     override fun onStart() {
@@ -193,11 +192,7 @@ class MainActivity : AppCompatActivity(), LifecycleOwner, HasSupportFragmentInje
     private fun onSuccess(){
         Toast.makeText(this, "Successfully inserted",Toast.LENGTH_LONG).show()
     }
-    private fun onSuccess(transactionList : List<Transaction>) {
-        for (transaction in transactionList){
-            Toast.makeText(this, transaction.uid,Toast.LENGTH_LONG).show()
-        }
-    }
+
 
     private fun onError(throwable : Throwable){
 

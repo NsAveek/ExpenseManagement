@@ -1,4 +1,4 @@
-package aveek.com.management.ui.home
+package aveek.com.management.ui.home.operation
 
 import android.arch.lifecycle.*
 import android.content.Context
@@ -18,7 +18,7 @@ import javax.inject.Inject
 class OperationsBottomSheetFragment : BottomSheetDialogFragment() {
 
     companion object {
-        fun getOperationsBottomSheetFragment() = OperationsBottomSheetFragment()
+        fun getOperationsBottomSheetFragment() =OperationsBottomSheetFragment()
     }
 
     val dismissOrProceedEvent = MutableLiveData<Pair<EnumEventState,Any>>()

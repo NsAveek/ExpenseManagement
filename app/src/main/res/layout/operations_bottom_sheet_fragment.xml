@@ -6,7 +6,7 @@
     <data>
         <variable
             name="viewmodel"
-            type="aveek.com.management.ui.home.OperationsBottomSheetViewModel"/>
+            type="aveek.com.management.ui.home.operation.OperationsBottomSheetViewModel"/>
     </data>
 <android.support.constraint.ConstraintLayout
     android:id="@+id/bottom_sheet"

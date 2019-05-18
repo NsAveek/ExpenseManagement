@@ -1,10 +1,8 @@
-package aveek.com.management.ui.home
+package aveek.com.management.ui.home.operation
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import android.databinding.ObservableField
-import android.databinding.ObservableInt
-import aveek.com.management.ui.db.entity.Transaction
 
 class OperationsBottomSheetViewModel : ViewModel() {
 

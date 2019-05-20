@@ -22,8 +22,6 @@ enum class EnumTransactionType(val type: String) {
 }
 
 
-
-
 const val REGULAR_TYPE = 1
 const val LOADING_TYPE = 2
 const val DOWNLOAD_MORE_DATA = 3
@@ -58,7 +56,7 @@ class TransactionAdapter(val context : Context) : RecyclerView.Adapter<RecyclerV
     }
 
     /**
-     * set data to the adapter. Mostly used for initial data setup or when duration days selected from the dropdown.
+     * set data to the adapter.
      * @param dataset to add to the adapter as dataset
      * @return nothing
      */
@@ -118,10 +116,11 @@ class TransactionAdapter(val context : Context) : RecyclerView.Adapter<RecyclerV
     }
 
     override fun getItemViewType(position: Int): Int {
-        return when(items[position]){
-            EnumTransactionType.LOADING.type -> LOADING_TYPE
-            else -> REGULAR_TYPE
-        }
+        return REGULAR_TYPE
+//        return when(items[position]){
+//            EnumTransactionType.LOADING.type -> LOADING_TYPE
+//            else -> REGULAR_TYPE
+//        }
     }
 
     /** Represents viewholder of the main type view for recycler view
@@ -129,7 +128,8 @@ class TransactionAdapter(val context : Context) : RecyclerView.Adapter<RecyclerV
      * @version 1
      * @since Version 1.0
      */
-    class RegularTransactionViewHolder(val binding : TransactionHistoryRcvItemBinding, val viewModel: TransactionVM) : RecyclerView.ViewHolder(binding.root){
+    class RegularTransactionViewHolder(binding : TransactionHistoryRcvItemBinding,viewModel: TransactionVM)
+        : RecyclerView.ViewHolder(binding.root){
 
         /**
          * set data to xml
@@ -137,6 +137,28 @@ class TransactionAdapter(val context : Context) : RecyclerView.Adapter<RecyclerV
          * @return none
          */
         fun bind(data: Transaction) {
+            //            val defaultCreditIcon = "https://img3.icarcdn.com/product_icons/ico_credit.png"
+//            binding.viewModel = TransactionVM().apply {
+//                packageTitle.set(data.description)
+//                creditsAdded.set(data.creditsAdded)
+//                creditValue.set(data.creditinOut)
+//                transactionTime.set(data.transactionTime)
+//                successfulTransaction.set(data.paymentStatus == "Successful")
+//                if (data.listingId == 0L && data.orderId == "") {
+//                    dividerVisibility.set(View.GONE)
+//                }
+//                orderListingId.set(if (data.orderId == "") {
+//                    if (data.listingId != 0L) {
+//                        String.format(ICarApp.iCarApp.getString(R.string.listing_id_transaction, data.listingId.toString()))
+//                    } else {
+//                        ""
+//                    }
+//                } else {
+//                    String.format(ICarApp.iCarApp.getString(R.string.order_id_transaction, data.orderId.toString()))
+//                })
+////            packageIcon.set(getIcon(data.mapName))
+//                packageIcon.set(data.iconUrl?:defaultCreditIcon)
+//            }
         }
     }
 
@@ -146,7 +168,8 @@ class TransactionAdapter(val context : Context) : RecyclerView.Adapter<RecyclerV
      * @version 1
      * @since Version 1.0
      */
-    class LoadingViewHolder (val binding : LoaderFooterTransparentGreyBinding): RecyclerView.ViewHolder(binding.root){
+    class LoadingViewHolder (val binding : LoaderFooterTransparentGreyBinding)
+        : RecyclerView.ViewHolder(binding.root){
 
         /**
          * set data to xml

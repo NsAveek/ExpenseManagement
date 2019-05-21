@@ -60,7 +60,7 @@ class TransactionAdapter(val context : Context) : RecyclerView.Adapter<RecyclerV
      * @param dataset to add to the adapter as dataset
      * @return nothing
      */
-    fun setData(data : ArrayList<Transaction>){
+    fun setData(data : List<Transaction>){
         items.addAll(data)
         notifyDataSetChanged()
     }
@@ -70,7 +70,7 @@ class TransactionAdapter(val context : Context) : RecyclerView.Adapter<RecyclerV
      * @param dataset to add to the existing dataset
      * @return nothing
      */
-    fun addData(data : ArrayList<Transaction>){
+    fun addData(data : List<Transaction>){
         val currentPos = itemCount
         items.addAll(data)
         notifyItemRangeInserted(currentPos, items.size)
@@ -116,11 +116,10 @@ class TransactionAdapter(val context : Context) : RecyclerView.Adapter<RecyclerV
     }
 
     override fun getItemViewType(position: Int): Int {
-        return REGULAR_TYPE
-//        return when(items[position]){
-//            EnumTransactionType.LOADING.type -> LOADING_TYPE
-//            else -> REGULAR_TYPE
-//        }
+        return when(items[position].type){
+            EnumTransactionType.LOADING.type -> LOADING_TYPE
+            else -> REGULAR_TYPE
+        }
     }
 
     /** Represents viewholder of the main type view for recycler view
@@ -128,7 +127,7 @@ class TransactionAdapter(val context : Context) : RecyclerView.Adapter<RecyclerV
      * @version 1
      * @since Version 1.0
      */
-    class RegularTransactionViewHolder(binding : TransactionHistoryRcvItemBinding,viewModel: TransactionVM)
+    class RegularTransactionViewHolder(val binding : TransactionHistoryRcvItemBinding,viewModel: TransactionVM)
         : RecyclerView.ViewHolder(binding.root){
 
         /**
@@ -137,6 +136,11 @@ class TransactionAdapter(val context : Context) : RecyclerView.Adapter<RecyclerV
          * @return none
          */
         fun bind(data: Transaction) {
+
+            binding.viewModel = TransactionVM().apply {
+                creditValue.set(data.amount.toString())
+                paymentType.set(data.paymentType)
+            }
             //            val defaultCreditIcon = "https://img3.icarcdn.com/product_icons/ico_credit.png"
 //            binding.viewModel = TransactionVM().apply {
 //                packageTitle.set(data.description)

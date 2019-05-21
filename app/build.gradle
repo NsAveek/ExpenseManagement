@@ -31,6 +31,9 @@ android {
     dataBinding {
         enabled = true
     }
+    lintOptions {
+        abortOnError false
+    }
     buildTypes {
         release {
             minifyEnabled false
@@ -66,10 +69,11 @@ dependencies {
 
     implementation "android.arch.persistence.room:runtime:$roomVersion"
     implementation "android.arch.persistence.room:rxjava2:$roomVersion"
-    annotationProcessor "android.arch.persistence.room:compiler:$roomVersion"
+    kapt "android.arch.persistence.room:compiler:$roomVersion"
+    androidTestImplementation "android.arch.persistence.room:testing:$roomVersion"
 
-    annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
-    annotationProcessor "com.google.dagger:dagger-android-processor:$daggerVersion"
+    kapt "com.google.dagger:dagger-compiler:$daggerVersion"
+    kapt "com.google.dagger:dagger-android-processor:$daggerVersion"
     kapt "com.google.dagger:dagger-compiler:$daggerVersion"
     kapt "com.google.dagger:dagger-android-processor:$daggerVersion"
 
@@ -78,18 +82,13 @@ dependencies {
     implementation "com.google.dagger:dagger-android-support:$daggerVersion"
     kapt "com.google.dagger:dagger-compiler:$daggerVersion"
 
-    implementation "android.arch.persistence.room:runtime:$roomVersion"
-    kapt "android.arch.persistence.room:compiler:$roomVersion"
-    androidTestImplementation "android.arch.persistence.room:testing:$roomVersion"
 
     implementation "com.facebook.stetho:stetho:$stethoVersion"
 
     implementation "com.jakewharton.timber:timber:$timberVersion"
 
     implementation "com.github.bumptech.glide:glide:$glideVersion"
-    annotationProcessor "com.github.bumptech.glide:compiler:$glideVersion"
-
-
+    kapt "com.github.bumptech.glide:compiler:$glideVersion"
 
 
     testImplementation 'junit:junit:4.12'

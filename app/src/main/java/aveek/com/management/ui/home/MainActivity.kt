@@ -13,6 +13,7 @@ import android.widget.Toast
 import aveek.com.management.BaseActivity
 import aveek.com.management.R
 import aveek.com.management.databinding.ActivityMainBinding
+import aveek.com.management.ui.common.NetworkActivity
 import aveek.com.management.ui.db.AppDatabase
 import aveek.com.management.ui.db.entity.Transaction
 import aveek.com.management.ui.home.operation.OperationsBottomSheetFragment
@@ -29,7 +30,7 @@ import java.util.*
 import javax.inject.Inject
 import dagger.android.DispatchingAndroidInjector
 
-class MainActivity : BaseActivity(), LifecycleOwner, HasSupportFragmentInjector {
+class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInjector {
 
     @Inject
     lateinit var viewModel: MainActivityViewModel
@@ -194,9 +195,7 @@ class MainActivity : BaseActivity(), LifecycleOwner, HasSupportFragmentInjector 
     }
 
 
-    private fun onError(throwable : Throwable){
 
-    }
 
 //    override fun getLifecycle(): Lifecycle {
 //        return mLifecycleRegistry

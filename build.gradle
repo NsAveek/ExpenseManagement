@@ -4,7 +4,7 @@ buildscript {
     ext{
         kotlin_version = '1.3.31'
         androidPluginVersion = '3.4.0'
-        daggerVersion = '2.15'
+        daggerVersion = '2.21'
         archLifecycleVersion = '1.1.1'
         supportVersion = '28.0.0'
         
@@ -13,7 +13,7 @@ buildscript {
         rxJavaVersion = '2.2.8'
         rxAndroidVersion = '2.1.1'
 
-        multidexVersion = '1.0.2'
+        multidexVersion = '1.0.3'
 
         roomVersion = '1.1.1'
         timberVersion = '4.7.1'

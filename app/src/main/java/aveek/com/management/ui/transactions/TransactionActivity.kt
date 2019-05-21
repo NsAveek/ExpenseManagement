@@ -8,7 +8,6 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.widget.Toast
-import aveek.com.management.BaseActivity
 import aveek.com.management.R
 import aveek.com.management.databinding.ActivityTransactionBinding
 import aveek.com.management.ui.common.NetworkActivity
@@ -28,15 +27,21 @@ class TransactionActivity : NetworkActivity(), LifecycleOwner {
     @Inject
     lateinit var viewModel : TransactionVM
 
+    private lateinit var adapter : TransactionAdapter
+
+    private lateinit var layoutManager: LinearLayoutManager
+
     private lateinit var mLifecycleRegistry: LifecycleRegistry
 
     private lateinit var compositeDisposable : CompositeDisposable
 
     private lateinit var recyclerView : RecyclerView
 
-    private lateinit var adapter : TransactionAdapter
-
-    private lateinit var layoutManager: LinearLayoutManager
+    // Recycler View
+    private var pageNumber = 1
+    private var contentSize = 0
+    private var totalCount: Long = 0
+    private var isLoading = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,6 +51,8 @@ class TransactionActivity : NetworkActivity(), LifecycleOwner {
         initBinding()
 
         initDatabase()
+
+        initiateRecyclerView()
 
         mLifecycleRegistry = LifecycleRegistry(this).apply {
             markState(Lifecycle.State.CREATED)
@@ -70,6 +77,8 @@ class TransactionActivity : NetworkActivity(), LifecycleOwner {
      * @return none
      */
     private fun initiateRecyclerView() {
+        layoutManager = LinearLayoutManager(this).apply { orientation = LinearLayoutManager.VERTICAL }
+        adapter = TransactionAdapter(this)
         recyclerView = findViewById<RecyclerView>(R.id.rcv_transaction).apply {
             this.layoutManager = this@TransactionActivity.layoutManager
             this.adapter = this@TransactionActivity.adapter
@@ -78,16 +87,16 @@ class TransactionActivity : NetworkActivity(), LifecycleOwner {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     super.onScrolled(recyclerView, dx, dy)
 
-//                    if (dy > 0) { // Detects if it is scrolling downwards
-//                        val lastVisibleItemPosition = (it.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
-//                        if (lastVisibleItemPosition == adapter.itemCount - 1) {
+                    if (dy > 0) { // Detects if it is scrolling downwards
+                        val lastVisibleItemPosition = (it.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
+                        if (lastVisibleItemPosition == adapter.itemCount - 1) {
 //                            if (isNetworkAvailable) {
-//                                if (contentSize < totalCount && !isLoading) { // isLoading = false
-//                                    loadMoreRecyclerData(pageNumber = ++pageNumber, pageSize = defaultPageSize, numberOfDays = numberOfDays)
-//                                }
+                                if (contentSize < totalCount && !isLoading) { // isLoading = false
+                                    loadMoreRecyclerData(pageNumber = ++pageNumber)
+                                }
 //                            }
-//                        }
-//                    }
+                        }
+                    }
                 }
 
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
@@ -97,6 +106,29 @@ class TransactionActivity : NetworkActivity(), LifecycleOwner {
         }
     }
 
+    /**
+     * load more data on scroll on recyclerview
+     * @param pageNumber, pageSize, numberOfDays
+     * call fetch api data on scroll with the parameters passed
+     * @return nothing
+     */
+    fun loadMoreRecyclerData(pageNumber: Int) {
+
+        val mockData = Transaction().apply {
+            type = EnumTransactionType.LOADING.type
+        }
+
+        adapter.addDataAtPos(mockData)
+
+        isLoading = true
+
+        fetchDataFromLocalDBOnLoadMore(pageNumber)
+
+    }
+
+    private fun fetchDataFromLocalDBOnLoadMore(pageNumber: Int) {
+        // TODO : Fetch data from database with offset
+    }
 
     private fun loadTransactions(){
         val disposable = database.transactionDao().getAllTransactions()
@@ -107,10 +139,14 @@ class TransactionActivity : NetworkActivity(), LifecycleOwner {
     }
 
     private fun onSuccess(transactionList : List<Transaction>) {
-        for (transaction in transactionList){
-            Toast.makeText(this, transaction.uid, Toast.LENGTH_LONG).show()
-        }
+//        for (transaction in transactionList){
+//            Toast.makeText(this, transaction.uid, Toast.LENGTH_LONG).show()
+//        }
+        adapter.setData(transactionList)
     }
+//    private fun onError(throwable : Throwable){
+//
+//    }
 
     override fun onStart() {
         super.onStart()
@@ -136,4 +172,5 @@ class TransactionActivity : NetworkActivity(), LifecycleOwner {
         mLifecycleRegistry.markState(Lifecycle.State.DESTROYED)
         compositeDisposable.dispose()
     }
+
 }

@@ -15,4 +15,8 @@ public class BaseActivity extends AppCompatActivity {
         AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
     }
+
+    public void onError(Throwable throwable){
+
+    }
 }

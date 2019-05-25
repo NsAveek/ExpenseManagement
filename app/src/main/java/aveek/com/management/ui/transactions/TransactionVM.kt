@@ -14,5 +14,5 @@ class TransactionVM : ViewModel() {
     val transactionTime  = ObservableField<String>()
     val dividerVisibility = ObservableInt()
     val paymentType = ObservableField<String>()
-    val transactionType = ObservableBoolean()
+    val transactionCategory = ObservableField<String>()
 }

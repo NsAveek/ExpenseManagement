@@ -57,7 +57,7 @@ class TransactionAdapter(val context : Context) : RecyclerView.Adapter<RecyclerV
 
     /**
      * set data to the adapter.
-     * @param dataset to add to the adapter as dataset
+     * @param dataset to addTransactionData to the adapter as dataset
      * @return nothing
      */
     fun setData(data : List<Transaction>){
@@ -66,8 +66,8 @@ class TransactionAdapter(val context : Context) : RecyclerView.Adapter<RecyclerV
     }
 
     /**
-     * add data to the existing dataset of the adapter. Mostly used for pagination
-     * @param dataset to add to the existing dataset
+     * addTransactionData data to the existing dataset of the adapter. Mostly used for pagination
+     * @param dataset to addTransactionData to the existing dataset
      * @return nothing
      */
     fun addData(data : List<Transaction>){
@@ -105,8 +105,8 @@ class TransactionAdapter(val context : Context) : RecyclerView.Adapter<RecyclerV
     }
 
     /**
-     * add data to adapter data set
-     * @param data to add
+     * addTransactionData data to adapter data set
+     * @param data to addTransactionData
      * @return none
      */
     fun addDataAtPos(data : Transaction){
@@ -140,29 +140,9 @@ class TransactionAdapter(val context : Context) : RecyclerView.Adapter<RecyclerV
             binding.viewModel = TransactionVM().apply {
                 creditValue.set(data.amount.toString())
                 paymentType.set(data.paymentType)
+                transactionCategory.set(data.category)
+                transactionTime.set(data.date)
             }
-            //            val defaultCreditIcon = "https://img3.icarcdn.com/product_icons/ico_credit.png"
-//            binding.viewModel = TransactionVM().apply {
-//                packageTitle.set(data.description)
-//                creditsAdded.set(data.creditsAdded)
-//                creditValue.set(data.creditinOut)
-//                transactionTime.set(data.transactionTime)
-//                successfulTransaction.set(data.paymentStatus == "Successful")
-//                if (data.listingId == 0L && data.orderId == "") {
-//                    dividerVisibility.set(View.GONE)
-//                }
-//                orderListingId.set(if (data.orderId == "") {
-//                    if (data.listingId != 0L) {
-//                        String.format(ICarApp.iCarApp.getString(R.string.listing_id_transaction, data.listingId.toString()))
-//                    } else {
-//                        ""
-//                    }
-//                } else {
-//                    String.format(ICarApp.iCarApp.getString(R.string.order_id_transaction, data.orderId.toString()))
-//                })
-////            packageIcon.set(getIcon(data.mapName))
-//                packageIcon.set(data.iconUrl?:defaultCreditIcon)
-//            }
         }
     }
 

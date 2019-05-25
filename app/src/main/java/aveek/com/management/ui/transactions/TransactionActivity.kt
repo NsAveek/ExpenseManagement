@@ -7,7 +7,6 @@ import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.widget.Toast
 import aveek.com.management.R
 import aveek.com.management.databinding.ActivityTransactionBinding
 import aveek.com.management.ui.common.NetworkActivity

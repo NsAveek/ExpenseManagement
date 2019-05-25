@@ -32,14 +32,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/transaction_title"
+        app:layout_constraintTop_toTopOf="@+id/transaction_category"
         app:layout_constraintVertical_bias="0.0"
         android:scaleType="fitXY"
         />
     <!-- app:glideImageUrl="@{viewModel.transactionIcon}" -->
 
     <TextView
-        android:id="@+id/transaction_title"
+        android:id="@+id/transaction_category"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -48,13 +48,13 @@
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
         android:maxLines="2"
-        android:text="@{viewModel.transactionTitle}"
+        android:text="@{viewModel.transactionCategory}"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/credit_in_out_text"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/transaction_icon"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="Dummy Title" />
+        tools:text="Dummy Category" />
 
     <TextView
         android:id="@+id/credit_in_out_text"
@@ -66,7 +66,7 @@
         android:text="@{viewModel.creditValue}"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/transaction_title"
+        app:layout_constraintTop_toTopOf="@+id/transaction_category"
         app:layout_constraintVertical_bias="0.0"
         tools:text="-110" />
 
@@ -85,7 +85,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/transaction_icon"
-        app:layout_constraintTop_toBottomOf="@+id/transaction_title"
+        app:layout_constraintTop_toBottomOf="@+id/transaction_category"
         tools:text="16:24:01"
         />
 

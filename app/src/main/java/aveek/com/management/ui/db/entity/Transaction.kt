@@ -12,9 +12,9 @@ data class Transaction (
         @ColumnInfo(name = "category") var category : String?, // Category of the income, i.e : Salary
         @ColumnInfo(name = "purpose") var purpose : String?, // Note on the transaction
         @ColumnInfo(name = "amount") var amount : Double?, // Amount to be credited
-        @ColumnInfo(name = "date") var date : String?, // Date to add the transaction
+        @ColumnInfo(name = "date") var date : String?, // Date to addTransactionData the transaction
         @Ignore var type : String? = null
 ){
-    constructor():this("","","","",0.0,"","")
+    constructor():this("","","","",0.0,"","") // To avoid error with @Ignore annotation
 }
 

@@ -3,28 +3,48 @@ package aveek.com.management.ui.home.operation
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import android.databinding.ObservableField
+import aveek.com.management.ui.db.entity.Transaction
+import java.util.*
 
 class OperationsBottomSheetViewModel : ViewModel() {
 
-    val addData = MutableLiveData<Boolean>().apply { value = false }
-    val dismissData = MutableLiveData<Boolean>().apply { value = false }
-    val amount = ObservableField<String>().apply { set("") }
-    val purpose = ObservableField<String>().apply { set("") }
-    val date = ObservableField<String>().apply { set("") }
+    private val addData = MutableLiveData<Boolean>().apply { value = false }
+    private val dismissData = MutableLiveData<Boolean>().apply { value = false }
+    private val transaction = MutableLiveData<Transaction>()
+    private val amount = ObservableField<String>().apply { set("") }
+    private val purpose = ObservableField<String>().apply { set("") }
+    private val date = ObservableField<String>().apply { set("") }
 
-    fun add(){
-        // TODO : add data from the user input and pass to the fragment
+    fun getDismissCommand() : MutableLiveData<Boolean>{
+        return dismissData
+    }
 
+    fun getAmount() : ObservableField<String>{
+        return amount
+    }
+
+    fun getPurpose() : ObservableField<String>{
+        return purpose
+    }
+
+    fun getDate(): ObservableField<String>{
+        return date
+    }
+
+    fun getTransaction() : MutableLiveData<Transaction> {
+        return transaction
+    }
+    fun addTransactionData(){
+
+
+        // TODO : addTransactionData data from the user input and pass to the fragment
         // TODO : Add Text watcher for Edit Text
-        // TODO : On add () function call, get all data from the fragment
+        // TODO : On addTransactionData () function call, get all data from the fragment
         // TODO : Move all of the operation code from the activity ( i.e : Database operation )
-        addData.value = true
-        dismissData.value = false
 
-        val checkamount = amount.get()
-        val checkpurpose = purpose.get()
-        val checkdate = date.get()
-        val coll = "$checkamount $checkpurpose $checkdate "
+        dismissData.value = false
+        transaction.value = Transaction(UUID.randomUUID().toString(), "credit", "shopping", purpose.get(), amount.get()!!.toDouble(), date.get())
+
     }
     fun dismissBottomSheet(){
         addData.value = false

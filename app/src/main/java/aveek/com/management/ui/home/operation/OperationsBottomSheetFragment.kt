@@ -32,7 +32,7 @@ class OperationsBottomSheetFragment : BottomSheetDialogFragment() {
     private lateinit var mLifecycleRegistry: LifecycleRegistry
 
     override fun onAttach(context: Context?) {
-        AndroidSupportInjection.inject(this);
+        AndroidSupportInjection.inject(this)
         super.onAttach(context)
     }
 
@@ -47,7 +47,7 @@ class OperationsBottomSheetFragment : BottomSheetDialogFragment() {
 
         binding = DataBindingUtil.inflate(inflater, R.layout.operations_bottom_sheet_fragment, container, false)
         binding.viewmodel = viewModel
-        binding.setLifecycleOwner(this) // To enable Live Data object to update the XML on update
+        binding.lifecycleOwner=this // To enable Live Data object to update the XML on update
         return binding.root
     }
 
@@ -61,15 +61,13 @@ class OperationsBottomSheetFragment : BottomSheetDialogFragment() {
 
         binding.viewmodel?.let {localViewModel ->
             with(localViewModel){
-                addData.observe(this@OperationsBottomSheetFragment, Observer {
-                    it?.let {
-                        if (it){
-                            dismissOrProceedEvent.value = Pair(EnumEventState.PROCEED,"nothing new")
+                getTransaction().observe(this@OperationsBottomSheetFragment, Observer {
+                    it?.let { transaction ->
+                            dismissOrProceedEvent.value = Pair(EnumEventState.PROCEED,transaction)
                             dismiss()
-                        }
                     }
                 })
-                dismissData.observe(this@OperationsBottomSheetFragment, Observer {
+                getDismissCommand().observe(this@OperationsBottomSheetFragment, Observer {
                     it?.let {
                         if (it){
                             dismissOrProceedEvent.value = Pair(EnumEventState.DISMISS,"nothing new")

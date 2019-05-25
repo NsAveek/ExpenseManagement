@@ -123,13 +123,11 @@ class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInject
                 it?.let { pair ->
                     when (pair.first.type) {
                         EnumEventState.PROCEED.type -> {
-                        compositeDisposable.add(Completable.fromAction {
-                                Action {
-                                    suspend {
-                                        // TODO : Add the received data from the Bottom Sheet Fragment
-                                        database.transactionDao().insert(Transaction(UUID.randomUUID().toString(), "credit", "shopping", "DIY", 25.50, "2019-04-11"))
-                                    }
-                                }
+                        compositeDisposable.add(
+                            Completable.fromAction {
+                            // TODO : Add the received data from the Bottom Sheet Fragment
+                            database.transactionDao().insert(pair.second as Transaction)
+
                             }.subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(this@MainActivity::onSuccess, this@MainActivity::onError))

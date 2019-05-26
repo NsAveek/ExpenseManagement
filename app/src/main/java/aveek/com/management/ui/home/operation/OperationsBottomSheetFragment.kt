@@ -61,10 +61,16 @@ class OperationsBottomSheetFragment : BottomSheetDialogFragment() {
 
         binding.viewmodel?.let {localViewModel ->
             with(localViewModel){
-                getTransaction().observe(this@OperationsBottomSheetFragment, Observer {
-                    it?.let { transaction ->
-                            dismissOrProceedEvent.value = Pair(EnumEventState.PROCEED,transaction)
-                            dismiss()
+//                getTransaction().observe(this@OperationsBottomSheetFragment, Observer {
+//                    it?.let { transaction ->
+//                            dismissOrProceedEvent.value = Pair(EnumEventState.PROCEED,transaction)
+//                            dismiss()
+//                    }
+//                })
+                addTransactionData().observe(this@OperationsBottomSheetFragment, Observer {
+                    it?.let { transactionStatus ->
+                        dismissOrProceedEvent.value = Pair(EnumEventState.PROCEED,transactionStatus)
+                        dismiss()
                     }
                 })
                 getDismissCommand().observe(this@OperationsBottomSheetFragment, Observer {

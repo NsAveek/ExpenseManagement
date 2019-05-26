@@ -18,6 +18,7 @@ import aveek.com.management.ui.db.AppDatabase
 import aveek.com.management.ui.db.entity.Transaction
 import aveek.com.management.ui.home.operation.OperationsBottomSheetFragment
 import aveek.com.management.ui.transactions.TransactionActivity
+import aveek.com.management.util.EnumDataState
 import aveek.com.management.util.EnumEventState
 import dagger.android.AndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
@@ -43,7 +44,7 @@ class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInject
     private lateinit var binding : ActivityMainBinding
 
     // TODO : Inject Database
-    private lateinit var database : AppDatabase
+
 
     private lateinit var compositeDisposable : CompositeDisposable
 
@@ -52,7 +53,7 @@ class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInject
 
         compositeDisposable = CompositeDisposable()
 
-        initDatabase()
+//        initDatabase()
 
         initBinding()
 
@@ -123,20 +124,29 @@ class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInject
                 it?.let { pair ->
                     when (pair.first.type) {
                         EnumEventState.PROCEED.type -> {
-                        compositeDisposable.add(
-                            Completable.fromAction {
-                            // TODO : Add the received data from the Bottom Sheet Fragment
-                            database.transactionDao().insert(pair.second as Transaction)
-
-                            }.subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(this@MainActivity::onSuccess, this@MainActivity::onError))
+                            with(pair.second){
+                                with(this as Pair<EnumDataState, Any>){
+                                    when(this.first.type){
+                                        EnumDataState.SUCCESS.type -> {
+                                            onSuccess()
+//                                            this.second as Transaction
+                                        }
+                                        EnumDataState.ERROR.type -> {
+                                            val throwable = this.second as Throwable
+                                            onError(throwable.message)
+                                        }
+                                        else -> {
+                                            onError("Something went wrong")
+                                        }
+                                    }
+                                }
+                            }
                         }
                         EnumEventState.DISMISS.type -> {
-                            dismiss()
+                            dismiss() // Redundant dismiss
                         }
                         else -> {
-                            dismiss()
+                            dismiss() // OperationsBottomSheet already have dismiss() command
                         }
                     }
                 }
@@ -144,13 +154,7 @@ class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInject
         }
     }
 
-    private fun initDatabase() {
-//        database = Room.databaseBuilder(
-//                applicationContext,
-//                AppDatabase::class.java, "expense.db"
-//        ).build()
-        database = AppDatabase.getAppDataBase(this)!!
-    }
+
 
     private fun initBinding() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)

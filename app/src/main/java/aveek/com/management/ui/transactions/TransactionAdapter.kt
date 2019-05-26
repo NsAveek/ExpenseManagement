@@ -10,17 +10,7 @@ import aveek.com.management.R
 import aveek.com.management.databinding.LoaderFooterTransparentGreyBinding
 import aveek.com.management.databinding.TransactionHistoryRcvItemBinding
 import aveek.com.management.ui.db.entity.Transaction
-
-/** Represents types of views to load inside recycler view
- * @author Aveek
- * @version 1
- * @since Version - 1.0
- */
-enum class EnumTransactionType(val type: String) {
-    REGULAR("regular"),
-    LOADING("loading")
-}
-
+import aveek.com.management.util.EnumTransactionType
 
 const val REGULAR_TYPE = 1
 const val LOADING_TYPE = 2

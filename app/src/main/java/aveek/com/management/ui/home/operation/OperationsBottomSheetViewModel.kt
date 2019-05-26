@@ -3,10 +3,17 @@ package aveek.com.management.ui.home.operation
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import android.databinding.ObservableField
+import aveek.com.management.repository.DatabaseRepository
 import aveek.com.management.ui.db.entity.Transaction
+import aveek.com.management.util.EnumDataState
+import io.reactivex.Completable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 import java.util.*
 
-class OperationsBottomSheetViewModel : ViewModel() {
+
+class OperationsBottomSheetViewModel(val repository: DatabaseRepository) : ViewModel() {
 
     private val addData = MutableLiveData<Boolean>().apply { value = false }
     private val dismissData = MutableLiveData<Boolean>().apply { value = false }
@@ -14,6 +21,8 @@ class OperationsBottomSheetViewModel : ViewModel() {
     private val amount = ObservableField<String>().apply { set("") }
     private val purpose = ObservableField<String>().apply { set("") }
     private val date = ObservableField<String>().apply { set("") }
+
+    private lateinit var compositeDisposable : CompositeDisposable
 
     fun getDismissCommand() : MutableLiveData<Boolean>{
         return dismissData
@@ -34,7 +43,7 @@ class OperationsBottomSheetViewModel : ViewModel() {
     fun getTransaction() : MutableLiveData<Transaction> {
         return transaction
     }
-    fun addTransactionData(){
+    fun addTransactionData() : MutableLiveData<Pair<EnumDataState,Any>>{
 
 
         // TODO : addTransactionData data from the user input and pass to the fragment
@@ -42,12 +51,30 @@ class OperationsBottomSheetViewModel : ViewModel() {
         // TODO : On addTransactionData () function call, get all data from the fragment
         // TODO : Move all of the operation code from the activity ( i.e : Database operation )
 
-        dismissData.value = false
-        transaction.value = Transaction(UUID.randomUUID().toString(), "credit", "shopping", purpose.get(), amount.get()!!.toDouble(), date.get())
-
+        val data = MutableLiveData<Pair<EnumDataState,Any>>()
+        val transactionModel = Transaction(UUID.randomUUID().toString(), "credit", "shopping", purpose.get(), amount.get()!!.toDouble(), date.get())
+        compositeDisposable.add(
+            Completable.fromAction {
+                repository.saveTransaction(transactionModel)
+            }.subscribeOn(Schedulers.io())
+             .observeOn(AndroidSchedulers.mainThread())
+             .subscribe({
+                 data.value = Pair(EnumDataState.SUCCESS,transactionModel)
+             },{
+                 data.value = Pair(EnumDataState.ERROR,it)
+             })
+        )
+        return data
     }
+
+
     fun dismissBottomSheet(){
         addData.value = false
         dismissData.value = true
+    }
+
+    override fun onCleared() {
+        compositeDisposable.dispose()
+        super.onCleared()
     }
 }

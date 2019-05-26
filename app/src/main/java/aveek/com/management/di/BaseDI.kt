@@ -1,8 +1,10 @@
 package aveek.com.management.di
 
 import android.app.Application
+import android.arch.persistence.room.Database
 import android.content.Context
 import aveek.com.management.BaseApp
+import aveek.com.management.ui.db.AppDatabase
 import aveek.com.management.ui.home.MainActivity
 import aveek.com.management.ui.home.MainActivityModule
 import aveek.com.management.ui.home.operation.OperationsBottomSheetFragment
@@ -17,6 +19,9 @@ import dagger.android.AndroidInjector
 import dagger.android.ContributesAndroidInjector
 import dagger.android.support.AndroidSupportInjectionModule
 import javax.inject.Singleton
+import android.arch.persistence.room.Room
+import aveek.com.management.repository.DatabaseRepository
+import aveek.com.management.ui.db.dao.TransactionDAO
 
 
 @Singleton
@@ -34,6 +39,8 @@ interface AppComponent : AndroidInjector<BaseApp> {
         fun build(): AppComponent
     }
     override fun inject(app : BaseApp)
+
+    fun getRepository(): DatabaseRepository
 }
 
 // This class is responsible for all of the dependencies like retrofit, db, sharedPrefs etc
@@ -45,6 +52,17 @@ internal class AppModule{
     fun provideContext (application: BaseApp) : Context{
         return application
     }
+
+    @Provides
+    @Singleton
+    fun provideDatabase (application: BaseApp) : AppDatabase {
+        return Room.databaseBuilder(application, AppDatabase::class.java, "myDB").build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideDao(database: AppDatabase): TransactionDAO= database.transactionDao()
+
 }
 
 @Module

@@ -1,6 +1,8 @@
 package aveek.com.management.di
 
 import android.app.Application
+import android.arch.lifecycle.ViewModel
+import android.arch.lifecycle.ViewModelProvider
 import android.arch.persistence.room.Database
 import android.content.Context
 import aveek.com.management.BaseApp
@@ -11,10 +13,6 @@ import aveek.com.management.ui.home.operation.OperationsBottomSheetFragment
 import aveek.com.management.ui.home.operation.OperationsBottomSheetFragmentModule
 import aveek.com.management.ui.transactions.TransactionActivity
 import aveek.com.management.ui.transactions.TransactionActivityModule
-import dagger.BindsInstance
-import dagger.Component
-import dagger.Module
-import dagger.Provides
 import dagger.android.AndroidInjector
 import dagger.android.ContributesAndroidInjector
 import dagger.android.support.AndroidSupportInjectionModule
@@ -22,6 +20,11 @@ import javax.inject.Singleton
 import android.arch.persistence.room.Room
 import aveek.com.management.repository.DatabaseRepository
 import aveek.com.management.ui.db.dao.TransactionDAO
+import aveek.com.management.ui.home.operation.OperationsBottomSheetViewModel
+import aveek.com.management.viewModel.ViewModelFactory
+import dagger.*
+import dagger.android.AndroidInjectionModule
+import dagger.multibindings.IntoMap
 
 
 @Singleton
@@ -40,12 +43,12 @@ interface AppComponent : AndroidInjector<BaseApp> {
     }
     override fun inject(app : BaseApp)
 
-    fun getRepository(): DatabaseRepository
+//    fun getRepository(): DatabaseRepository
 }
 
 // This class is responsible for all of the dependencies like retrofit, db, sharedPrefs etc
 
-@Module
+@Module (includes = [ViewModelModule::class])
 internal class AppModule{
     @Provides
     @Singleton
@@ -63,6 +66,23 @@ internal class AppModule{
     @Singleton
     fun provideDao(database: AppDatabase): TransactionDAO= database.transactionDao()
 
+    @Provides
+    @Singleton
+    fun provideViewModelFactory(database: AppDatabase): TransactionDAO= database.transactionDao()
+
+}
+
+@Module
+internal abstract class ViewModelModule{
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(OperationsBottomSheetViewModel::class)
+    abstract fun bindOperationsBottomSheetViewModel(operationsBottomSheetViewModel: OperationsBottomSheetViewModel): ViewModel
+
+
+    @Binds
+    abstract fun bindViewModelFactory(factory: ViewModelFactory): ViewModelProvider.Factory
 }
 
 @Module
@@ -78,7 +98,7 @@ internal abstract class LocalDependencyBuilder{
 
 @Module
 internal abstract class OperationsBottomSheetFragmentProvider{
-    @ContributesAndroidInjector(modules = [OperationsBottomSheetFragmentModule::class])
+    @ContributesAndroidInjector
     abstract fun bindOperationsBottomSheetFragment() : OperationsBottomSheetFragment
 }
 

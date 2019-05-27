@@ -7,6 +7,7 @@ import android.content.Context
 import aveek.com.management.BaseApp
 import aveek.com.management.ui.db.dao.TransactionDAO
 import aveek.com.management.ui.db.entity.Transaction
+import javax.inject.Inject
 
 @Database(entities=[Transaction::class], version=1)
 abstract class AppDatabase : RoomDatabase() {

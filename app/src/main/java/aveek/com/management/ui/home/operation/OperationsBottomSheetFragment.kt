@@ -23,8 +23,9 @@ class OperationsBottomSheetFragment : BottomSheetDialogFragment() {
 
     val dismissOrProceedEvent = MutableLiveData<Pair<EnumEventState,Any>>()
 
-
     @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+
     lateinit var viewModel: OperationsBottomSheetViewModel
 
     private lateinit var binding: OperationsBottomSheetFragmentBinding
@@ -38,6 +39,7 @@ class OperationsBottomSheetFragment : BottomSheetDialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        viewModel = ViewModelProviders.of(this,viewModelFactory).get(OperationsBottomSheetViewModel::class.java)
         mLifecycleRegistry = LifecycleRegistry(this)
         mLifecycleRegistry.markState(Lifecycle.State.CREATED)
     }

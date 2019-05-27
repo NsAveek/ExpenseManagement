@@ -9,7 +9,7 @@ import aveek.com.management.repository.DatabaseRepository
 @Module
 class  OperationsBottomSheetFragmentModule{
 
-    @Provides
-    fun viewModel (repository: DatabaseRepository) = ViewModelProviders.of(context).get(OperationsBottomSheetViewModel::class.java)
-
+//    @Provides
+//    fun viewModel (repository: DatabaseRepository) = ViewModelProviders.of(context).get(OperationsBottomSheetViewModel::class.java)
+//
 }

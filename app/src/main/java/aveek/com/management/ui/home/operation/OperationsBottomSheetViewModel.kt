@@ -3,17 +3,18 @@ package aveek.com.management.ui.home.operation
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import android.databinding.ObservableField
-import aveek.com.management.repository.DatabaseRepository
-import aveek.com.management.ui.db.entity.Transaction
+import aveek.com.management.db.entity.Transaction
+import aveek.com.management.db.repository.DatabaseRepository
 import aveek.com.management.util.EnumDataState
 import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import java.util.*
+import javax.inject.Inject
 
 
-class OperationsBottomSheetViewModel(val repository: DatabaseRepository) : ViewModel() {
+class OperationsBottomSheetViewModel @Inject constructor(val repository: DatabaseRepository) : ViewModel() {
 
     private val addData = MutableLiveData<Boolean>().apply { value = false }
     private val dismissData = MutableLiveData<Boolean>().apply { value = false }

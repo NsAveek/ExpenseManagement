@@ -16,7 +16,7 @@ class BaseApp : MultiDexApplication() , HasActivityInjector{
     lateinit var dispatchingActivityInjector : DispatchingAndroidInjector<Activity>
     override fun onCreate() {
         super.onCreate()
-//        baseApp = this
+        baseApp = this
         AppInjector.init(this)
         Stetho.initializeWithDefaults(this)
     }
@@ -24,7 +24,7 @@ class BaseApp : MultiDexApplication() , HasActivityInjector{
         return  dispatchingActivityInjector
     }
 
-//    companion object {
-//        lateinit var baseApp: BaseApp
-//    }
+    companion object {
+        lateinit var baseApp: BaseApp
+    }
 }

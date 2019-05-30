@@ -3,28 +3,25 @@ package aveek.com.management.di
 import android.app.Application
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
-import android.arch.persistence.room.Database
+import android.arch.persistence.room.Room
 import android.content.Context
 import aveek.com.management.BaseApp
-import aveek.com.management.ui.db.AppDatabase
+import aveek.com.management.db.AppDatabase
+import aveek.com.management.db.dao.TransactionDAO
+import aveek.com.management.db.repository.DatabaseRepository
 import aveek.com.management.ui.home.MainActivity
 import aveek.com.management.ui.home.MainActivityModule
 import aveek.com.management.ui.home.operation.OperationsBottomSheetFragment
-import aveek.com.management.ui.home.operation.OperationsBottomSheetFragmentModule
+import aveek.com.management.ui.home.operation.OperationsBottomSheetViewModel
 import aveek.com.management.ui.transactions.TransactionActivity
 import aveek.com.management.ui.transactions.TransactionActivityModule
+import aveek.com.management.viewModel.ViewModelFactory
+import dagger.*
 import dagger.android.AndroidInjector
 import dagger.android.ContributesAndroidInjector
 import dagger.android.support.AndroidSupportInjectionModule
-import javax.inject.Singleton
-import android.arch.persistence.room.Room
-import aveek.com.management.repository.DatabaseRepository
-import aveek.com.management.ui.db.dao.TransactionDAO
-import aveek.com.management.ui.home.operation.OperationsBottomSheetViewModel
-import aveek.com.management.viewModel.ViewModelFactory
-import dagger.*
-import dagger.android.AndroidInjectionModule
 import dagger.multibindings.IntoMap
+import javax.inject.Singleton
 
 
 @Singleton
@@ -64,7 +61,12 @@ internal class AppModule{
 
     @Provides
     @Singleton
-    fun provideDao(database: AppDatabase): TransactionDAO= database.transactionDao()
+    fun provideDao(database: AppDatabase): TransactionDAO = database.transactionDao()
+
+    @Provides
+    @Singleton
+    fun provideRepo(database: AppDatabase): DatabaseRepository = DatabaseRepository(database)
+
 
     @Provides
     @Singleton
@@ -78,7 +80,7 @@ internal abstract class ViewModelModule{
     @Binds
     @IntoMap
     @ViewModelKey(OperationsBottomSheetViewModel::class)
-    abstract fun bindOperationsBottomSheetViewModel(operationsBottomSheetViewModel: OperationsBottomSheetViewModel): ViewModel
+    abstract fun bindOperationsBottomSheetViewModel (operationsBottomSheetViewModel: OperationsBottomSheetViewModel): ViewModel
 
 
     @Binds

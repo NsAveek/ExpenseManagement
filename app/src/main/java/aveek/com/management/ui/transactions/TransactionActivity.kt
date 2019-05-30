@@ -10,8 +10,9 @@ import android.support.v7.widget.RecyclerView
 import aveek.com.management.R
 import aveek.com.management.databinding.ActivityTransactionBinding
 import aveek.com.management.ui.common.NetworkActivity
-import aveek.com.management.ui.db.AppDatabase
-import aveek.com.management.ui.db.entity.Transaction
+import aveek.com.management.db.AppDatabase
+import aveek.com.management.db.entity.Transaction
+import aveek.com.management.util.EnumTransactionType
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -21,10 +22,13 @@ class TransactionActivity : NetworkActivity(), LifecycleOwner {
 
     private lateinit var binding : ActivityTransactionBinding
 
-    private lateinit var database : AppDatabase
+//    private lateinit var database : AppDatabase
 
     @Inject
     lateinit var viewModel : TransactionVM
+
+    @Inject
+    lateinit var database: AppDatabase
 
     private lateinit var adapter : TransactionAdapter
 
@@ -49,7 +53,7 @@ class TransactionActivity : NetworkActivity(), LifecycleOwner {
 
         initBinding()
 
-        initDatabase()
+//        initDatabase()
 
         initiateRecyclerView()
 
@@ -66,9 +70,9 @@ class TransactionActivity : NetworkActivity(), LifecycleOwner {
         binding.lifecycleOwner=this // To enable Live Data object to update the XML on update
     }
 
-    private fun initDatabase() {
-        database = AppDatabase.getAppDataBase(this)!!
-    }
+//    private fun initDatabase() {
+//        database = AppDatabase.getAppDataBase(this)!!
+//    }
 
     /**
      * initialize recycler view
@@ -133,7 +137,7 @@ class TransactionActivity : NetworkActivity(), LifecycleOwner {
         val disposable = database.transactionDao().getAllTransactions()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this@TransactionActivity::onSuccess, this@TransactionActivity::onError)
+                .subscribe()
         compositeDisposable.add(disposable)
     }
 

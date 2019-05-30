@@ -1,4 +1,4 @@
-package aveek.com.management.ui.db.entity
+package aveek.com.management.db.entity
 
 import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Entity

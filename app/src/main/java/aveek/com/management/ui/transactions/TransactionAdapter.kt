@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import aveek.com.management.R
 import aveek.com.management.databinding.LoaderFooterTransparentGreyBinding
 import aveek.com.management.databinding.TransactionHistoryRcvItemBinding
-import aveek.com.management.ui.db.entity.Transaction
+import aveek.com.management.db.entity.Transaction
 import aveek.com.management.util.EnumTransactionType
 
 const val REGULAR_TYPE = 1

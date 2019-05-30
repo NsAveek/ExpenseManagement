@@ -1,8 +1,6 @@
 package aveek.com.management.ui.transactions
 
-import android.arch.lifecycle.Lifecycle
-import android.arch.lifecycle.LifecycleOwner
-import android.arch.lifecycle.LifecycleRegistry
+import android.arch.lifecycle.*
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
@@ -12,20 +10,24 @@ import aveek.com.management.databinding.ActivityTransactionBinding
 import aveek.com.management.ui.common.NetworkActivity
 import aveek.com.management.db.AppDatabase
 import aveek.com.management.db.entity.Transaction
+import aveek.com.management.di.Injectable
+import aveek.com.management.ui.home.MainActivityViewModel
 import aveek.com.management.util.EnumTransactionType
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
-class TransactionActivity : NetworkActivity(), LifecycleOwner {
+class TransactionActivity : NetworkActivity(), LifecycleOwner, Injectable {
 
     private lateinit var binding : ActivityTransactionBinding
 
 //    private lateinit var database : AppDatabase
 
     @Inject
-    lateinit var viewModel : TransactionVM
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    lateinit var viewModel: TransactionVM
 
     @Inject
     lateinit var database: AppDatabase
@@ -50,6 +52,8 @@ class TransactionActivity : NetworkActivity(), LifecycleOwner {
         super.onCreate(savedInstanceState)
 
         compositeDisposable = CompositeDisposable()
+
+        viewModel = ViewModelProviders.of(this,viewModelFactory).get(TransactionVM::class.java)
 
         initBinding()
 

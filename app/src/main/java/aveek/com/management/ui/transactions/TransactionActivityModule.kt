@@ -11,7 +11,7 @@ import dagger.Provides
 class TransactionActivityModule{
 
     // TODO : Change context insertion to viewmodel
-    @Provides
-    fun viewModel (context : TransactionActivity) = ViewModelProviders.of(context).get(TransactionVM::class.java)
+//    @Provides
+//    fun viewModel (context : TransactionActivity) = ViewModelProviders.of(context).get(TransactionVM::class.java)
 
 }

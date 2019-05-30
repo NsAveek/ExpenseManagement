@@ -47,6 +47,7 @@ interface AppComponent : AndroidInjector<BaseApp> {
 
 @Module (includes = [ViewModelModule::class])
 internal class AppModule{
+
     @Provides
     @Singleton
     fun provideContext (application: BaseApp) : Context{
@@ -68,9 +69,9 @@ internal class AppModule{
     fun provideRepo(database: AppDatabase): DatabaseRepository = DatabaseRepository(database)
 
 
-    @Provides
-    @Singleton
-    fun provideViewModelFactory(database: AppDatabase): TransactionDAO= database.transactionDao()
+//    @Provides
+//    @Singleton
+//    fun provideViewModelFactory(database: AppDatabase): TransactionDAO= ViewModelFactory
 
 }
 

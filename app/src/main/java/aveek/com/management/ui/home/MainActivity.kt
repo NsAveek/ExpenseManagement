@@ -1,10 +1,7 @@
 package aveek.com.management.ui.home
 
 
-import android.arch.lifecycle.Lifecycle
-import android.arch.lifecycle.LifecycleOwner
-import android.arch.lifecycle.LifecycleRegistry
-import android.arch.lifecycle.Observer
+import android.arch.lifecycle.*
 import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
@@ -12,8 +9,10 @@ import android.support.v4.app.Fragment
 import android.widget.Toast
 import aveek.com.management.R
 import aveek.com.management.databinding.ActivityMainBinding
+import aveek.com.management.di.Injectable
 import aveek.com.management.ui.common.NetworkActivity
 import aveek.com.management.ui.home.operation.OperationsBottomSheetFragment
+import aveek.com.management.ui.home.operation.OperationsBottomSheetViewModel
 import aveek.com.management.ui.transactions.TransactionActivity
 import aveek.com.management.util.EnumDataState
 import aveek.com.management.util.EnumEventState
@@ -23,9 +22,11 @@ import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 import dagger.android.DispatchingAndroidInjector
 
-class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInjector {
+class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInjector, Injectable {
 
     @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+
     lateinit var viewModel: MainActivityViewModel
 
     @Inject
@@ -38,10 +39,13 @@ class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInject
     // TODO : Inject Database
 
 
+
     private lateinit var compositeDisposable : CompositeDisposable
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        viewModel = ViewModelProviders.of(this,viewModelFactory).get(MainActivityViewModel::class.java)
 
         compositeDisposable = CompositeDisposable()
 

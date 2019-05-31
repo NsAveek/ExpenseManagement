@@ -13,12 +13,13 @@ import aveek.com.management.db.entity.Transaction
 import aveek.com.management.di.Injectable
 import aveek.com.management.ui.home.MainActivityViewModel
 import aveek.com.management.util.EnumTransactionType
+import dagger.android.AndroidInjection
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
-class TransactionActivity : NetworkActivity(), LifecycleOwner, Injectable {
+class TransactionActivity : NetworkActivity(), LifecycleOwner {
 
     private lateinit var binding : ActivityTransactionBinding
 
@@ -29,8 +30,8 @@ class TransactionActivity : NetworkActivity(), LifecycleOwner, Injectable {
 
     lateinit var viewModel: TransactionVM
 
-    @Inject
-    lateinit var database: AppDatabase
+//    @Inject
+//    lateinit var database: AppDatabase
 
     private lateinit var adapter : TransactionAdapter
 
@@ -49,6 +50,9 @@ class TransactionActivity : NetworkActivity(), LifecycleOwner, Injectable {
     private var isLoading = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        AndroidInjection.inject(this)
+
         super.onCreate(savedInstanceState)
 
         compositeDisposable = CompositeDisposable()
@@ -138,11 +142,11 @@ class TransactionActivity : NetworkActivity(), LifecycleOwner, Injectable {
     }
 
     private fun loadTransactions(){
-        val disposable = database.transactionDao().getAllTransactions()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe()
-        compositeDisposable.add(disposable)
+//        val disposable = database.transactionDao().getAllTransactions()
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe()
+//        compositeDisposable.add(disposable)
     }
 
     private fun onSuccess(transactionList : List<Transaction>) {

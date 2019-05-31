@@ -16,13 +16,14 @@ import aveek.com.management.ui.home.operation.OperationsBottomSheetViewModel
 import aveek.com.management.ui.transactions.TransactionActivity
 import aveek.com.management.util.EnumDataState
 import aveek.com.management.util.EnumEventState
+import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
 import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 import dagger.android.DispatchingAndroidInjector
 
-class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInjector, Injectable {
+class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInjector {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -36,13 +37,12 @@ class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInject
 
     private lateinit var binding : ActivityMainBinding
 
-    // TODO : Inject Database
-
-
-
     private lateinit var compositeDisposable : CompositeDisposable
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        AndroidInjection.inject(this)
+
         super.onCreate(savedInstanceState)
 
         viewModel = ViewModelProviders.of(this,viewModelFactory).get(MainActivityViewModel::class.java)

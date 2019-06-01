@@ -1,9 +1,7 @@
 package aveek.com.management.ui.home
 
 
-import android.arch.lifecycle.Lifecycle
-import android.arch.lifecycle.LifecycleOwner
-import android.arch.lifecycle.LifecycleRegistry
+import android.arch.lifecycle.*
 import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.databinding.DataBindingUtil
@@ -13,6 +11,7 @@ import android.widget.Toast
 import aveek.com.management.BaseActivity
 import aveek.com.management.R
 import aveek.com.management.databinding.ActivityMainBinding
+import aveek.com.management.di.Injectable
 import aveek.com.management.ui.common.NetworkActivity
 import aveek.com.management.ui.db.AppDatabase
 import aveek.com.management.ui.db.entity.Transaction
@@ -33,7 +32,10 @@ import dagger.android.DispatchingAndroidInjector
 
 class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInjector {
 
+
     @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+
     lateinit var viewModel: MainActivityViewModel
 
     @Inject
@@ -43,17 +45,14 @@ class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInject
 
     private lateinit var binding : ActivityMainBinding
 
-    // TODO : Inject Database
-
-
     private lateinit var compositeDisposable : CompositeDisposable
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        compositeDisposable = CompositeDisposable()
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(MainActivityViewModel::class.java)
 
-//        initDatabase()
+        compositeDisposable = CompositeDisposable()
 
         initBinding()
 

@@ -1,8 +1,6 @@
 package aveek.com.management.ui.transactions
 
-import android.arch.lifecycle.Lifecycle
-import android.arch.lifecycle.LifecycleOwner
-import android.arch.lifecycle.LifecycleRegistry
+import android.arch.lifecycle.*
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
@@ -12,6 +10,8 @@ import aveek.com.management.databinding.ActivityTransactionBinding
 import aveek.com.management.ui.common.NetworkActivity
 import aveek.com.management.ui.db.AppDatabase
 import aveek.com.management.ui.db.entity.Transaction
+import aveek.com.management.ui.home.operation.OperationsBottomSheetViewModel
+import aveek.com.management.util.EnumTransactionType
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -21,9 +21,9 @@ class TransactionActivity : NetworkActivity(), LifecycleOwner {
 
     private lateinit var binding : ActivityTransactionBinding
 
-    private lateinit var database : AppDatabase
-
     @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+
     lateinit var viewModel : TransactionVM
 
     private lateinit var adapter : TransactionAdapter
@@ -45,11 +45,11 @@ class TransactionActivity : NetworkActivity(), LifecycleOwner {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        viewModel = ViewModelProviders.of(this,viewModelFactory).get(TransactionVM::class.java)
+
         compositeDisposable = CompositeDisposable()
 
         initBinding()
-
-        initDatabase()
 
         initiateRecyclerView()
 
@@ -66,9 +66,6 @@ class TransactionActivity : NetworkActivity(), LifecycleOwner {
         binding.lifecycleOwner=this // To enable Live Data object to update the XML on update
     }
 
-    private fun initDatabase() {
-        database = AppDatabase.getAppDataBase(this)!!
-    }
 
     /**
      * initialize recycler view
@@ -130,11 +127,11 @@ class TransactionActivity : NetworkActivity(), LifecycleOwner {
     }
 
     private fun loadTransactions(){
-        val disposable = database.transactionDao().getAllTransactions()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this@TransactionActivity::onSuccess, this@TransactionActivity::onError)
-        compositeDisposable.add(disposable)
+//        val disposable = database.transactionDao().getAllTransactions()
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(this@TransactionActivity::onSuccess, this@TransactionActivity::onError)
+//        compositeDisposable.add(disposable)
     }
 
     private fun onSuccess(transactionList : List<Transaction>) {

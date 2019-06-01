@@ -10,15 +10,16 @@ import android.view.View
 import android.view.ViewGroup
 import aveek.com.management.R
 import aveek.com.management.databinding.OperationsBottomSheetFragmentBinding
+import aveek.com.management.di.Injectable
 import aveek.com.management.util.EnumEventState
 import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
 
 
-class OperationsBottomSheetFragment : BottomSheetDialogFragment() {
+class OperationsBottomSheetFragment : BottomSheetDialogFragment(), Injectable {
 
     companion object {
-        fun getOperationsBottomSheetFragment() =OperationsBottomSheetFragment()
+        fun getOperationsBottomSheetFragment() = OperationsBottomSheetFragment()
     }
 
     val dismissOrProceedEvent = MutableLiveData<Pair<EnumEventState,Any>>()
@@ -33,7 +34,6 @@ class OperationsBottomSheetFragment : BottomSheetDialogFragment() {
     private lateinit var mLifecycleRegistry: LifecycleRegistry
 
     override fun onAttach(context: Context?) {
-        AndroidSupportInjection.inject(this)
         super.onAttach(context)
     }
 

@@ -11,9 +11,10 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import java.util.*
+import javax.inject.Inject
 
 
-class OperationsBottomSheetViewModel(val repository: DatabaseRepository) : ViewModel() {
+class OperationsBottomSheetViewModel @Inject constructor() : ViewModel() {
 
     private val addData = MutableLiveData<Boolean>().apply { value = false }
     private val dismissData = MutableLiveData<Boolean>().apply { value = false }
@@ -55,7 +56,7 @@ class OperationsBottomSheetViewModel(val repository: DatabaseRepository) : ViewM
         val transactionModel = Transaction(UUID.randomUUID().toString(), "credit", "shopping", purpose.get(), amount.get()!!.toDouble(), date.get())
         compositeDisposable.add(
             Completable.fromAction {
-                repository.saveTransaction(transactionModel)
+//                repository.saveTransaction(transactionModel)
             }.subscribeOn(Schedulers.io())
              .observeOn(AndroidSchedulers.mainThread())
              .subscribe({

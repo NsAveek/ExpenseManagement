@@ -10,7 +10,7 @@ import dagger.Provides
 @Module
 class TransactionActivityModule{
 
-//    // TODO : Change context insertion to viewmodel
+    // TODO : Change context insertion to viewmodel
 //    @Provides
 //    fun viewModel (context : TransactionActivity) = ViewModelProviders.of(context).get(TransactionVM::class.java)
 

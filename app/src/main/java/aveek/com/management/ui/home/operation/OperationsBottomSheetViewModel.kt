@@ -3,8 +3,8 @@ package aveek.com.management.ui.home.operation
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import android.databinding.ObservableField
-import aveek.com.management.repository.DatabaseRepository
-import aveek.com.management.ui.db.entity.Transaction
+import aveek.com.management.db.entity.Transaction
+import aveek.com.management.db.repository.DatabaseRepository
 import aveek.com.management.util.EnumDataState
 import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -14,7 +14,7 @@ import java.util.*
 import javax.inject.Inject
 
 
-class OperationsBottomSheetViewModel @Inject constructor() : ViewModel() {
+class OperationsBottomSheetViewModel @Inject constructor(val repository: DatabaseRepository): ViewModel() {
 
     private val addData = MutableLiveData<Boolean>().apply { value = false }
     private val dismissData = MutableLiveData<Boolean>().apply { value = false }
@@ -56,7 +56,7 @@ class OperationsBottomSheetViewModel @Inject constructor() : ViewModel() {
         val transactionModel = Transaction(UUID.randomUUID().toString(), "credit", "shopping", purpose.get(), amount.get()!!.toDouble(), date.get())
         compositeDisposable.add(
             Completable.fromAction {
-//                repository.saveTransaction(transactionModel)
+                repository.saveTransaction(transactionModel)
             }.subscribeOn(Schedulers.io())
              .observeOn(AndroidSchedulers.mainThread())
              .subscribe({

@@ -1,6 +1,7 @@
 package aveek.com.management
 
 import android.app.Activity
+import android.app.Application
 import android.support.multidex.MultiDexApplication
 import android.support.v7.app.AppCompatDelegate
 import aveek.com.management.di.AppInjector
@@ -14,9 +15,10 @@ class BaseApp : MultiDexApplication() , HasActivityInjector{
 
     @Inject
     lateinit var dispatchingActivityInjector : DispatchingAndroidInjector<Activity>
+
     override fun onCreate() {
         super.onCreate()
-//        baseApp = this
+        baseApp = this
         AppInjector.init(this)
         Stetho.initializeWithDefaults(this)
     }
@@ -24,7 +26,7 @@ class BaseApp : MultiDexApplication() , HasActivityInjector{
         return  dispatchingActivityInjector
     }
 
-//    companion object {
-//        lateinit var baseApp: BaseApp
-//    }
+    companion object {
+        lateinit var baseApp: BaseApp
+    }
 }

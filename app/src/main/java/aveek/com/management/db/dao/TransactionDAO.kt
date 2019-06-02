@@ -1,10 +1,10 @@
-package aveek.com.management.ui.db.dao
+package aveek.com.management.db.dao
 
 import android.arch.persistence.room.Dao
 import android.arch.persistence.room.Delete
 import android.arch.persistence.room.Insert
 import android.arch.persistence.room.Query
-import aveek.com.management.ui.db.entity.Transaction
+import aveek.com.management.db.entity.Transaction
 import io.reactivex.Single
 
 @Dao

@@ -3,7 +3,6 @@ package aveek.com.management.ui.home
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import android.databinding.ObservableField
-import aveek.com.management.repository.DatabaseRepository
 import javax.inject.Inject
 
 

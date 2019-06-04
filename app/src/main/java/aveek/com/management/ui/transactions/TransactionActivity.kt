@@ -30,9 +30,6 @@ class TransactionActivity : NetworkActivity(), LifecycleOwner {
 
     lateinit var viewModel: TransactionVM
 
-//    @Inject
-//    lateinit var database: AppDatabase
-
     private lateinit var adapter : TransactionAdapter
 
     private lateinit var layoutManager: LinearLayoutManager
@@ -78,9 +75,6 @@ class TransactionActivity : NetworkActivity(), LifecycleOwner {
         binding.lifecycleOwner=this // To enable Live Data object to update the XML on update
     }
 
-//    private fun initDatabase() {
-//        database = AppDatabase.getAppDataBase(this)!!
-//    }
 
     /**
      * initialize recycler view
@@ -147,6 +141,12 @@ class TransactionActivity : NetworkActivity(), LifecycleOwner {
 //                .observeOn(AndroidSchedulers.mainThread())
 //                .subscribe()
 //        compositeDisposable.add(disposable)
+
+        val disposable = viewModel.loadTransactions()
+                                                .subscribeOn(Schedulers.io())
+                                                .observeOn(AndroidSchedulers.mainThread())
+                                                .subscribe()
+        compositeDisposable.add(disposable)
     }
 
     private fun onSuccess(transactionList : List<Transaction>) {

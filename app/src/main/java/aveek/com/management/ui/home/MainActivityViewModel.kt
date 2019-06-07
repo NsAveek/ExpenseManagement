@@ -6,7 +6,7 @@ import android.databinding.ObservableField
 import javax.inject.Inject
 
 
-class MainActivityViewModel : ViewModel() {
+class MainActivityViewModel @Inject constructor(): ViewModel() {
     val creditData = MutableLiveData<Boolean>()
     val transactionHistory = MutableLiveData<Boolean>()
     val category = MutableLiveData<Boolean>()

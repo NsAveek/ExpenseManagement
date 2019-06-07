@@ -23,8 +23,6 @@ class TransactionActivity : NetworkActivity(), LifecycleOwner {
 
     private lateinit var binding : ActivityTransactionBinding
 
-//    private lateinit var database : AppDatabase
-
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
@@ -136,28 +134,22 @@ class TransactionActivity : NetworkActivity(), LifecycleOwner {
     }
 
     private fun loadTransactions(){
-//        val disposable = database.transactionDao().getAllTransactions()
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe()
-//        compositeDisposable.add(disposable)
 
-        val disposable = viewModel.loadTransactions()
-                                                .subscribeOn(Schedulers.io())
-                                                .observeOn(AndroidSchedulers.mainThread())
-                                                .subscribe()
+        val disposable =
+                viewModel.loadTransactions()
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe({
+                            onSuccess(it)
+                        },{
+                            onError(it.message)
+                        })
         compositeDisposable.add(disposable)
     }
 
     private fun onSuccess(transactionList : List<Transaction>) {
-//        for (transaction in transactionList){
-//            Toast.makeText(this, transaction.uid, Toast.LENGTH_LONG).show()
-//        }
         adapter.setData(transactionList)
     }
-//    private fun onError(throwable : Throwable){
-//
-//    }
 
     override fun onStart() {
         super.onStart()
@@ -183,5 +175,4 @@ class TransactionActivity : NetworkActivity(), LifecycleOwner {
         mLifecycleRegistry.markState(Lifecycle.State.DESTROYED)
         compositeDisposable.dispose()
     }
-
 }

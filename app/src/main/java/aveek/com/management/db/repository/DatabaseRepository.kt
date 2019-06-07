@@ -6,6 +6,7 @@ import io.reactivex.Single
 import javax.inject.Inject
 
 class DatabaseRepository @Inject constructor(private val dao: TransactionDAO): IRepository {
+
     override fun getAllTransactions(): Single<List<Transaction>> {
         return dao.getAllTransactions()
     }

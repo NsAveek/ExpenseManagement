@@ -10,7 +10,9 @@ import aveek.com.management.R
 import aveek.com.management.databinding.LoaderFooterTransparentGreyBinding
 import aveek.com.management.databinding.TransactionHistoryRcvItemBinding
 import aveek.com.management.db.entity.Transaction
+import aveek.com.management.db.repository.DatabaseRepository
 import aveek.com.management.util.EnumTransactionType
+import javax.inject.Inject
 
 const val REGULAR_TYPE = 1
 const val LOADING_TYPE = 2
@@ -18,8 +20,10 @@ const val DOWNLOAD_MORE_DATA = 3
 
 class TransactionAdapter(val context : Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
+    @Inject
+    lateinit var repository : DatabaseRepository
     private val items : ArrayList<Transaction> = ArrayList()
-    private val viewModel : TransactionVM = TransactionVM()
+    private val viewModel : TransactionVM = TransactionVM(repository)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when(viewType){
@@ -29,7 +33,7 @@ class TransactionAdapter(val context : Context) : RecyclerView.Adapter<RecyclerV
             }
             else -> {
                 RegularTransactionViewHolder(DataBindingUtil.inflate(LayoutInflater.from(context),
-                        R.layout.transaction_history_rcv_item, parent, false),viewModel)
+                        R.layout.transaction_history_rcv_item, parent, false),repository)
             }
         }
     }
@@ -117,7 +121,7 @@ class TransactionAdapter(val context : Context) : RecyclerView.Adapter<RecyclerV
      * @version 1
      * @since Version 1.0
      */
-    class RegularTransactionViewHolder(val binding : TransactionHistoryRcvItemBinding,viewModel: TransactionVM)
+    class RegularTransactionViewHolder(val binding : TransactionHistoryRcvItemBinding,val repository: DatabaseRepository)
         : RecyclerView.ViewHolder(binding.root){
 
         /**
@@ -127,7 +131,7 @@ class TransactionAdapter(val context : Context) : RecyclerView.Adapter<RecyclerV
          */
         fun bind(data: Transaction) {
 
-            binding.viewModel = TransactionVM().apply {
+            binding.viewModel = TransactionVM(repository).apply {
                 creditValue.set(data.amount.toString())
                 paymentType.set(data.paymentType)
                 transactionCategory.set(data.category)

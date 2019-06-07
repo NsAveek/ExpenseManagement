@@ -6,7 +6,11 @@ import android.databinding.ObservableField
 import android.databinding.ObservableInt
 import aveek.com.management.db.entity.Transaction
 import aveek.com.management.db.repository.DatabaseRepository
+import aveek.com.management.util.EnumDataState
 import io.reactivex.Single
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 class TransactionVM @Inject constructor(val repository: DatabaseRepository): ViewModel() {
@@ -21,8 +25,5 @@ class TransactionVM @Inject constructor(val repository: DatabaseRepository): Vie
 
     fun loadTransactions() : Single<List<Transaction>>{
         return repository.getAllTransactions()
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe()
     }
 }

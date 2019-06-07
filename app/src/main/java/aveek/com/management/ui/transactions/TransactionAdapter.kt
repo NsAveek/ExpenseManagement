@@ -18,10 +18,8 @@ const val REGULAR_TYPE = 1
 const val LOADING_TYPE = 2
 const val DOWNLOAD_MORE_DATA = 3
 
-class TransactionAdapter(val context : Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class TransactionAdapter(val context : Context, val repository: DatabaseRepository) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    @Inject
-    lateinit var repository : DatabaseRepository
     private val items : ArrayList<Transaction> = ArrayList()
     private val viewModel : TransactionVM = TransactionVM(repository)
 

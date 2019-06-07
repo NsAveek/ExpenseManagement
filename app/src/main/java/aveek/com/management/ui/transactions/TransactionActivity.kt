@@ -7,11 +7,9 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import aveek.com.management.R
 import aveek.com.management.databinding.ActivityTransactionBinding
-import aveek.com.management.ui.common.NetworkActivity
-import aveek.com.management.db.AppDatabase
 import aveek.com.management.db.entity.Transaction
-import aveek.com.management.di.Injectable
-import aveek.com.management.ui.home.MainActivityViewModel
+import aveek.com.management.db.repository.DatabaseRepository
+import aveek.com.management.ui.common.NetworkActivity
 import aveek.com.management.util.EnumTransactionType
 import dagger.android.AndroidInjection
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -25,6 +23,9 @@ class TransactionActivity : NetworkActivity(), LifecycleOwner {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    @Inject
+    lateinit var repository : DatabaseRepository
 
     lateinit var viewModel: TransactionVM
 
@@ -81,7 +82,7 @@ class TransactionActivity : NetworkActivity(), LifecycleOwner {
      */
     private fun initiateRecyclerView() {
         layoutManager = LinearLayoutManager(this).apply { orientation = LinearLayoutManager.VERTICAL }
-        adapter = TransactionAdapter(this)
+        adapter = TransactionAdapter(this,repository)
         recyclerView = findViewById<RecyclerView>(R.id.rcv_transaction).apply {
             this.layoutManager = this@TransactionActivity.layoutManager
             this.adapter = this@TransactionActivity.adapter

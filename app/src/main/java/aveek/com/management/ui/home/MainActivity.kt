@@ -125,7 +125,6 @@ class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInject
                                     when(this.first.type){
                                         EnumDataState.SUCCESS.type -> {
                                             onSuccess()
-//                                            this.second as Transaction
                                         }
                                         EnumDataState.ERROR.type -> {
                                             val throwable = this.second as Throwable

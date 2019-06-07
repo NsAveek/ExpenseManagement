@@ -57,8 +57,6 @@ class TransactionActivity : NetworkActivity(), LifecycleOwner {
 
         initBinding()
 
-//        initDatabase()
-
         initiateRecyclerView()
 
         mLifecycleRegistry = LifecycleRegistry(this).apply {

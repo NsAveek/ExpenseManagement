@@ -21,13 +21,15 @@ import aveek.com.management.viewModel.ExpenseViewModelFactory
 import dagger.*
 import dagger.android.AndroidInjectionModule
 import dagger.android.ContributesAndroidInjector
+import dagger.android.support.AndroidSupportInjection
+import dagger.android.support.AndroidSupportInjectionModule
 import dagger.multibindings.IntoMap
 import javax.inject.Singleton
 
 
 @Singleton
 @Component ( modules = [
-    AndroidInjectionModule::class,
+    AndroidSupportInjectionModule::class,
     AppModule::class,
     LocalDependencyBuilder::class])
 interface AppComponent{

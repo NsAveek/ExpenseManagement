@@ -18,6 +18,7 @@ interface TransactionDAO  {
 
     @Query("SELECT * FROM `transaction`")
     fun getAllTransactions() : Single<List<Transaction>>
-//    fun getAllTransactions() : Single<List<TransactionCopy>>
 
+    @Query("SELECT * FROM `transaction` LIMIT :pageSize OFFSET :lastIndex")
+    fun getTransactions(lastIndex : Int, pageSize : Int) : Single<List<Transaction>>
 }

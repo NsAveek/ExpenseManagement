@@ -7,10 +7,13 @@ import javax.inject.Inject
 
 class DatabaseRepository @Inject constructor(private val dao: TransactionDAO): IRepository {
 
+    override fun getTransactions(lastIndex : Int, pageSize : Int) : Single<List<Transaction>>{
+        return dao.getTransactions(lastIndex,pageSize)
+    }
+
     override fun getAllTransactions(): Single<List<Transaction>> {
         return dao.getAllTransactions()
     }
-
 
     override fun saveTransaction(transaction: Transaction) {
         dao.insert(transaction)

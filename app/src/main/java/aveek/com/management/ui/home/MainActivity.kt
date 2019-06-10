@@ -49,8 +49,6 @@ class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInject
 
         compositeDisposable = CompositeDisposable()
 
-//        initDatabase()
-
         initBinding()
 
         mLifecycleRegistry = LifecycleRegistry(this).apply {
@@ -169,7 +167,6 @@ class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInject
 
     override fun onPause() {
         super.onPause()
-
     }
 
     override fun onStop() {

@@ -3,6 +3,7 @@ package aveek.com.management.ui.transactions
 import android.arch.lifecycle.*
 import android.databinding.DataBindingUtil
 import android.os.Bundle
+import android.os.Handler
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import aveek.com.management.R
@@ -42,7 +43,8 @@ class TransactionActivity : NetworkActivity(), LifecycleOwner {
     // Recycler View
     private var pageNumber = 1
     private var contentSize = 0
-    private var totalCount: Long = 0
+    private var lastIndex = 0
+    private var totalCount: Long = 100
     private var isLoading = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -94,7 +96,8 @@ class TransactionActivity : NetworkActivity(), LifecycleOwner {
                         if (lastVisibleItemPosition == adapter.itemCount - 1) {
 //                            if (isNetworkAvailable) {
                                 if (contentSize < totalCount && !isLoading) { // isLoading = false
-                                    loadMoreRecyclerData(pageNumber = ++pageNumber)
+//                                    loadMoreRecyclerData(pageNumber = ++pageNumber)
+                                    loadMoreRecyclerData(lastIndex)
                                 }
 //                            }
                         }
@@ -114,7 +117,7 @@ class TransactionActivity : NetworkActivity(), LifecycleOwner {
      * call fetch api data on scroll with the parameters passed
      * @return nothing
      */
-    fun loadMoreRecyclerData(pageNumber: Int) {
+    fun loadMoreRecyclerData(lastIndex: Int) {
 
         val mockData = Transaction().apply {
             type = EnumTransactionType.LOADING.type
@@ -124,30 +127,45 @@ class TransactionActivity : NetworkActivity(), LifecycleOwner {
 
         isLoading = true
 
-        fetchDataFromLocalDBOnLoadMore(pageNumber)
+        fetchDataFromLocalDBOnLoadMore(lastIndex)
 
     }
 
-    private fun fetchDataFromLocalDBOnLoadMore(pageNumber: Int) {
-        // TODO : Fetch data from database with offset
+    private fun fetchDataFromLocalDBOnLoadMore(lastIndex: Int) {
+//        Handler().postDelayed({
+//            //doSomethingHere()
+//            if (adapter.itemCount > 0) {
+//                            adapter.removeData(adapter.itemCount - 1)
+//                        }
+//                        loadTransactions(lastIndex,firstTimeLoading = false)
+//        }, 3000)
+        if (adapter.itemCount > 0) {
+            adapter.removeData(adapter.itemCount - 1)
+        }
+        loadTransactions(lastIndex,firstTimeLoading = false)
     }
 
-    private fun loadTransactions(){
+    private fun loadTransactions(lastIndex : Int = 0, pageSize : Int = 10 , firstTimeLoading : Boolean = true){
 
         val disposable =
-                viewModel.loadTransactions()
+                viewModel.loadTransactions(lastIndex,pageSize)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({
-                            onSuccess(it)
+                            onSuccess(it,firstTimeLoading)
                         },{
                             onError(it.message)
                         })
         compositeDisposable.add(disposable)
     }
 
-    private fun onSuccess(transactionList : List<Transaction>) {
-        adapter.setData(transactionList)
+    private fun onSuccess(transactionList : List<Transaction>, firstTimeLoading: Boolean) {
+        lastIndex += transactionList.size-1
+        contentSize += transactionList.size
+        when(firstTimeLoading){
+            true -> adapter.setData(transactionList)
+            else -> adapter.addData(transactionList)
+        }
     }
 
     override fun onStart() {
@@ -162,7 +180,6 @@ class TransactionActivity : NetworkActivity(), LifecycleOwner {
 
     override fun onPause() {
         super.onPause()
-
     }
 
     override fun onStop() {

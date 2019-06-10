@@ -97,23 +97,6 @@ class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInject
         }
     }
 
-    private fun getCategoriesOperation() {
-        CategoriesFragment.newInstance().also {
-            val fragmentTransaction = supportFragmentManager.beginTransaction()
-            fragmentTransaction.show(it)
-        }
-    }
-
-    private fun getExpenseListOperation(){
-        // TODO : Add Expense Fragment
-    }
-
-    private fun loadTransactionHistory() {
-        Intent(this,TransactionActivity::class.java).also {
-            startActivity(it)
-        }
-    }
-
     private fun addExpenseOperation() {
         OperationsBottomSheetFragment.getOperationsBottomSheetFragment().apply {
             isCancelable = false
@@ -151,7 +134,22 @@ class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInject
         }
     }
 
+    private fun loadTransactionHistory() {
+        Intent(this,TransactionActivity::class.java).also {
+            startActivity(it)
+        }
+    }
 
+    private fun getCategoriesOperation() {
+        CategoriesFragment.newInstance().also {
+            val fragmentTransaction = supportFragmentManager.beginTransaction()
+            fragmentTransaction.show(it)
+        }
+    }
+
+    private fun getExpenseListOperation(){
+        // TODO : Add Expense Fragment
+    }
 
     private fun initBinding() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)

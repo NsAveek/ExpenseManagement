@@ -18,12 +18,12 @@ class OperationsBottomSheetViewModel @Inject constructor(val repository: Databas
 
     private val addData = MutableLiveData<Boolean>().apply { value = false }
     private val dismissData = MutableLiveData<Boolean>().apply { value = false }
-    private val transaction = MutableLiveData<Transaction>()
+    val transaction = MutableLiveData<Pair<EnumDataState,Any>>()
     private val amount = ObservableField<String>().apply { set("") }
     private val purpose = ObservableField<String>().apply { set("") }
     private val date = ObservableField<String>().apply { set("") }
 
-    private lateinit var compositeDisposable : CompositeDisposable
+    private val compositeDisposable : CompositeDisposable = CompositeDisposable()
 
     fun getDismissCommand() : MutableLiveData<Boolean>{
         return dismissData
@@ -41,11 +41,10 @@ class OperationsBottomSheetViewModel @Inject constructor(val repository: Databas
         return date
     }
 
-    fun getTransaction() : MutableLiveData<Transaction> {
-        return transaction
-    }
-    fun addTransactionData() : MutableLiveData<Pair<EnumDataState,Any>>{
-
+//    fun getTransaction() : MutableLiveData<Pair<EnumDataState,Any>>{
+//        return transaction
+//    }
+    fun addTransactionData(){
 
         // TODO : addTransactionData data from the user input and pass to the fragment
         // TODO : Add Text watcher for Edit Text
@@ -61,11 +60,12 @@ class OperationsBottomSheetViewModel @Inject constructor(val repository: Databas
              .observeOn(AndroidSchedulers.mainThread())
              .subscribe({
                  data.value = Pair(EnumDataState.SUCCESS,transactionModel)
+                 transaction.postValue(data.value)
              },{
                  data.value = Pair(EnumDataState.ERROR,it)
+                 transaction.postValue(data.value)
              })
         )
-        return data
     }
 
 

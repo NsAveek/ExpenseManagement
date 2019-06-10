@@ -39,7 +39,6 @@ class OperationsBottomSheetFragment : BottomSheetDialogFragment(), Injectable {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProviders.of(this,viewModelFactory).get(OperationsBottomSheetViewModel::class.java)
         mLifecycleRegistry = LifecycleRegistry(this)
         mLifecycleRegistry.markState(Lifecycle.State.CREATED)
     }
@@ -48,9 +47,13 @@ class OperationsBottomSheetFragment : BottomSheetDialogFragment(), Injectable {
                               savedInstanceState: Bundle?): View? {
 
         binding = DataBindingUtil.inflate(inflater, R.layout.operations_bottom_sheet_fragment, container, false)
-        binding.viewmodel = viewModel
         binding.lifecycleOwner=this // To enable Live Data object to update the XML on update
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        viewModel = ViewModelProviders.of(this,viewModelFactory).get(OperationsBottomSheetViewModel::class.java)
+        binding.viewmodel = viewModel
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -60,19 +63,13 @@ class OperationsBottomSheetFragment : BottomSheetDialogFragment(), Injectable {
     override fun onStart() {
         super.onStart()
         mLifecycleRegistry.markState(Lifecycle.State.STARTED)
-
         binding.viewmodel?.let {localViewModel ->
             with(localViewModel){
-//                getTransaction().observe(this@OperationsBottomSheetFragment, Observer {
-//                    it?.let { transaction ->
-//                            dismissOrProceedEvent.value = Pair(EnumEventState.PROCEED,transaction)
-//                            dismiss()
-//                    }
-//                })
-                addTransactionData().observe(this@OperationsBottomSheetFragment, Observer {
-                    it?.let { transactionStatus ->
-                        dismissOrProceedEvent.value = Pair(EnumEventState.PROCEED,transactionStatus)
-                        dismiss()
+
+                transaction.observe(this@OperationsBottomSheetFragment, Observer {
+                    it?.let { transaction ->
+                            dismissOrProceedEvent.value = Pair(EnumEventState.PROCEED,transaction)
+                            dismiss()
                     }
                 })
                 getDismissCommand().observe(this@OperationsBottomSheetFragment, Observer {

@@ -6,11 +6,13 @@ import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentManager
 import android.widget.Toast
 import aveek.com.management.R
 import aveek.com.management.databinding.ActivityMainBinding
 import aveek.com.management.di.Injectable
 import aveek.com.management.ui.common.NetworkActivity
+import aveek.com.management.ui.home.categories.CategoriesFragment
 import aveek.com.management.ui.home.operation.OperationsBottomSheetFragment
 import aveek.com.management.ui.home.operation.OperationsBottomSheetViewModel
 import aveek.com.management.ui.transactions.TransactionActivity
@@ -95,13 +97,11 @@ class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInject
         }
     }
 
-
-    override fun supportFragmentInjector(): AndroidInjector<Fragment> {
-        return fragmentDispatchingAndroidInjector
-    }
-
     private fun getCategoriesOperation() {
-        Toast.makeText(this@MainActivity, " Category ", Toast.LENGTH_SHORT).show()
+        CategoriesFragment.newInstance().also {
+            val fragmentTransaction = supportFragmentManager.beginTransaction()
+            fragmentTransaction.show(it)
+        }
     }
 
     private fun loadTransactionHistory() {
@@ -179,19 +179,15 @@ class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInject
         compositeDisposable.dispose()
     }
 
-
-//    override fun fragmentInjector(): AndroidInjector<Fragment> {
-//        return fragmentInjector
-//    }
-
     private fun onSuccess(){
         Toast.makeText(this, "Successfully inserted",Toast.LENGTH_LONG).show()
     }
 
-
-
-
 //    override fun getLifecycle(): Lifecycle {
 //        return mLifecycleRegistry
 //    }
+
+    override fun supportFragmentInjector(): AndroidInjector<Fragment> {
+        return fragmentDispatchingAndroidInjector
+    }
 }

@@ -12,6 +12,8 @@ import aveek.com.management.db.repository.DatabaseRepository
 import aveek.com.management.ui.home.MainActivity
 import aveek.com.management.ui.home.MainActivityModule
 import aveek.com.management.ui.home.MainActivityViewModel
+import aveek.com.management.ui.home.categories.CategoriesFragment
+import aveek.com.management.ui.home.categories.CategoriesViewModel
 import aveek.com.management.ui.home.operation.OperationsBottomSheetFragment
 import aveek.com.management.ui.home.operation.OperationsBottomSheetViewModel
 import aveek.com.management.ui.transactions.TransactionActivity
@@ -43,7 +45,6 @@ interface AppComponent{
         fun build(): AppComponent
     }
     fun inject(app : BaseApp)
-
 }
 
 // This class is responsible for all of the dependencies like retrofit, db, sharedPrefs etc
@@ -83,15 +84,18 @@ internal abstract class ViewModelModule{
 
     @Binds
     @IntoMap
+    @ViewModelKey(CategoriesViewModel::class)
+    abstract fun bindCategoriesViewModel (categoriesViewModel: CategoriesViewModel): ViewModel
+
+    @Binds
+    @IntoMap
     @ViewModelKey(MainActivityViewModel::class)
     abstract fun bindMainActivityViewModel (mainActivityViewModel: MainActivityViewModel): ViewModel
-
 
     @Binds
     @IntoMap
     @ViewModelKey(TransactionVM::class)
     abstract fun bindTransactionViewModel (transactionVM: TransactionVM): ViewModel
-
 
     @Binds
     abstract fun bindViewModelFactory(factory: ExpenseViewModelFactory): ViewModelProvider.Factory
@@ -100,7 +104,7 @@ internal abstract class ViewModelModule{
 @Module
 internal abstract class LocalDependencyBuilder{
 
-    @ContributesAndroidInjector(modules = [MainActivityModule::class, OperationsBottomSheetFragmentProvider::class])
+    @ContributesAndroidInjector(modules = [MainActivityModule::class, FragmentProviderModule::class])
     abstract fun bindMainActivity() : MainActivity
 
     @ContributesAndroidInjector(modules = [TransactionActivityModule::class])
@@ -109,9 +113,12 @@ internal abstract class LocalDependencyBuilder{
 }
 
 @Module
-internal abstract class OperationsBottomSheetFragmentProvider{
+internal abstract class FragmentProviderModule{
     @ContributesAndroidInjector
     abstract fun bindOperationsBottomSheetFragment() : OperationsBottomSheetFragment
+
+    @ContributesAndroidInjector
+    abstract fun bindCategoriesFragment() : CategoriesFragment
 }
 
 

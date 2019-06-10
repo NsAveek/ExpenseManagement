@@ -132,13 +132,6 @@ class TransactionActivity : NetworkActivity(), LifecycleOwner {
     }
 
     private fun fetchDataFromLocalDBOnLoadMore(lastIndex: Int) {
-//        Handler().postDelayed({
-//            //doSomethingHere()
-//            if (adapter.itemCount > 0) {
-//                            adapter.removeData(adapter.itemCount - 1)
-//                        }
-//                        loadTransactions(lastIndex,firstTimeLoading = false)
-//        }, 3000)
         if (adapter.itemCount > 0) {
             adapter.removeData(adapter.itemCount - 1)
         }

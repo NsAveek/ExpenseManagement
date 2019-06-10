@@ -41,9 +41,6 @@ class OperationsBottomSheetViewModel @Inject constructor(val repository: Databas
         return date
     }
 
-//    fun getTransaction() : MutableLiveData<Pair<EnumDataState,Any>>{
-//        return transaction
-//    }
     fun addTransactionData(){
 
         // TODO : addTransactionData data from the user input and pass to the fragment
@@ -51,7 +48,6 @@ class OperationsBottomSheetViewModel @Inject constructor(val repository: Databas
         // TODO : On addTransactionData () function call, get all data from the fragment
         // TODO : Move all of the operation code from the activity ( i.e : Database operation )
 
-        val data = MutableLiveData<Pair<EnumDataState,Any>>()
         val transactionModel = Transaction(UUID.randomUUID().toString(), "credit", "shopping", purpose.get(), amount.get()!!.toDouble(), date.get())
         compositeDisposable.add(
             Completable.fromAction {
@@ -59,15 +55,12 @@ class OperationsBottomSheetViewModel @Inject constructor(val repository: Databas
             }.subscribeOn(Schedulers.io())
              .observeOn(AndroidSchedulers.mainThread())
              .subscribe({
-                 data.value = Pair(EnumDataState.SUCCESS,transactionModel)
-                 transaction.postValue(data.value)
+                 transaction.postValue(Pair(EnumDataState.SUCCESS,transactionModel))
              },{
-                 data.value = Pair(EnumDataState.ERROR,it)
-                 transaction.postValue(data.value)
+                 transaction.postValue(Pair(EnumDataState.ERROR,it))
              })
         )
     }
-
 
     fun dismissBottomSheet(){
         addData.value = false

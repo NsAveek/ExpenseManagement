@@ -18,5 +18,4 @@ class DatabaseRepository @Inject constructor(private val dao: TransactionDAO): I
     override fun saveTransaction(transaction: Transaction) {
         dao.insert(transaction)
     }
-
 }

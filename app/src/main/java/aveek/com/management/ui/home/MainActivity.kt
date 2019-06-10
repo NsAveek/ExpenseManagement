@@ -88,7 +88,7 @@ class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInject
                         it?.let {
                             // TODO : Generate Expense
                             if (it) {
-                                Toast.makeText(this@MainActivity, " Expense ", Toast.LENGTH_SHORT).show()
+                                getExpenseListOperation()
                             }
                         }
                     })
@@ -102,6 +102,10 @@ class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInject
             val fragmentTransaction = supportFragmentManager.beginTransaction()
             fragmentTransaction.show(it)
         }
+    }
+
+    private fun getExpenseListOperation(){
+        // TODO : Add Expense Fragment
     }
 
     private fun loadTransactionHistory() {

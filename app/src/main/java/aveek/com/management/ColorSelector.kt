@@ -34,6 +34,7 @@ class ColorSelector @JvmOverloads constructor(context: Context?, attrs: Attribut
         colorSelectorArrowLeft.setOnClickListener {
             selectPreviousColor()
         }
+        colorEnabled.setOnCheckedChangeListener{buttonView , isEnabled -> broadcastColor()}
     }
     private fun selectNextColor(){
         if (selectedColorIndex == listOfColors.lastIndex){
@@ -43,6 +44,7 @@ class ColorSelector @JvmOverloads constructor(context: Context?, attrs: Attribut
             selectedColorIndex++
         }
         selectedColor.setBackgroundColor(listOfColors[selectedColorIndex])
+        broadcastColor()
     }
     private fun selectPreviousColor(){
         if (selectedColorIndex == 0){
@@ -52,6 +54,20 @@ class ColorSelector @JvmOverloads constructor(context: Context?, attrs: Attribut
             selectedColorIndex--
         }
         selectedColor.setBackgroundColor(listOfColors[selectedColorIndex])
+        broadcastColor()
     }
 
+    fun setColorChangeListener (listener: ColorSelectedListener){
+        this.colorSelectedListener = listener
+    }
+    private var colorSelectedListener : ColorSelectedListener? = null
+    interface ColorSelectedListener {
+        fun onColorSelected(color : Int)
+    }
+
+    private fun broadcastColor() {
+        val color =  if (colorEnabled.isChecked) listOfColors[selectedColorIndex]
+                            else Color.TRANSPARENT
+        this.colorSelectedListener?.onColorSelected(color)
+    }
 }

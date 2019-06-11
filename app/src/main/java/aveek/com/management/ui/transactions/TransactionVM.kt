@@ -23,9 +23,10 @@ class TransactionVM @Inject constructor(val repository: DatabaseRepository): Vie
     val paymentType = ObservableField<String>()
     val transactionCategory = ObservableField<String>()
 
-//    fun loadTransactions() : Single<List<Transaction>>{
-//        return repository.getAllTransactions()
-//    }
+    fun loadTransactions() : Single<List<Transaction>>{
+        return repository.getAllTransactions()
+    }
+
     fun loadTransactions(lastIndex : Int, pageSize : Int) : Single<List<Transaction>>{
         return repository.getTransactions(lastIndex,pageSize)
     }

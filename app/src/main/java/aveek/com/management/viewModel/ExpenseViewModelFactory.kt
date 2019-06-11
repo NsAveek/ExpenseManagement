@@ -6,12 +6,6 @@ import javax.inject.Inject
 import javax.inject.Provider
 import javax.inject.Singleton
 
-//class ExpenseViewModelFactory<VM : ViewModel> @Inject constructor(
-//        private val viewModel : Lazy<VM>
-//) : ViewModelProvider.Factory{
-//    override fun <T : ViewModel> create(modelClass: Class<T>) = viewModel.value as T
-//}
-
 @Singleton
 class ExpenseViewModelFactory @Inject constructor(
         private val creators: Map<Class<out ViewModel>, @JvmSuppressWildcards Provider<ViewModel>>

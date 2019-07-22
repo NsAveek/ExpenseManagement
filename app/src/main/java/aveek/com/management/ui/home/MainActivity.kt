@@ -141,6 +141,7 @@ class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInject
     }
 
     private fun getCategoriesOperation() {
+        //TODO : Make a Main activity with fragment, then replace the fragments
         CategoriesFragment.newInstance().also {
             val fragmentTransaction = supportFragmentManager.beginTransaction()
             fragmentTransaction.show(it)

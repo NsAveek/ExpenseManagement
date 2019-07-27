@@ -49,52 +49,52 @@ class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInject
 
         viewModel = ViewModelProviders.of(this,viewModelFactory).get(MainActivityViewModel::class.java)
 
-        compositeDisposable = CompositeDisposable()
-
-        initBinding()
-
-        mLifecycleRegistry = LifecycleRegistry(this).apply {
-            markState(Lifecycle.State.CREATED)
-        }
-
-        with(binding){
-            this.viewmodel?.let { localViewModel ->
-                with(localViewModel) {
-                    balanceText.set("Aveek testing")
-                    creditData.observe(this@MainActivity, Observer {
-                        it?.let {
-                            if (it) {
-                                addExpenseOperation()
-                            }
-                        }
-                    })
-                    transactionHistory.observe(this@MainActivity, Observer {
-                        it?.let {
-                            // TODO : Generate History list
-                            if (it) {
-                                loadTransactionHistory()
-                            }
-                        }
-                    })
-                    category.observe(this@MainActivity, Observer {
-                        it?.let {
-                            // TODO : Generate Category
-                            if (it) {
-                                getCategoriesOperation()
-                            }
-                        }
-                    })
-                    expense.observe(this@MainActivity, Observer {
-                        it?.let {
-                            // TODO : Generate Expense
-                            if (it) {
-                                getExpenseListOperation()
-                            }
-                        }
-                    })
-                }
-            }
-        }
+//        compositeDisposable = CompositeDisposable()
+//
+//        initBinding()
+//
+//        mLifecycleRegistry = LifecycleRegistry(this).apply {
+//            markState(Lifecycle.State.CREATED)
+//        }
+//
+//        with(binding){
+//            this.viewmodel?.let { localViewModel ->
+//                with(localViewModel) {
+//                    balanceText.set("Aveek testing")
+//                    creditData.observe(this@MainActivity, Observer {
+//                        it?.let {
+//                            if (it) {
+//                                addExpenseOperation()
+//                            }
+//                        }
+//                    })
+//                    transactionHistory.observe(this@MainActivity, Observer {
+//                        it?.let {
+//                            // TODO : Generate History list
+//                            if (it) {
+//                                loadTransactionHistory()
+//                            }
+//                        }
+//                    })
+//                    category.observe(this@MainActivity, Observer {
+//                        it?.let {
+//                            // TODO : Generate Category
+//                            if (it) {
+//                                getCategoriesOperation()
+//                            }
+//                        }
+//                    })
+//                    expense.observe(this@MainActivity, Observer {
+//                        it?.let {
+//                            // TODO : Generate Expense
+//                            if (it) {
+//                                getExpenseListOperation()
+//                            }
+//                        }
+//                    })
+//                }
+//            }
+//        }
     }
 
     private fun addExpenseOperation() {
@@ -133,7 +133,7 @@ class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInject
             })
         }
     }
-
+//
     private fun loadTransactionHistory() {
         Intent(this,TransactionActivity::class.java).also {
             startActivity(it)
@@ -151,12 +151,12 @@ class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInject
     private fun getExpenseListOperation(){
         // TODO : Add Expense Fragment
     }
-
-    private fun initBinding() {
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-        binding.viewmodel = viewModel
-        binding.lifecycleOwner=this // To enable Live Data object to update the XML on update
-    }
+//
+//    private fun initBinding() {
+//        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+//        binding.viewmodel = viewModel
+//        binding.lifecycleOwner=this // To enable Live Data object to update the XML on update
+//    }
 
     override fun onStart() {
         super.onStart()

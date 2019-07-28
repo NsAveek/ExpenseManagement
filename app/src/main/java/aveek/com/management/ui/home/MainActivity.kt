@@ -13,6 +13,7 @@ import aveek.com.management.databinding.ActivityMainBinding
 import aveek.com.management.di.Injectable
 import aveek.com.management.ui.common.NetworkActivity
 import aveek.com.management.ui.home.categories.CategoriesFragment
+import aveek.com.management.ui.home.main.MainFragment
 import aveek.com.management.ui.home.operation.OperationsBottomSheetFragment
 import aveek.com.management.ui.home.operation.OperationsBottomSheetViewModel
 import aveek.com.management.ui.transactions.TransactionActivity
@@ -49,13 +50,19 @@ class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInject
 
         viewModel = ViewModelProviders.of(this,viewModelFactory).get(MainActivityViewModel::class.java)
 
+
+
 //        compositeDisposable = CompositeDisposable()
 //
 //        initBinding()
 //
-//        mLifecycleRegistry = LifecycleRegistry(this).apply {
-//            markState(Lifecycle.State.CREATED)
-//        }
+        mLifecycleRegistry = LifecycleRegistry(this).apply {
+            markState(Lifecycle.State.CREATED)
+        }
+
+        initFragment()
+
+//
 //
 //        with(binding){
 //            this.viewmodel?.let { localViewModel ->
@@ -95,6 +102,17 @@ class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInject
 //                }
 //            }
 //        }
+    }
+
+    private fun initFragment() {
+        val mainFragment = MainFragment.newInstance()
+        supportFragmentManager
+                .beginTransaction()
+                // 2
+                .replace(R.id.fragment_holder, mainFragment, "main")
+                // 3
+                .addToBackStack(null)
+                .commit()
     }
 
     private fun addExpenseOperation() {

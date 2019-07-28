@@ -2,14 +2,15 @@ package aveek.com.management.ui.home.main
 
 import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.LifecycleRegistry
+import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
-import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import aveek.com.management.R
+import aveek.com.management.databinding.MainFragmentBinding
 import io.reactivex.disposables.CompositeDisposable
 
 class MainFragment : Fragment() {
@@ -20,7 +21,7 @@ class MainFragment : Fragment() {
 
     private lateinit var viewModel: MainFragmentViewModel
 
-    private lateinit var binding : FragmentMainBinding
+    private lateinit var binding : MainFragmentBinding
 
     private lateinit var mLifecycleRegistry: LifecycleRegistry
 
@@ -39,7 +40,7 @@ class MainFragment : Fragment() {
 
         compositeDisposable = CompositeDisposable()
 
-        initBinding()
+//        initBinding()
 
         mLifecycleRegistry = LifecycleRegistry(this).apply {
             markState(Lifecycle.State.CREATED)
@@ -68,7 +69,7 @@ class MainFragment : Fragment() {
                         it?.let {
                             // TODO : Generate Category
                             if (it) {
-                                getCategoriesOperation()
+//                                getCategoriesOperation()
                             }
                         }
                     })
@@ -76,7 +77,7 @@ class MainFragment : Fragment() {
                         it?.let {
                             // TODO : Generate Expense
                             if (it) {
-                                getExpenseListOperation()
+//                                getExpenseListOperation()
                             }
                         }
                     })
@@ -103,11 +104,11 @@ class MainFragment : Fragment() {
 //        // TODO : Add Expense Fragment
 //    }
 //
-    private fun initBinding() {
-        binding = DataBindingUtil.setContentView(this.activity, R.layout.main_fragment)
-        binding.viewmodel = viewModel
-        binding.lifecycleOwner=this // To enable Live Data object to update the XML on update
-    }
+//    private fun initBinding() {
+//        binding = DataBindingUtil.setContentView(this.activity, R.layout.main_fragment)
+//        binding.viewmodel = viewModel
+//        binding.lifecycleOwner=this // To enable Live Data object to update the XML on update
+//    }
 
     private fun addExpenseOperation(){
 

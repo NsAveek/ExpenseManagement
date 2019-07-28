@@ -14,4 +14,6 @@ abstract class BaseActivity: AppCompatActivity(){
     fun onError(message: String?) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
+
+
 }

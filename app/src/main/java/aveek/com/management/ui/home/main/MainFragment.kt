@@ -4,6 +4,7 @@ import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.LifecycleRegistry
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -11,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import aveek.com.management.R
 import aveek.com.management.databinding.MainFragmentBinding
+import aveek.com.management.ui.home.MainActivity
 import io.reactivex.disposables.CompositeDisposable
 
 class MainFragment : Fragment() {
@@ -29,18 +31,12 @@ class MainFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.main_fragment, container, false)
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-
-        super.onActivityCreated(savedInstanceState)
 
         viewModel=ViewModelProviders.of(this).get(MainFragmentViewModel::class.java)
 
         compositeDisposable = CompositeDisposable()
 
-//        initBinding()
+        initBinding()
 
         mLifecycleRegistry = LifecycleRegistry(this).apply {
             markState(Lifecycle.State.CREATED)
@@ -84,7 +80,15 @@ class MainFragment : Fragment() {
                 }
             }
         }
+        return inflater.inflate(R.layout.main_fragment, container, false)
     }
+
+//    override fun onActivityCreated(savedInstanceState: Bundle?) {
+//
+//        super.onActivityCreated(savedInstanceState)
+//
+//
+//    }
 
 
 
@@ -104,11 +108,11 @@ class MainFragment : Fragment() {
 //        // TODO : Add Expense Fragment
 //    }
 //
-//    private fun initBinding() {
-//        binding = DataBindingUtil.setContentView(this.activity, R.layout.main_fragment)
-//        binding.viewmodel = viewModel
-//        binding.lifecycleOwner=this // To enable Live Data object to update the XML on update
-//    }
+    private fun initBinding() {
+        binding = DataBindingUtil.setContentView(this.activity as MainActivity, R.layout.main_fragment)
+        binding.viewmodel = viewModel
+        binding.lifecycleOwner=this // To enable Live Data object to update the XML on update
+    }
 
     private fun addExpenseOperation(){
 

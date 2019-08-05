@@ -14,6 +14,7 @@ import aveek.com.management.ui.home.MainActivityModule
 import aveek.com.management.ui.home.MainActivityViewModel
 import aveek.com.management.ui.home.categories.CategoriesFragment
 import aveek.com.management.ui.home.categories.CategoriesViewModel
+import aveek.com.management.ui.home.main.MainFragment
 import aveek.com.management.ui.home.operation.OperationsBottomSheetFragment
 import aveek.com.management.ui.home.operation.OperationsBottomSheetViewModel
 import aveek.com.management.ui.transactions.TransactionActivity
@@ -114,8 +115,13 @@ internal abstract class LocalDependencyBuilder{
 
 @Module
 internal abstract class FragmentProviderModule{
+
+
     @ContributesAndroidInjector
     abstract fun bindOperationsBottomSheetFragment() : OperationsBottomSheetFragment
+
+    @ContributesAndroidInjector
+    abstract fun bindMainFragment() : MainFragment
 
     @ContributesAndroidInjector
     abstract fun bindCategoriesFragment() : CategoriesFragment

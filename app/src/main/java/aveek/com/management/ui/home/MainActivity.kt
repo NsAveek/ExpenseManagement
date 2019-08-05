@@ -6,25 +6,22 @@ import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
 import android.widget.Toast
 import aveek.com.management.R
 import aveek.com.management.databinding.ActivityMainBinding
-import aveek.com.management.di.Injectable
 import aveek.com.management.ui.common.NetworkActivity
 import aveek.com.management.ui.home.categories.CategoriesFragment
 import aveek.com.management.ui.home.main.MainFragment
 import aveek.com.management.ui.home.operation.OperationsBottomSheetFragment
-import aveek.com.management.ui.home.operation.OperationsBottomSheetViewModel
 import aveek.com.management.ui.transactions.TransactionActivity
 import aveek.com.management.util.EnumDataState
 import aveek.com.management.util.EnumEventState
 import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
+import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
 import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
-import dagger.android.DispatchingAndroidInjector
 
 class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInjector {
 
@@ -54,7 +51,7 @@ class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInject
 
 //        compositeDisposable = CompositeDisposable()
 //
-//        initBinding()
+        initBinding()
 //
         mLifecycleRegistry = LifecycleRegistry(this).apply {
             markState(Lifecycle.State.CREATED)
@@ -108,9 +105,7 @@ class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInject
         val mainFragment = MainFragment.newInstance()
         supportFragmentManager
                 .beginTransaction()
-                // 2
-                .replace(R.id.fragment_holder, mainFragment, "main")
-                // 3
+                .replace(R.id.fragment_holder, mainFragment)
                 .addToBackStack(null)
                 .commit()
     }
@@ -170,11 +165,11 @@ class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInject
         // TODO : Add Expense Fragment
     }
 //
-//    private fun initBinding() {
-//        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-//        binding.viewmodel = viewModel
-//        binding.lifecycleOwner=this // To enable Live Data object to update the XML on update
-//    }
+    private fun initBinding() {
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        binding.viewmodel = viewModel
+        binding.lifecycleOwner=this // To enable Live Data object to update the XML on update
+    }
 
     override fun onStart() {
         super.onStart()

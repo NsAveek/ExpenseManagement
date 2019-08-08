@@ -3,28 +3,27 @@ package aveek.com.management.ui.home
 
 import android.arch.lifecycle.*
 import android.content.Intent
-import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
+import android.support.v4.app.FragmentTransaction
+import android.util.Log
 import android.widget.Toast
 import aveek.com.management.R
 import aveek.com.management.databinding.ActivityMainBinding
-import aveek.com.management.di.Injectable
 import aveek.com.management.ui.common.NetworkActivity
 import aveek.com.management.ui.home.categories.CategoriesFragment
 import aveek.com.management.ui.home.main.MainFragment
 import aveek.com.management.ui.home.operation.OperationsBottomSheetFragment
-import aveek.com.management.ui.home.operation.OperationsBottomSheetViewModel
 import aveek.com.management.ui.transactions.TransactionActivity
 import aveek.com.management.util.EnumDataState
 import aveek.com.management.util.EnumEventState
 import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
+import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
 import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
-import dagger.android.DispatchingAndroidInjector
 
 class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInjector {
 
@@ -48,6 +47,8 @@ class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInject
 
         super.onCreate(savedInstanceState)
 
+//        initFragment()
+
         viewModel = ViewModelProviders.of(this,viewModelFactory).get(MainActivityViewModel::class.java)
 
 
@@ -60,7 +61,11 @@ class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInject
             markState(Lifecycle.State.CREATED)
         }
 
-        initFragment()
+        if (savedInstanceState == null) {
+            supportFragmentManager.inTransaction {
+                add(R.id.fragment_holder, MainFragment.newInstance())
+            }
+        }
 
 //
 //
@@ -105,14 +110,9 @@ class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInject
     }
 
     private fun initFragment() {
-        val mainFragment = MainFragment.newInstance()
-        supportFragmentManager
-                .beginTransaction()
-                // 2
-                .replace(R.id.fragment_holder, mainFragment, "main")
-                // 3
-                .addToBackStack(null)
-                .commit()
+        // 1
+
+
     }
 
     private fun addExpenseOperation() {
@@ -169,6 +169,11 @@ class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInject
     private fun getExpenseListOperation(){
         // TODO : Add Expense Fragment
     }
+
+    inline fun FragmentManager.inTransaction(func: FragmentTransaction.() -> FragmentTransaction) {
+        beginTransaction().func().commit()
+    }
+
 //
 //    private fun initBinding() {
 //        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
@@ -183,6 +188,7 @@ class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInject
 
     override fun onResume() {
         super.onResume()
+
         mLifecycleRegistry.markState(Lifecycle.State.RESUMED)
     }
 

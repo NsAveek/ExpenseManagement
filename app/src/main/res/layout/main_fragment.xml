@@ -79,13 +79,13 @@
         android:id="@+id/transactionHistoryText"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
-
+        android:text="Transaction History"
         android:gravity="center"
         app:layout_constraintBottom_toBottomOf="@+id/transactionHistoryImage"
         app:layout_constraintEnd_toEndOf="@+id/transactionHistoryImage"
         app:layout_constraintStart_toStartOf="@+id/transactionHistoryImage"
         app:layout_constraintTop_toTopOf="@+id/transactionHistoryImage"
-        tools:text="Transaction History"
+        tools:text=""
 
         />
 
@@ -115,12 +115,12 @@
         android:id="@+id/categoryText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView"
+        android:text="Category"
         app:layout_constraintBottom_toBottomOf="@+id/categoryImage"
         app:layout_constraintEnd_toEndOf="@+id/categoryImage"
         app:layout_constraintStart_toStartOf="@+id/categoryImage"
         app:layout_constraintTop_toTopOf="@+id/categoryImage"
-        tools:text="Category" />
+        tools:text="" />
 
     <ImageView
         android:id="@+id/expenseImage"
@@ -146,11 +146,12 @@
         android:id="@+id/expenseText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="Expense"
         app:layout_constraintBottom_toBottomOf="@+id/expenseImage"
         app:layout_constraintEnd_toEndOf="@+id/expenseImage"
         app:layout_constraintStart_toStartOf="@+id/expenseImage"
         app:layout_constraintTop_toTopOf="@+id/expenseImage"
-        tools:text="Expense" />
+        />
 
     <!--<include layout="@layout/bottom_sheet"/>-->
 

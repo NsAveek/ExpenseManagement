@@ -13,7 +13,10 @@ import android.view.ViewGroup
 import aveek.com.management.R
 import aveek.com.management.databinding.MainFragmentBinding
 import aveek.com.management.ui.home.MainActivity
+import aveek.com.management.util.EnumEventOperations
+import aveek.com.management.util.EventMessage
 import io.reactivex.disposables.CompositeDisposable
+import org.greenrobot.eventbus.EventBus
 
 class MainFragment : Fragment() {
 
@@ -65,7 +68,7 @@ class MainFragment : Fragment() {
                         it?.let {
                             // TODO : Generate Category
                             if (it) {
-//                                getCategoriesOperation()
+                                getCategoriesOperation()
                             }
                         }
                     })
@@ -73,7 +76,7 @@ class MainFragment : Fragment() {
                         it?.let {
                             // TODO : Generate Expense
                             if (it) {
-//                                getExpenseListOperation()
+                                getExpenseListOperation()
                             }
                         }
                     })
@@ -83,31 +86,7 @@ class MainFragment : Fragment() {
         return inflater.inflate(R.layout.main_fragment, container, false)
     }
 
-//    override fun onActivityCreated(savedInstanceState: Bundle?) {
-//
-//        super.onActivityCreated(savedInstanceState)
-//
-//
-//    }
 
-
-
-    private fun loadTransactionHistory() {
-
-    }
-//
-//    private fun getCategoriesOperation() {
-//        //TODO : Make a Main activity with fragment, then replace the fragments
-//        CategoriesFragment.newInstance().also {
-//            val fragmentTransaction = supportFragmentManager.beginTransaction()
-//            fragmentTransaction.show(it)
-//        }
-//    }
-//
-//    private fun getExpenseListOperation(){
-//        // TODO : Add Expense Fragment
-//    }
-//
     private fun initBinding() {
         binding = DataBindingUtil.setContentView(this.activity as MainActivity, R.layout.main_fragment)
         binding.viewmodel = viewModel
@@ -115,8 +94,21 @@ class MainFragment : Fragment() {
     }
 
     private fun addExpenseOperation(){
-
+        EventBus.getDefault().post(EventMessage("Fire fragment", EnumEventOperations.INCOME))
     }
+
+    private fun loadTransactionHistory() {
+        EventBus.getDefault().post(EventMessage("Fire activity", EnumEventOperations.TRANSACTIONLIST))
+    }
+
+    private fun getCategoriesOperation() {
+        EventBus.getDefault().post(EventMessage("Fire fragment", EnumEventOperations.CATEGORIES))
+    }
+//
+    private fun getExpenseListOperation(){
+        EventBus.getDefault().post(EventMessage("Fire fragment", EnumEventOperations.EXPENSES))
+    }
+
 //
 //    private fun onSuccess(){
 ////        Toast.makeText(this, "Successfully inserted", Toast.LENGTH_LONG).show()

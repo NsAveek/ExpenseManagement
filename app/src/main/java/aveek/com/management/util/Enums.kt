@@ -26,3 +26,10 @@ enum class EnumDataState(val type: String) {
     ERROR("error"),
     FAILED("failed")
 }
+
+enum class EnumEventOperations(val type: String){
+    INCOME("income"),
+    CATEGORIES("categories"),
+    TRANSACTIONLIST("transaction list"),
+    EXPENSES("expense")
+}

@@ -209,7 +209,7 @@ class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInject
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onMessage(event: EventMessage) {
-       Toast.makeText(this,event.getEvents().first,Toast.LENGTH_LONG).show()
+       addExpenseOperation()
     }
 //    override fun getLifecycle(): Lifecycle {
 //        return mLifecycleRegistry

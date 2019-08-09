@@ -64,6 +64,8 @@ dependencies {
 //    kapt "com.android.databinding:compiler:$androidPluginVersion"
     // this must be on top of the dagger implementations
 
+    implementation 'org.greenrobot:eventbus:3.0.0'
+
     implementation "io.reactivex.rxjava2:rxandroid:$rxAndroidVersion"
     implementation "io.reactivex.rxjava2:rxjava:$rxJavaVersion"
 

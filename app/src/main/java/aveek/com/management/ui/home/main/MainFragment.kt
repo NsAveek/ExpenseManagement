@@ -13,7 +13,9 @@ import android.view.ViewGroup
 import aveek.com.management.R
 import aveek.com.management.databinding.MainFragmentBinding
 import aveek.com.management.ui.home.MainActivity
+import aveek.com.management.util.EventMessage
 import io.reactivex.disposables.CompositeDisposable
+import org.greenrobot.eventbus.EventBus
 
 class MainFragment : Fragment() {
 
@@ -115,6 +117,8 @@ class MainFragment : Fragment() {
     }
 
     private fun addExpenseOperation(){
+
+        EventBus.getDefault().post(EventMessage("Fire fragment", true))
 
     }
 //

@@ -7,7 +7,6 @@ import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.widget.Toast
-import aveek.com.management.R
 import aveek.com.management.databinding.ActivityMainBinding
 import aveek.com.management.ui.common.NetworkActivity
 import aveek.com.management.ui.home.categories.CategoriesFragment
@@ -21,7 +20,14 @@ import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
 import io.reactivex.disposables.CompositeDisposable
+import org.greenrobot.eventbus.EventBus
+import aveek.com.management.R
 import javax.inject.Inject
+import org.greenrobot.eventbus.ThreadMode
+import org.greenrobot.eventbus.Subscribe
+import aveek.com.management.util.EventMessage
+import kotlinx.android.synthetic.main.activity_main.*
+
 
 class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInjector {
 
@@ -174,6 +180,7 @@ class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInject
     override fun onStart() {
         super.onStart()
         mLifecycleRegistry.markState(Lifecycle.State.STARTED)
+        EventBus.getDefault().register(this)
     }
 
     override fun onResume() {
@@ -186,6 +193,7 @@ class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInject
     }
 
     override fun onStop() {
+        EventBus.getDefault().unregister(this)
         super.onStop()
     }
 
@@ -199,6 +207,10 @@ class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInject
         Toast.makeText(this, "Successfully inserted",Toast.LENGTH_LONG).show()
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onMessage(event: EventMessage) {
+       Toast.makeText(this,event.getEvents().first,Toast.LENGTH_LONG).show()
+    }
 //    override fun getLifecycle(): Lifecycle {
 //        return mLifecycleRegistry
 //    }

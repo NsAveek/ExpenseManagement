@@ -115,6 +115,8 @@ internal abstract class LocalDependencyBuilder{
 
 @Module
 internal abstract class FragmentProviderModule{
+
+
     @ContributesAndroidInjector
     abstract fun bindOperationsBottomSheetFragment() : OperationsBottomSheetFragment
 

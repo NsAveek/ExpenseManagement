@@ -3,11 +3,11 @@ package aveek.com.management.ui.home
 
 import android.arch.lifecycle.*
 import android.content.Intent
+import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentTransaction
-import android.util.Log
 import android.widget.Toast
 import aveek.com.management.R
 import aveek.com.management.databinding.ActivityMainBinding
@@ -23,6 +23,7 @@ import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.subjects.PublishSubject
 import javax.inject.Inject
 
 class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInjector {
@@ -55,16 +56,12 @@ class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInject
 
 //        compositeDisposable = CompositeDisposable()
 //
-//        initBinding()
+        initBinding()
+
+        var publishSubject =PublishSubject.create<Boolean>()
 //
         mLifecycleRegistry = LifecycleRegistry(this).apply {
             markState(Lifecycle.State.CREATED)
-        }
-
-        if (savedInstanceState == null) {
-            supportFragmentManager.inTransaction {
-                add(R.id.fragment_holder, MainFragment.newInstance())
-            }
         }
 
 //
@@ -110,9 +107,9 @@ class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInject
     }
 
     private fun initFragment() {
-        // 1
-
-
+        supportFragmentManager.inTransaction {
+            add(R.id.fragment_holder, MainFragment.newInstance())
+        }
     }
 
     private fun addExpenseOperation() {
@@ -170,16 +167,16 @@ class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInject
         // TODO : Add Expense Fragment
     }
 
+    // Higher Order Function Kotlin Example
     inline fun FragmentManager.inTransaction(func: FragmentTransaction.() -> FragmentTransaction) {
         beginTransaction().func().commit()
     }
 
-//
-//    private fun initBinding() {
-//        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-//        binding.viewmodel = viewModel
-//        binding.lifecycleOwner=this // To enable Live Data object to update the XML on update
-//    }
+    private fun initBinding() {
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        binding.viewmodel = viewModel
+        binding.lifecycleOwner=this // To enable Live Data object to update the XML on update
+    }
 
     override fun onStart() {
         super.onStart()

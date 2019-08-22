@@ -15,6 +15,7 @@ import aveek.com.management.databinding.MainFragmentBinding
 import aveek.com.management.ui.home.MainActivity
 import aveek.com.management.util.EnumEventOperations
 import aveek.com.management.util.EventMessage
+import aveek.com.management.util.RxBus
 import io.reactivex.disposables.CompositeDisposable
 import org.greenrobot.eventbus.EventBus
 
@@ -26,16 +27,16 @@ class MainFragment : Fragment() {
 
     private lateinit var viewModel: MainFragmentViewModel
 
-    private lateinit var binding : MainFragmentBinding
+    private lateinit var binding: MainFragmentBinding
 
     private lateinit var mLifecycleRegistry: LifecycleRegistry
 
-    private lateinit var compositeDisposable : CompositeDisposable
+    private lateinit var compositeDisposable: CompositeDisposable
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
 
-        viewModel=ViewModelProviders.of(this).get(MainFragmentViewModel::class.java)
+        viewModel = ViewModelProviders.of(this).get(MainFragmentViewModel::class.java)
 
         compositeDisposable = CompositeDisposable()
 
@@ -45,9 +46,9 @@ class MainFragment : Fragment() {
             markState(Lifecycle.State.CREATED)
         }
 
-        with(binding){
+        with(binding) {
             this.viewmodel?.let { localViewModel ->
-                kotlin.with(localViewModel) {
+                with(localViewModel) {
                     balanceText.set("Aveek testing")
                     creditData.observe(this@MainFragment, Observer {
                         it?.let {
@@ -90,8 +91,11 @@ class MainFragment : Fragment() {
     private fun initBinding() {
         binding = DataBindingUtil.setContentView(this.activity as MainActivity, R.layout.main_fragment)
         binding.viewmodel = viewModel
-        binding.lifecycleOwner=this // To enable Live Data object to update the XML on update
+        binding.lifecycleOwner = this // To enable Live Data object to update the XML on update
     }
+
+    /* EventBus example for communicating between Fragment - Activity
+
 
     private fun addExpenseOperation(){
         EventBus.getDefault().post(EventMessage("Fire fragment", EnumEventOperations.INCOME))
@@ -104,14 +108,31 @@ class MainFragment : Fragment() {
     private fun getCategoriesOperation() {
         EventBus.getDefault().post(EventMessage("Fire fragment", EnumEventOperations.CATEGORIES))
     }
-//
+
     private fun getExpenseListOperation(){
         EventBus.getDefault().post(EventMessage("Fire fragment", EnumEventOperations.EXPENSES))
     }
+ */
 
-//
-//    private fun onSuccess(){
-////        Toast.makeText(this, "Successfully inserted", Toast.LENGTH_LONG).show()
-//    }
+    private fun addExpenseOperation() {
+        RxBus.publish(EnumEventOperations.INCOME)
+    }
+
+    private fun loadTransactionHistory() {
+        RxBus.publish(EnumEventOperations.TRANSACTIONLIST)
+//        EventBus.getDefault().post(EventMessage("Fire activity", EnumEventOperations.TRANSACTIONLIST))
+    }
+
+    private fun getCategoriesOperation() {
+        RxBus.publish(EnumEventOperations.CATEGORIES)
+//         EventBus.getDefault().post(EventMessage("Fire fragment", EnumEventOperations.CATEGORIES))
+    }
+
+    //
+    private fun getExpenseListOperation() {
+        RxBus.publish(EnumEventOperations.EXPENSES)
+//        EventBus.getDefault().post(EventMessage("Fire fragment", EnumEventOperations.EXPENSES))
+    }
+
 
 }

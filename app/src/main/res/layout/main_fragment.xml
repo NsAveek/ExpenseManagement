@@ -85,8 +85,6 @@
         app:layout_constraintEnd_toEndOf="@+id/transactionHistoryImage"
         app:layout_constraintStart_toStartOf="@+id/transactionHistoryImage"
         app:layout_constraintTop_toTopOf="@+id/transactionHistoryImage"
-        tools:text=""
-
         />
 
     <ImageView
@@ -120,7 +118,7 @@
         app:layout_constraintEnd_toEndOf="@+id/categoryImage"
         app:layout_constraintStart_toStartOf="@+id/categoryImage"
         app:layout_constraintTop_toTopOf="@+id/categoryImage"
-        tools:text="" />
+        />
 
     <ImageView
         android:id="@+id/expenseImage"

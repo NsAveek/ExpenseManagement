@@ -47,7 +47,7 @@ class MainFragment : Fragment() {
 
         with(binding){
             this.viewmodel?.let { localViewModel ->
-                kotlin.with(localViewModel) {
+                with(localViewModel) {
                     balanceText.set("Aveek testing")
                     creditData.observe(this@MainFragment, Observer {
                         it?.let {

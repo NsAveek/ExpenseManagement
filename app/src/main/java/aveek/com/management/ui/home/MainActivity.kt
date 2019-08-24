@@ -31,6 +31,8 @@ import org.greenrobot.eventbus.ThreadMode
 import javax.inject.Inject
 
 
+
+
 class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInjector {
 
     @Inject
@@ -85,9 +87,17 @@ class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInject
     }
 
     private fun replaceFragment(fragment: Fragment){
-        supportFragmentManager.inTransaction {
-            replace(R.id.fragment_holder,fragment)
-        }
+
+        supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_holder, fragment).commit()
+// or ft.add(R.id.your_placeholder, new FooFragment());
+// Complete the changes added above
+//        ft.commit()
+
+
+//        supportFragmentManager.inTransaction {
+//            replace(R.id.fragment_holder,fragment)
+//        }
     }
 
     override fun onStart() {
@@ -98,7 +108,6 @@ class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInject
 
     override fun onResume() {
         super.onResume()
-
         mLifecycleRegistry.markState(Lifecycle.State.RESUMED)
     }
 

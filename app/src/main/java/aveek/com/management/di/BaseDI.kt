@@ -14,6 +14,8 @@ import aveek.com.management.ui.home.MainActivityModule
 import aveek.com.management.ui.home.MainActivityViewModel
 import aveek.com.management.ui.home.categories.CategoriesFragment
 import aveek.com.management.ui.home.categories.CategoriesViewModel
+import aveek.com.management.ui.home.expense.ExpenseFragment
+import aveek.com.management.ui.home.expense.ExpenseViewModel
 import aveek.com.management.ui.home.main.MainFragment
 import aveek.com.management.ui.home.operation.OperationsBottomSheetFragment
 import aveek.com.management.ui.home.operation.OperationsBottomSheetViewModel
@@ -90,6 +92,11 @@ internal abstract class ViewModelModule{
 
     @Binds
     @IntoMap
+    @ViewModelKey(ExpenseViewModel::class)
+    abstract fun bindExpenseViewModel (expenseViewModel: ExpenseViewModel): ViewModel
+
+    @Binds
+    @IntoMap
     @ViewModelKey(MainActivityViewModel::class)
     abstract fun bindMainActivityViewModel (mainActivityViewModel: MainActivityViewModel): ViewModel
 
@@ -116,7 +123,6 @@ internal abstract class LocalDependencyBuilder{
 @Module
 internal abstract class FragmentProviderModule{
 
-
     @ContributesAndroidInjector
     abstract fun bindOperationsBottomSheetFragment() : OperationsBottomSheetFragment
 
@@ -125,6 +131,9 @@ internal abstract class FragmentProviderModule{
 
     @ContributesAndroidInjector
     abstract fun bindCategoriesFragment() : CategoriesFragment
+
+    @ContributesAndroidInjector
+    abstract fun bindExpenseFragment() : ExpenseFragment
 }
 
 

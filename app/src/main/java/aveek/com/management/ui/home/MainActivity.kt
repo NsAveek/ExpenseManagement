@@ -13,13 +13,12 @@ import aveek.com.management.R
 import aveek.com.management.databinding.ActivityMainBinding
 import aveek.com.management.ui.common.NetworkActivity
 import aveek.com.management.ui.home.categories.CategoriesFragment
+import aveek.com.management.ui.home.expense.ExpenseFragment
 import aveek.com.management.ui.home.main.MainFragment
 import aveek.com.management.ui.home.operation.OperationsBottomSheetFragment
 import aveek.com.management.ui.transactions.TransactionActivity
-import aveek.com.management.util.EnumDataState
-import aveek.com.management.util.EnumEventOperations
-import aveek.com.management.util.EnumEventState
-import aveek.com.management.util.EventMessage
+import aveek.com.management.util.*
+import aveek.com.management.util.EnumEventOperations.*
 import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
@@ -29,6 +28,8 @@ import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import javax.inject.Inject
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 
 
 
@@ -57,8 +58,8 @@ class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInject
 
         viewModel=ViewModelProviders.of(this, viewModelFactory).get(MainActivityViewModel::class.java)
 
-//        compositeDisposable = CompositeDisposable()
-//
+        compositeDisposable = CompositeDisposable()
+
         initBinding()
 
         mLifecycleRegistry=LifecycleRegistry(this).apply {
@@ -66,6 +67,8 @@ class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInject
         }
 
         initFragment()
+
+        initRx()
     }
 
 
@@ -86,24 +89,35 @@ class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInject
         }
     }
 
+    private fun initRx(){
+        compositeDisposable.add(
+                RxBus.listen()
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe({
+                            when(it){
+                                INCOME -> addExpenseOperation()
+                                TRANSACTIONLIST -> loadTransactionHistory()
+                                CATEGORIES -> getCategoriesOperation()
+                                EXPENSES -> getExpenseListOperation()
+                            }
+                },{
+                    onError(it.message)
+                }))
+    }
+
+
     private fun replaceFragment(fragment: Fragment){
-
-        supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_holder, fragment).commit()
-// or ft.add(R.id.your_placeholder, new FooFragment());
-// Complete the changes added above
-//        ft.commit()
-
-
-//        supportFragmentManager.inTransaction {
-//            replace(R.id.fragment_holder,fragment)
-//        }
+        this.supportFragmentManager.inTransaction {
+            initBinding()
+            replace(R.id.fragment_holder,fragment)
+        }
     }
 
     override fun onStart() {
         super.onStart()
         mLifecycleRegistry.markState(Lifecycle.State.STARTED)
-        EventBus.getDefault().register(this)
+//        EventBus.getDefault().register(this)
     }
 
     override fun onResume() {
@@ -116,7 +130,7 @@ class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInject
     }
 
     override fun onStop() {
-        EventBus.getDefault().unregister(this)
+//        EventBus.getDefault().unregister(this)
         super.onStop()
     }
 
@@ -130,18 +144,19 @@ class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInject
         Toast.makeText(this, "Successfully inserted", Toast.LENGTH_LONG).show()
     }
 
-    @Subscribe(threadMode=ThreadMode.MAIN)
-    fun onMessage(event: EventMessage) {
-        with(event){
-            when(getEvents().second)
-            {
-                EnumEventOperations.INCOME -> addExpenseOperation()
-                EnumEventOperations.TRANSACTIONLIST -> loadTransactionHistory()
-                EnumEventOperations.CATEGORIES -> getCategoriesOperation()
-                EnumEventOperations.EXPENSES -> getExpenseListOperation()
-            }
-        }
-    }
+//    @Subscribe(threadMode=ThreadMode.MAIN)
+//    fun onMessage(event: EventMessage) {
+//        with(event){
+////            initBinding()
+//            when(getEvents().second)
+//            {
+//                INCOME -> addExpenseOperation()
+//                TRANSACTIONLIST -> loadTransactionHistory()
+//                CATEGORIES -> getCategoriesOperation()
+//                EXPENSES -> getExpenseListOperation()
+//            }
+//        }
+//    }
 
     //Fragment - Activity - Fragment
     private fun addExpenseOperation() {
@@ -194,6 +209,7 @@ class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInject
 
     private fun getExpenseListOperation() {
         // TODO : Add Expense Fragment
+        replaceFragment(ExpenseFragment.newInstance())
     }
 
 //    override fun getLifecycle(): Lifecycle {
@@ -204,3 +220,4 @@ class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInject
         return fragmentDispatchingAndroidInjector
     }
 }
+

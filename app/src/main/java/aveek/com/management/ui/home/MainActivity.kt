@@ -13,6 +13,7 @@ import aveek.com.management.R
 import aveek.com.management.databinding.ActivityMainBinding
 import aveek.com.management.ui.common.NetworkActivity
 import aveek.com.management.ui.home.categories.CategoriesFragment
+import aveek.com.management.ui.home.expense.ExpenseFragment
 import aveek.com.management.ui.home.main.MainFragment
 import aveek.com.management.ui.home.operation.OperationsBottomSheetFragment
 import aveek.com.management.ui.transactions.TransactionActivity
@@ -29,6 +30,8 @@ import org.greenrobot.eventbus.ThreadMode
 import javax.inject.Inject
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+
+
 
 
 class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInjector {
@@ -92,7 +95,6 @@ class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInject
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({
-                            initBinding()
                             when(it){
                                 INCOME -> addExpenseOperation()
                                 TRANSACTIONLIST -> loadTransactionHistory()
@@ -107,6 +109,7 @@ class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInject
 
     private fun replaceFragment(fragment: Fragment){
         this.supportFragmentManager.inTransaction {
+            initBinding()
             replace(R.id.fragment_holder,fragment)
         }
     }
@@ -206,6 +209,7 @@ class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInject
 
     private fun getExpenseListOperation() {
         // TODO : Add Expense Fragment
+        replaceFragment(ExpenseFragment.newInstance())
     }
 
 //    override fun getLifecycle(): Lifecycle {

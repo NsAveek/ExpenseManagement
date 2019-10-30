@@ -1,4 +1,4 @@
-package aveek.com.management.ui.home.categories
+package aveek.com.management.ui.home.expense
 
 import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.LifecycleRegistry
@@ -9,26 +9,28 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+
 import aveek.com.management.R
 import aveek.com.management.databinding.CategoriesFragmentBinding
-import aveek.com.management.databinding.MainFragmentBinding
+import aveek.com.management.databinding.ExpenseFragmentBinding
 import aveek.com.management.di.Injectable
 import aveek.com.management.ui.home.MainActivity
+import aveek.com.management.ui.home.categories.CategoriesViewModel
 
-class CategoriesFragment : Fragment(), Injectable {
-
-    private lateinit var binding : CategoriesFragmentBinding
-    private lateinit var viewModel: CategoriesViewModel
-    private lateinit var mLifecycleRegistry: LifecycleRegistry
+class ExpenseFragment : Fragment(), Injectable {
 
     companion object {
-        fun newInstance() = CategoriesFragment()
+        fun newInstance()=ExpenseFragment()
     }
+
+    private lateinit var viewModel: ExpenseViewModel
+    private lateinit var binding : ExpenseFragmentBinding
+    private lateinit var mLifecycleRegistry: LifecycleRegistry
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
 
-        viewModel = ViewModelProviders.of(this).get(CategoriesViewModel::class.java)
+        viewModel=ViewModelProviders.of(this).get(ExpenseViewModel::class.java)
 
         initBinding()
 
@@ -36,7 +38,7 @@ class CategoriesFragment : Fragment(), Injectable {
             markState(Lifecycle.State.CREATED)
         }
 
-        return inflater.inflate(R.layout.categories_fragment, container, false)
+        return inflater.inflate(R.layout.expense_fragment, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -44,7 +46,7 @@ class CategoriesFragment : Fragment(), Injectable {
     }
 
     private fun initBinding() {
-        binding = DataBindingUtil.setContentView(this.activity as MainActivity, R.layout.categories_fragment)
+        binding = DataBindingUtil.setContentView(this.activity as MainActivity, R.layout.expense_fragment)
         binding.viewmodel = viewModel
         binding.lifecycleOwner=this // To enable Live Data object to update the XML on update
     }

@@ -1,22 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
-
-<data>
-    <variable
-        name="viewmodel"
-        type="aveek.com.management.ui.home.categories.CategoriesViewModel" />
-</data>
-<android.support.constraint.ConstraintLayout
+<layout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="aveek.com.management.ui.home.categories.CategoriesFragment">
+    >
 
-    <TextView
+    <data>
+        <variable
+            name="viewmodel"
+            type="aveek.com.management.ui.home.categories.CategoriesViewModel" />
+    </data>
+
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Hello" />
+        tools:context="aveek.com.management.ui.home.categories.CategoriesFragment">
 
-</android.support.constraint.ConstraintLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Hello" />
+
+    </android.support.constraint.ConstraintLayout>
 </layout>

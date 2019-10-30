@@ -120,19 +120,13 @@ class MainFragment : Fragment() {
 
     private fun loadTransactionHistory() {
         RxBus.publish(EnumEventOperations.TRANSACTIONLIST)
-//        EventBus.getDefault().post(EventMessage("Fire activity", EnumEventOperations.TRANSACTIONLIST))
     }
 
     private fun getCategoriesOperation() {
         RxBus.publish(EnumEventOperations.CATEGORIES)
-//         EventBus.getDefault().post(EventMessage("Fire fragment", EnumEventOperations.CATEGORIES))
     }
 
-    //
     private fun getExpenseListOperation() {
         RxBus.publish(EnumEventOperations.EXPENSES)
-//        EventBus.getDefault().post(EventMessage("Fire fragment", EnumEventOperations.EXPENSES))
     }
-
-
 }

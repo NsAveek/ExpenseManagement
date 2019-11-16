@@ -24,13 +24,10 @@ import aveek.com.management.ui.transactions.TransactionActivityModule
 import aveek.com.management.ui.transactions.TransactionVM
 import aveek.com.management.viewModel.ExpenseViewModelFactory
 import dagger.*
-import dagger.android.AndroidInjectionModule
 import dagger.android.ContributesAndroidInjector
-import dagger.android.support.AndroidSupportInjection
 import dagger.android.support.AndroidSupportInjectionModule
 import dagger.multibindings.IntoMap
 import javax.inject.Singleton
-
 
 @Singleton
 @Component ( modules = [

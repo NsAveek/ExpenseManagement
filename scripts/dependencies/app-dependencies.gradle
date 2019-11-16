@@ -1,0 +1,96 @@
+ext.libVersions = [
+//        chuckVersion : '1.1.0',
+//        roomCompiler : '2.1.0',
+//        roomRuntime : '2.1.0',
+//        constraintLayout : '1.1.3',
+//        recyclerView : '1.0.0',
+//        paging : '2.1.0',
+//        glide : '4.9.0',
+//        appCompat : '1.0.2',
+//        retrofit : '2.5.0',
+//        retrofitConverter : '2.5.0',
+
+        androidPluginVersion : '3.4.0',
+        kotlin_version : '1.3.31',
+
+        daggerVersion : '2.21',
+        archLifecycleVersion : '1.1.1',
+        supportVersion : '28.0.0',
+
+        constraintLayoutVersion : '1.1.3',
+
+        rxJavaVersion : '2.2.8',
+        rxAndroidVersion : '2.1.1',
+
+        multidexVersion : '1.0.3',
+
+        roomVersion : '1.1.1',
+        timberVersion : '4.7.1',
+        glideVersion : '4.9.0',
+        stethoVersion : '1.5.1',
+
+        eventBus : '3.0.0',
+        lifecycleExt : '1.1.1'
+]
+
+ext.compilerLibraries = [
+
+        kotlin : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$libVersions.kotlin_version",
+        appCompat : "com.android.support:appcompat-v7:$libVersions.supportVersion",
+        design : "com.android.support:design:$libVersions.supportVersion",
+        supportv4 :  "com.android.support:support-v4:$libVersions.supportVersion",
+        multidex :  "com.android.support:multidex:$libVersions.multidexVersion",
+        constraintLayout :  "com.android.support.constraint:constraint-layout:$libVersions.constraintLayoutVersion",
+        archLifecycle :  "android.arch.lifecycle:extensions:$libVersions.archLifecycleVersion",
+//    annotationProcessor "android.arch.lifecycle:compiler:1.1.0"
+
+//    kapt "com.android.databinding:compiler:$androidPluginVersion"
+        // this must be on top of the dagger implementations
+
+        eventBus : "org.greenrobot:eventbus:$libVersions.eventBus",
+
+        rxAndroid :  "io.reactivex.rxjava2:rxandroid:$libVersions.rxAndroidVersion",
+        rxJava :  "io.reactivex.rxjava2:rxjava:$libVersions.rxJavaVersion",
+
+        room : "android.arch.persistence.room:runtime:$libVersions.roomVersion",
+        roomRxJava : "android.arch.persistence.room:rxjava2:$libVersions.roomVersion",
+//        implementation 'com.android.support:support-v4:28.0.0'
+        lifecycleExt :  "android.arch.lifecycle:extensions:$libVersions.lifecycleExt'",
+
+
+
+
+
+        dagger :  "com.google.dagger:dagger:$libVersions.daggerVersion",
+        daggerAndroidSupport : "com.google.dagger:dagger-android-support:$libVersions.daggerVersion",
+
+
+        stetho : "com.facebook.stetho:stetho:$libVersions.stethoVersion",
+
+        timber :  "com.jakewharton.timber:timber:$libVersions.timberVersion",
+
+        glide :  "com.github.bumptech.glide:glide:$libVersions.glideVersion",
+
+
+
+
+//        roomRuntime : "androidx.room:room-runtime:$libVersions.roomRuntime",
+//        constraintLayout : "androidx.constraintlayout:constraintlayout:$libVersions.constraintLayout",
+//        recyclerView : "androidx.recyclerview:recyclerview:$libVersions.recyclerView",
+//        paging : "androidx.paging:paging-runtime:$libVersions.paging",
+//        glide : "com.github.bumptech.glide:glide:$libVersions.glide",
+//        appCompat : "androidx.appcompat:appcompat:$libVersions.appCompat",
+//        retrofit : "com.squareup.retrofit2:retrofit:$libVersions.retrofit",
+//        retrofitConverter : "com.squareup.retrofit2:converter-gson:$libVersions.retrofitConverter",
+
+]
+
+ext.kaptValues = [
+        glideCompiler : "com.github.bumptech.glide:compiler:$libVersions.glideVersion",
+        roomCompiler :  "android.arch.persistence.room:compiler:$libVersions.roomVersion",
+        daggerCompiler : "com.google.dagger:dagger-compiler:$libVersions.daggerVersion",
+        daggerVersion :  "com.google.dagger:dagger-android-processor:$libVersions.daggerVersion",
+]
+
+ext.chuck = "com.readystatesoftware.chuck:library:$libVersions.chuckVersion"
+ext.noChuck = "com.readystatesoftware.chuck:library-no-op:$libVersions.chuckVersion"

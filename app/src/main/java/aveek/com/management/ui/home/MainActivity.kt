@@ -85,7 +85,7 @@ class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInject
 
     private fun initFragment() {
         supportFragmentManager.inTransaction {
-            add(R.id.fragment_holder, MainFragment.newInstance())
+            add(R.id.fragment_holder, MainFragment.newInstance()).addToBackStack("main")
         }
     }
 

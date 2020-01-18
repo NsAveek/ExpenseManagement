@@ -10,7 +10,6 @@ import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.widget.Toast
-import aveek.com.management.BaseActivity
 import aveek.com.management.R
 import aveek.com.management.databinding.ActivityMainBinding
 import aveek.com.management.ui.common.NetworkActivity
@@ -20,6 +19,7 @@ import aveek.com.management.ui.home.operation.OperationsBottomSheetFragment
 import aveek.com.management.ui.transactions.TransactionActivity
 import aveek.com.management.util.EnumEventState
 import dagger.android.AndroidInjector
+import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
 import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -28,7 +28,6 @@ import io.reactivex.functions.Action
 import io.reactivex.schedulers.Schedulers
 import java.util.*
 import javax.inject.Inject
-import dagger.android.DispatchingAndroidInjector
 
 class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInjector {
 

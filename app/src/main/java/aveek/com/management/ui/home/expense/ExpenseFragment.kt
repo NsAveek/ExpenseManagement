@@ -20,7 +20,8 @@ import aveek.com.management.ui.home.categories.CategoriesViewModel
 class ExpenseFragment : Fragment(), Injectable {
 
     companion object {
-        fun newInstance()=ExpenseFragment()
+        fun newInstance()= ExpenseFragment()
+        val name = "Expense Fragment"
     }
 
     private lateinit var viewModel: ExpenseViewModel

@@ -23,6 +23,7 @@ class CategoriesFragment : Fragment(), Injectable {
 
     companion object {
         fun newInstance() = CategoriesFragment()
+        val name = "Categories Fragment"
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,

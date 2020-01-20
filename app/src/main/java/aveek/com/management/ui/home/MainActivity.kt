@@ -27,7 +27,8 @@ import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import java.io.File
+
+
 
 
 class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInjector {
@@ -62,7 +63,9 @@ class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInject
             markState(Lifecycle.State.CREATED)
         }
 
-        initFragment()
+        if(savedInstanceState == null){
+            initFragment()
+        }
 
         initRx()
     }
@@ -85,13 +88,13 @@ class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInject
             initBinding()
             replace(R.id.fragment_holder,fragment)
                     .addToBackStack(name)
-
         }
     }
 
     // Higher Order Function Kotlin Example
-    inline fun FragmentManager.inTransaction(func: FragmentTransaction.() -> FragmentTransaction) {
-        beginTransaction().func().commit()
+    private inline fun FragmentManager.inTransaction(func: FragmentTransaction.() -> FragmentTransaction) {
+        beginTransaction().func().commitAllowingStateLoss()
+
     }
 
     private fun initRx(){
@@ -99,8 +102,8 @@ class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInject
                 RxBus.listen()
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe({
-                            when(it){
+                        .subscribe({ enumEventOperations ->
+                            when(enumEventOperations){
                                 INCOME -> addExpenseOperation()
                                 TRANSACTIONLIST -> loadTransactionHistory()
                                 CATEGORIES -> getCategoriesOperation()
@@ -216,28 +219,17 @@ class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInject
 //    }
 
     override fun onBackPressed() {
-        supportFragmentManager.popBackStack()
-//        if (supportFragmentManager.backStackEntryCount > 1) {
-//            iCarAlertDialogUtility.showDiscardChangesDialog { _, _ ->
-//                run {
-//                    // TODO : Change the delete file logic to this commented section below
-////                    Fragment fragmentByTag = getSupportFragmentManager().findFragmentByTag(createAdDetailFragment.getClass().getSimpleName());
-////                    if (fragmentByTag instanceof CreateAdDetailFragment)
-////                        iCarAlertDialogUtility.showDiscardChangesDialog((dialog, which) -> super.onBackPressed());
-////                    else
-////                    super.onBackPressed();
-//                    if(supportFragmentManager.backStackEntryCount == 2) // FragmentCropAndReposition
-//                    {
-//                        supportFragmentManager.fragments.get(1).arguments?.let {
-//                            Utils.deleteFile(File(it.getString(REGISTRATION_CARD_STORAGE_PATH,"")))
-//                        }
-//                    }
-//                    supportFragmentManager.popBackStack()
+        if(supportFragmentManager.backStackEntryCount >0){
+//            if(supportFragmentManager.backStackEntryCount ==1){
+//                supportFragmentManager.inTransaction {
+//                    add(R.id.fragment_holder, MainFragment.newInstance()).addToBackStack("main")
 //                }
+//            }else {
+                this.supportFragmentManager.popBackStack()
 //            }
-//        } else {
-//            finish()
-//        }
+        } else{
+            super.onBackPressed()
+        }
     }
 
     override fun supportFragmentInjector(): AndroidInjector<Fragment> {

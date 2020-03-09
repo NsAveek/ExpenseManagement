@@ -32,14 +32,14 @@ class MainFragment : Fragment() {
 
     private lateinit var mLifecycleRegistry: LifecycleRegistry
 
-    private lateinit var compositeDisposable: CompositeDisposable
+//    private lateinit var compositeDisposable: CompositeDisposable
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
 
         viewModel = ViewModelProviders.of(this).get(MainFragmentViewModel::class.java)
 
-        compositeDisposable = CompositeDisposable()
+//        compositeDisposable = CompositeDisposable()
 
         initBinding(inflater,container!!)
 

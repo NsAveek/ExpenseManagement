@@ -47,8 +47,6 @@ class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInject
 
     private lateinit var compositeDisposable: CompositeDisposable
 
-    private var testRxCall : Boolean = false
-
     override fun onCreate(savedInstanceState: Bundle?) {
 
         AndroidInjection.inject(this)
@@ -68,8 +66,8 @@ class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInject
 
         if(savedInstanceState == null){
             initFragment()
-            initRx()
         }
+        initRx()
     }
 
     private fun initBinding() {
@@ -80,14 +78,12 @@ class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInject
 
     private fun initFragment() {
         supportFragmentManager.inTransaction {
-//            add(R.id.fragment_holder, MainFragment.newInstance()).addToBackStack("main")
             add(R.id.fragment_holder, MainFragment.newInstance()).addToBackStack("main")
         }
     }
 
     private fun replaceFragment(fragment: Fragment, name : String){
         this.supportFragmentManager.inTransaction {
-//            initBinding()
             replace(R.id.fragment_holder,fragment)
                     .addToBackStack(name)
         }
@@ -104,18 +100,17 @@ class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInject
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({ enumEventOperations ->
-                            if (!testRxCall){
                                 when(enumEventOperations){
 
                                     // TODO : We have noticed that this subscription is getting called every time on popbackstack.
                                     // TODO : Question : Why Rx is getting called here again and again?
+                                    // TODO : Solution : Check MainFragment -> RxBus.publish
 
                                     INCOME -> addExpenseOperation()
                                     TRANSACTIONLIST -> loadTransactionHistory()
                                     CATEGORIES -> getCategoriesOperation()
                                     EXPENSES -> getExpenseListOperation()
                                 }
-                            }
                 },{
                     onError(it.message)
                 }))
@@ -136,6 +131,7 @@ class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInject
 
     override fun onPause() {
         super.onPause()
+        compositeDisposable.clear();
     }
 
     override fun onStop() {
@@ -213,7 +209,6 @@ class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInject
     }
 
     private fun getCategoriesOperation() {
-        testRxCall = true
         replaceFragment(CategoriesFragment.newInstance(), CategoriesFragment.name)
     }
 
@@ -233,7 +228,6 @@ class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInject
 //                }
 //            }else {
                 this.supportFragmentManager.popBackStack()
-//                this.supportFragmentManager.popBackStackImmediate(CategoriesFragment.name, 1)
 
 //            }
         } else{

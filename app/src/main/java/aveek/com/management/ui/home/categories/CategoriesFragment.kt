@@ -31,21 +31,24 @@ class CategoriesFragment : Fragment(), Injectable {
 
         viewModel = ViewModelProviders.of(this).get(CategoriesViewModel::class.java)
 
-        initBinding()
+        initBinding(inflater,container!!)
 
         mLifecycleRegistry = LifecycleRegistry(this).apply {
             markState(Lifecycle.State.CREATED)
         }
 
-        return inflater.inflate(R.layout.categories_fragment, container, false)
+//        return inflater.inflate(R.layout.categories_fragment, container, false)
+        return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
     }
 
-    private fun initBinding() {
-        binding = DataBindingUtil.setContentView(this.activity as MainActivity, R.layout.categories_fragment)
+    private fun initBinding(inflater : LayoutInflater,
+                            container : ViewGroup) {
+//        binding = DataBindingUtil.setContentView(this.activity as MainActivity, R.layout.categories_fragment)
+        binding = DataBindingUtil.inflate(inflater,R.layout.categories_fragment, container, false)
         binding.viewmodel = viewModel
         binding.lifecycleOwner=this // To enable Live Data object to update the XML on update
     }

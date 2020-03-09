@@ -6,6 +6,7 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.databinding.DataBindingUtil
 import android.os.Bundle
+import android.support.annotation.Nullable
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -40,7 +41,7 @@ class MainFragment : Fragment() {
 
         compositeDisposable = CompositeDisposable()
 
-        initBinding()
+        initBinding(inflater,container!!)
 
         mLifecycleRegistry = LifecycleRegistry(this).apply {
             markState(Lifecycle.State.CREATED)
@@ -84,12 +85,16 @@ class MainFragment : Fragment() {
                 }
             }
         }
-        return inflater.inflate(R.layout.main_fragment, container, false)
+
+//        return inflater.inflate(R.layout.main_fragment, container, false)
+        return binding.root
     }
 
 
-    private fun initBinding() {
-        binding = DataBindingUtil.setContentView(this.activity as MainActivity, R.layout.main_fragment)
+    private fun initBinding(inflater : LayoutInflater,
+                            container : ViewGroup) {
+//        binding = DataBindingUtil.setContentView(this.activity as MainActivity, R.layout.main_fragment)
+        binding = DataBindingUtil.inflate(inflater,R.layout.main_fragment,container, false)
         binding.viewmodel = viewModel
         binding.lifecycleOwner = this // To enable Live Data object to update the XML on update
     }

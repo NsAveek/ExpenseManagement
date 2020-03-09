@@ -17,18 +17,18 @@ import aveek.com.management.ui.home.expense.ExpenseFragment
 import aveek.com.management.ui.home.main.MainFragment
 import aveek.com.management.ui.home.operation.OperationsBottomSheetFragment
 import aveek.com.management.ui.transactions.TransactionActivity
-import aveek.com.management.util.*
+import aveek.com.management.util.EnumDataState
 import aveek.com.management.util.EnumEventOperations.*
+import aveek.com.management.util.EnumEventState
+import aveek.com.management.util.RxBus
 import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
-import io.reactivex.disposables.CompositeDisposable
-import javax.inject.Inject
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-
-
+import javax.inject.Inject
 
 
 class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInjector {
@@ -47,6 +47,8 @@ class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInject
 
     private lateinit var compositeDisposable: CompositeDisposable
 
+    private var testRxCall : Boolean = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
 
         AndroidInjection.inject(this)
@@ -57,6 +59,7 @@ class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInject
 
         compositeDisposable = CompositeDisposable()
 
+
         initBinding()
 
         mLifecycleRegistry=LifecycleRegistry(this).apply {
@@ -65,11 +68,9 @@ class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInject
 
         if(savedInstanceState == null){
             initFragment()
+            initRx()
         }
-
-        initRx()
     }
-
 
     private fun initBinding() {
         binding=DataBindingUtil.setContentView(this, R.layout.activity_main)
@@ -79,13 +80,14 @@ class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInject
 
     private fun initFragment() {
         supportFragmentManager.inTransaction {
+//            add(R.id.fragment_holder, MainFragment.newInstance()).addToBackStack("main")
             add(R.id.fragment_holder, MainFragment.newInstance()).addToBackStack("main")
         }
     }
 
     private fun replaceFragment(fragment: Fragment, name : String){
         this.supportFragmentManager.inTransaction {
-            initBinding()
+//            initBinding()
             replace(R.id.fragment_holder,fragment)
                     .addToBackStack(name)
         }
@@ -93,8 +95,7 @@ class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInject
 
     // Higher Order Function Kotlin Example
     private inline fun FragmentManager.inTransaction(func: FragmentTransaction.() -> FragmentTransaction) {
-        beginTransaction().func().commitAllowingStateLoss()
-
+        beginTransaction().func().commit()
     }
 
     private fun initRx(){
@@ -103,18 +104,22 @@ class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInject
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({ enumEventOperations ->
-                            when(enumEventOperations){
-                                INCOME -> addExpenseOperation()
-                                TRANSACTIONLIST -> loadTransactionHistory()
-                                CATEGORIES -> getCategoriesOperation()
-                                EXPENSES -> getExpenseListOperation()
+                            if (!testRxCall){
+                                when(enumEventOperations){
+
+                                    // TODO : We have noticed that this subscription is getting called every time on popbackstack.
+                                    // TODO : Question : Why Rx is getting called here again and again?
+
+                                    INCOME -> addExpenseOperation()
+                                    TRANSACTIONLIST -> loadTransactionHistory()
+                                    CATEGORIES -> getCategoriesOperation()
+                                    EXPENSES -> getExpenseListOperation()
+                                }
                             }
                 },{
                     onError(it.message)
                 }))
     }
-
-
 
 
     override fun onStart() {
@@ -126,6 +131,7 @@ class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInject
     override fun onResume() {
         super.onResume()
         mLifecycleRegistry.markState(Lifecycle.State.RESUMED)
+
     }
 
     override fun onPause() {
@@ -207,6 +213,7 @@ class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInject
     }
 
     private fun getCategoriesOperation() {
+        testRxCall = true
         replaceFragment(CategoriesFragment.newInstance(), CategoriesFragment.name)
     }
 
@@ -226,6 +233,8 @@ class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInject
 //                }
 //            }else {
                 this.supportFragmentManager.popBackStack()
+//                this.supportFragmentManager.popBackStackImmediate(CategoriesFragment.name, 1)
+
 //            }
         } else{
             super.onBackPressed()

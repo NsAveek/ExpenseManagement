@@ -57,7 +57,6 @@ class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInject
 
         compositeDisposable = CompositeDisposable()
 
-
         initBinding()
 
         mLifecycleRegistry = LifecycleRegistry(this).apply {
@@ -101,11 +100,6 @@ class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInject
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({ enumEventOperations ->
                             when (enumEventOperations) {
-
-                                // TODO : We have noticed that this subscription is getting called every time on popbackstack.
-                                // TODO : Question : Why Rx is getting called here again and again?
-                                // TODO : Solution : Check MainFragment -> RxBus.publish
-
                                 INCOME -> addExpenseOperation()
                                 TRANSACTIONLIST -> loadTransactionHistory()
                                 CATEGORIES -> getCategoriesOperation()

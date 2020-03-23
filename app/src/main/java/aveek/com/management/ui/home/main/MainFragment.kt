@@ -6,19 +6,14 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.databinding.DataBindingUtil
 import android.os.Bundle
-import android.support.annotation.Nullable
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import aveek.com.management.R
 import aveek.com.management.databinding.MainFragmentBinding
-import aveek.com.management.ui.home.MainActivity
 import aveek.com.management.util.EnumEventOperations
-import aveek.com.management.util.EventMessage
 import aveek.com.management.util.RxBus
-import io.reactivex.disposables.CompositeDisposable
-import org.greenrobot.eventbus.EventBus
 
 class MainFragment : Fragment() {
 
@@ -34,17 +29,14 @@ class MainFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(MainFragmentViewModel::class.java)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
 
-
+        viewModel = ViewModelProviders.of(this).get(MainFragmentViewModel::class.java)
 
         initBinding(inflater,container!!)
-
-//        initialValueSetup()
 
         mLifecycleRegistry = LifecycleRegistry(this).apply {
             markState(Lifecycle.State.CREATED)
@@ -54,34 +46,43 @@ class MainFragment : Fragment() {
             this.viewmodel?.let { localViewModel ->
                 with(localViewModel) {
                     balanceText.set("Aveek testing")
-                    creditData.observe(this@MainFragment, Observer {
+                    getCreditData().observe(this@MainFragment, Observer {
                         it?.let {
-                            if (it) {
-                                addExpenseOperation()
+                            it.getContentIfNotHandled()?.let {
+                                if (it) {
+                                    addExpenseOperation()
+                                }
                             }
                         }
                     })
-                    transactionHistory.observe(this@MainFragment, Observer {
+                    getTransactionHistory().observe(this@MainFragment, Observer {
                         it?.let {
                             // TODO : Generate History list
-                            if (it) {
-                                loadTransactionHistory()
+                            it.getContentIfNotHandled()?.let{
+                                if (it) {
+                                    loadTransactionHistory()
+                                }
                             }
                         }
                     })
                     getCategory().observe(this@MainFragment, Observer {
                         it?.let {
                             // TODO : Find out alternatives
+                            // TODO : Involve Hafiz
                             it.getContentIfNotHandled()?.let {
-                                getCategoriesOperation()
+                                if (it) {
+                                    getCategoriesOperation()
+                                }
                             }
                         }
                     })
-                    expense.observe(this@MainFragment, Observer {
+                    getExpense().observe(this@MainFragment, Observer {
                         it?.let {
                             // TODO : Generate Expense
-                            if (it) {
-                                getExpenseListOperation()
+                            it.getContentIfNotHandled()?.let {
+                                if (it) {
+                                    getExpenseListOperation()
+                                }
                             }
                         }
                     })

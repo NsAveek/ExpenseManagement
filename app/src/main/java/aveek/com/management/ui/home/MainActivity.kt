@@ -53,27 +53,27 @@ class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInject
 
         super.onCreate(savedInstanceState)
 
-        viewModel=ViewModelProviders.of(this, viewModelFactory).get(MainActivityViewModel::class.java)
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(MainActivityViewModel::class.java)
 
         compositeDisposable = CompositeDisposable()
 
 
         initBinding()
 
-        mLifecycleRegistry=LifecycleRegistry(this).apply {
+        mLifecycleRegistry = LifecycleRegistry(this).apply {
             markState(Lifecycle.State.CREATED)
         }
 
-        if(savedInstanceState == null){
+        if (savedInstanceState == null) {
             initFragment()
         }
         initRx()
     }
 
     private fun initBinding() {
-        binding=DataBindingUtil.setContentView(this, R.layout.activity_main)
-        binding.viewmodel=viewModel
-        binding.lifecycleOwner=this // To enable Live Data object to update the XML on update
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        binding.viewmodel = viewModel
+        binding.lifecycleOwner = this // To enable Live Data object to update the XML on update
     }
 
     private fun initFragment() {
@@ -82,13 +82,10 @@ class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInject
         }
     }
 
-    private fun replaceFragment(fragment: Fragment, tag : String){
-        val fragmentTag = this.supportFragmentManager.findFragmentByTag(tag)
-        if(fragmentTag == null || !fragmentTag.isAdded){
-            this.supportFragmentManager.inTransaction {
-                replace(R.id.fragment_holder,fragment,tag)
-                        .addToBackStack(tag)
-            }
+    private fun replaceFragment(fragment: Fragment, tag: String) {
+        this.supportFragmentManager.inTransaction {
+            replace(R.id.fragment_holder, fragment, tag)
+                    .addToBackStack(tag)
         }
     }
 
@@ -97,26 +94,26 @@ class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInject
         beginTransaction().func().commit()
     }
 
-    private fun initRx(){
+    private fun initRx() {
         compositeDisposable.add(
                 RxBus.listen()
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({ enumEventOperations ->
-                                when(enumEventOperations){
+                            when (enumEventOperations) {
 
-                                    // TODO : We have noticed that this subscription is getting called every time on popbackstack.
-                                    // TODO : Question : Why Rx is getting called here again and again?
-                                    // TODO : Solution : Check MainFragment -> RxBus.publish
+                                // TODO : We have noticed that this subscription is getting called every time on popbackstack.
+                                // TODO : Question : Why Rx is getting called here again and again?
+                                // TODO : Solution : Check MainFragment -> RxBus.publish
 
-                                    INCOME -> addExpenseOperation()
-                                    TRANSACTIONLIST -> loadTransactionHistory()
-                                    CATEGORIES -> getCategoriesOperation()
-                                    EXPENSES -> getExpenseListOperation()
-                                }
-                },{
-                    onError(it.message)
-                }))
+                                INCOME -> addExpenseOperation()
+                                TRANSACTIONLIST -> loadTransactionHistory()
+                                CATEGORIES -> getCategoriesOperation()
+                                EXPENSES -> getExpenseListOperation()
+                            }
+                        }, {
+                            onError(it.message)
+                        }))
     }
 
 
@@ -169,7 +166,7 @@ class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInject
     //Fragment - Activity - Fragment
     private fun addExpenseOperation() {
         OperationsBottomSheetFragment.getOperationsBottomSheetFragment().apply {
-            isCancelable=false
+            isCancelable = false
             show(supportFragmentManager, null)
             dismissOrProceedEvent.observe(this@MainActivity, Observer {
                 it?.let { pair ->
@@ -182,7 +179,7 @@ class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInject
                                             onSuccess()
                                         }
                                         EnumDataState.ERROR.type -> {
-                                            val throwable=this.second as Throwable
+                                            val throwable = this.second as Throwable
                                             onError(throwable.message)
                                         }
                                         else -> {
@@ -224,16 +221,16 @@ class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInject
 //    }
 
     override fun onBackPressed() {
-        if(supportFragmentManager.backStackEntryCount >0){
+        if (supportFragmentManager.backStackEntryCount > 0) {
 //            if(supportFragmentManager.backStackEntryCount ==1){
 //                supportFragmentManager.inTransaction {
 //                    add(R.id.fragment_holder, MainFragment.newInstance()).addToBackStack("main")
 //                }
 //            }else {
-                this.supportFragmentManager.popBackStack()
+            this.supportFragmentManager.popBackStack()
 
 //            }
-        } else{
+        } else {
             super.onBackPressed()
         }
     }

@@ -8,33 +8,35 @@ import javax.inject.Inject
 
 class MainFragmentViewModel @Inject constructor() : ViewModel(){
 
-    val creditData = MutableLiveData<Boolean>()
-    val transactionHistory = MutableLiveData<Boolean>()
-//    val category = MutableLiveData<Boolean>()
+    private var creditData = MutableLiveData<CustomEventLiveData<Boolean>>()
+    private var transactionHistory = MutableLiveData<CustomEventLiveData<Boolean>>()
     private var category = MutableLiveData<CustomEventLiveData<Boolean>> ()
+    private var expense = MutableLiveData<CustomEventLiveData<Boolean>>()
 
     fun getCategory(): MutableLiveData<CustomEventLiveData<Boolean>> {
         return category
     }
-//    fun setCategory() {
-//        category.value = false
-//    }
-
-    val expense = MutableLiveData<Boolean>()
-
+    fun getTransactionHistory(): MutableLiveData<CustomEventLiveData<Boolean>> {
+        return transactionHistory
+    }
+    fun getCreditData(): MutableLiveData<CustomEventLiveData<Boolean>> {
+        return creditData
+    }
+    fun getExpense(): MutableLiveData<CustomEventLiveData<Boolean>> {
+        return expense
+    }
     val balanceText = ObservableField<String>()
 
     fun clickCreditData(){
-        creditData.value = true
+        creditData.value = CustomEventLiveData(true)
     }
     fun clickTransactionHistory(){
-        transactionHistory.value = true
+        transactionHistory.value = CustomEventLiveData(true)
     }
     fun clickCategory(){
         category.value = CustomEventLiveData(true)
-//        setCategory()
     }
     fun clickExpense(){
-        expense.value = true
+        expense.value = CustomEventLiveData(true)
     }
 }

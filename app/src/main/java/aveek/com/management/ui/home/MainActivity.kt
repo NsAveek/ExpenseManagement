@@ -78,14 +78,17 @@ class MainActivity : NetworkActivity(), LifecycleOwner, HasSupportFragmentInject
 
     private fun initFragment() {
         supportFragmentManager.inTransaction {
-            add(R.id.fragment_holder, MainFragment.newInstance()).addToBackStack("main")
+            add(R.id.fragment_holder, MainFragment.newInstance(), "main")
         }
     }
 
-    private fun replaceFragment(fragment: Fragment, name : String){
-        this.supportFragmentManager.inTransaction {
-            replace(R.id.fragment_holder,fragment)
-                    .addToBackStack(name)
+    private fun replaceFragment(fragment: Fragment, tag : String){
+        val fragmentTag = this.supportFragmentManager.findFragmentByTag(tag)
+        if(fragmentTag == null || !fragmentTag.isAdded){
+            this.supportFragmentManager.inTransaction {
+                replace(R.id.fragment_holder,fragment,tag)
+                        .addToBackStack(tag)
+            }
         }
     }
 

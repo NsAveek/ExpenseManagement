@@ -32,16 +32,19 @@ class MainFragment : Fragment() {
 
     private lateinit var mLifecycleRegistry: LifecycleRegistry
 
-//    private lateinit var compositeDisposable: CompositeDisposable
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel = ViewModelProviders.of(this).get(MainFragmentViewModel::class.java)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
 
-        viewModel = ViewModelProviders.of(this).get(MainFragmentViewModel::class.java)
 
-//        compositeDisposable = CompositeDisposable()
 
         initBinding(inflater,container!!)
+
+//        initialValueSetup()
 
         mLifecycleRegistry = LifecycleRegistry(this).apply {
             markState(Lifecycle.State.CREATED)
@@ -66,10 +69,10 @@ class MainFragment : Fragment() {
                             }
                         }
                     })
-                    category.observe(this@MainFragment, Observer {
+                    getCategory().observe(this@MainFragment, Observer {
                         it?.let {
-                            // TODO : Generate Category
-                            if (it) {
+                            // TODO : Find out alternatives
+                            it.getContentIfNotHandled()?.let {
                                 getCategoriesOperation()
                             }
                         }
@@ -93,7 +96,6 @@ class MainFragment : Fragment() {
 
     private fun initBinding(inflater : LayoutInflater,
                             container : ViewGroup) {
-//        binding = DataBindingUtil.setContentView(this.activity as MainActivity, R.layout.main_fragment)
         binding = DataBindingUtil.inflate(inflater,R.layout.main_fragment,container, false)
         binding.viewmodel = viewModel
         binding.lifecycleOwner = this // To enable Live Data object to update the XML on update

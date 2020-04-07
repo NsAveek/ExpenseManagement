@@ -11,4 +11,9 @@
         <item>#088da5</item>
         <item>#d0ccfe</item>
     </string-array>
+
+    <string name="off">OFF</string>
+    <string name="low">1</string>
+    <string name="medium">2</string>
+    <string name="high">3</string>
 </resources>

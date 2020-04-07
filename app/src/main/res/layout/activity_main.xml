@@ -17,7 +17,7 @@
         <!-- Transaction Expense Transaction Category Balance -->
 
         <TextView
-
+            android:id="@+id/customViewLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@={viewmodel.balanceText}"
@@ -26,6 +26,16 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Aveek testing"/>
+        <aveek.com.management.customview.DialView
+            android:id="@+id/dialView"
+            android:layout_width="@dimen/fan_dimen"
+            android:layout_height="@dimen/fan_dimen"
+            app:layout_constraintTop_toBottomOf="@+id/customViewLabel"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginLeft="@dimen/default_margin"
+            android:layout_marginRight="@dimen/default_margin"
+            android:layout_marginTop="@dimen/default_margin" />
 
         <ImageView
             android:id="@+id/incomeImage"

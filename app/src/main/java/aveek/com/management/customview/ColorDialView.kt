@@ -26,6 +26,7 @@ class ColorDialView @JvmOverloads constructor(context: Context,
 
     private var colors: ArrayList<Int> = arrayListOf(Color.RED, Color.YELLOW, Color.BLUE, Color.GREEN, Color.DKGRAY, Color.CYAN, Color.MAGENTA, Color.BLACK)
     private var dialDrawable: Drawable? = null
+    private var noColorDrawable : Drawable? = null
     private var dialDiameter = dptoDisplayPixels(100)
     private val paint : Paint = Paint().also {
         it.color = Color.BLUE
@@ -59,6 +60,10 @@ class ColorDialView @JvmOverloads constructor(context: Context,
             it?.bounds = getCenteredBounds(dialDiameter)
             it?.setTint(Color.DKGRAY)
         }
+        noColorDrawable = context.getDrawable(R.drawable.ic_no_color).also {
+            it?.bounds = getCenteredBounds(tickSize.toInt(),2f)
+        }
+        colors.add(0,Color.TRANSPARENT)
         angleBetweenColors = 360f/ colors.size
         refreshValues()
     }
@@ -91,8 +96,14 @@ class ColorDialView @JvmOverloads constructor(context: Context,
     override fun onDraw(canvas: Canvas) {
         val saveCount = canvas.save()
         colors.forEachIndexed{i, color ->
-            paint.color = colors[i]
-            canvas.drawCircle(centerHorizontal,tickPositionVertical,tickSize,paint)
+            if(i==0){
+                canvas.translate(centerHorizontal,tickPositionVertical)
+                noColorDrawable?.draw(canvas)
+                canvas.translate(-centerHorizontal,-tickPositionVertical)
+            }else{
+                paint.color = colors[i]
+                canvas.drawCircle(centerHorizontal,tickPositionVertical,tickSize,paint)
+            }
             canvas.rotate(angleBetweenColors,centerHorizontal,centerVertical)
         }
         canvas.restoreToCount(saveCount)

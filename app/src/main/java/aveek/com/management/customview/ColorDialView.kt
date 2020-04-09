@@ -26,16 +26,16 @@ class ColorDialView @JvmOverloads constructor(context: Context,
 
     private var colors: ArrayList<Int> = arrayListOf(Color.RED, Color.YELLOW, Color.BLUE, Color.GREEN, Color.DKGRAY, Color.CYAN, Color.MAGENTA, Color.BLACK)
     private var dialDrawable: Drawable? = null
-    private var noColorDrawable : Drawable? = null
+    private var noColorDrawable: Drawable? = null
     private var dialDiameter = dptoDisplayPixels(100)
-    private val paint : Paint = Paint().also {
+    private val paint: Paint = Paint().also {
         it.color = Color.BLUE
         it.isAntiAlias = true
     }
 
     // Pre computed Horizontal values
-    private var horizontalSize = 0f
-    private var verticalSize = 0f
+    private var horizontalSize = 0f // total width of the view
+    private var verticalSize = 0f // total height of the view
 
     // Pre computed Vertical values
     private var centerHorizontal = 0f
@@ -55,34 +55,54 @@ class ColorDialView @JvmOverloads constructor(context: Context,
 
     // automatically will get called when the view initialized
     init {
+        val typedArray = context.obtainStyledAttributes(attrs, R.styleable.ColorDialView)
+        try {
+            val customColors = typedArray.getTextArray(R.styleable.ColorDialView_colors)?.map {
+                Color.parseColor(it.toString())
+            } as ArrayList<Int>?
+            customColors?.let {
+                colors = customColors
+            }
+            dialDiameter = typedArray.getDimension(R.styleable.ColorDialView_dialDiameter,
+                    dptoDisplayPixels(100).toFloat()).toInt()
+            extraPadding = typedArray.getDimension(R.styleable.ColorDialView_tickPadding,
+                    dptoDisplayPixels(30).toFloat()).toInt()
+            tickSize = typedArray.getDimension(R.styleable.ColorDialView_tickRadius,
+                    dptoDisplayPixels(10).toFloat())
+
+
+        } finally {
+            typedArray.recycle()
+        }
+
         // Take a drawable and customize it accordingly
         dialDrawable = context.getDrawable(R.drawable.ic_dial).also {
             it?.bounds = getCenteredBounds(dialDiameter)
             it?.setTint(Color.DKGRAY)
         }
         noColorDrawable = context.getDrawable(R.drawable.ic_no_color).also {
-            it?.bounds = getCenteredBounds(tickSize.toInt(),2f)
+            it?.bounds = getCenteredBounds(tickSize.toInt(), 2f)
         }
-        colors.add(0,Color.TRANSPARENT)
-        angleBetweenColors = 360f/ colors.size
+        colors.add(0, Color.TRANSPARENT)
+        angleBetweenColors = 360f / colors.size
         refreshValues()
     }
 
     // Method to compute, and call it when necessary
     // compute positions
     private fun refreshValues() {
-        horizontalSize = paddingLeft+ dialDiameter.toFloat() + paddingRight + (extraPadding*2)
-        verticalSize = paddingTop+ dialDiameter.toFloat() + paddingBottom + (extraPadding*2)
+        horizontalSize = paddingLeft + dialDiameter.toFloat() + paddingRight + (extraPadding * 2)
+        verticalSize = paddingTop + dialDiameter.toFloat() + paddingBottom + (extraPadding * 2)
 
-        centerHorizontal = totalLeftPadding+(horizontalSize - totalLeftPadding - totalRightPadding) / 2f
-        centerVertical = totalTopPadding + (verticalSize -totalTopPadding - totalBottomPadding)/ 2f
+        centerHorizontal = totalLeftPadding + (horizontalSize - totalLeftPadding - totalRightPadding) / 2f
+        centerVertical = totalTopPadding + (verticalSize - totalTopPadding - totalBottomPadding) / 2f
 
-        totalLeftPadding = (paddingLeft+extraPadding).toFloat()
-        totalRightPadding = (paddingRight+extraPadding).toFloat()
-        totalTopPadding = (paddingTop+extraPadding).toFloat()
-        totalBottomPadding = (paddingBottom+extraPadding).toFloat()
+        totalLeftPadding = (paddingLeft + extraPadding).toFloat()
+        totalRightPadding = (paddingRight + extraPadding).toFloat()
+        totalTopPadding = (paddingTop + extraPadding).toFloat()
+        totalBottomPadding = (paddingBottom + extraPadding).toFloat()
 
-        tickPositionVertical = paddingTop + extraPadding/2f
+        tickPositionVertical = paddingTop + extraPadding / 2f
 
 
     }
@@ -95,21 +115,27 @@ class ColorDialView @JvmOverloads constructor(context: Context,
 
     override fun onDraw(canvas: Canvas) {
         val saveCount = canvas.save()
-        colors.forEachIndexed{i, color ->
-            if(i==0){
-                canvas.translate(centerHorizontal,tickPositionVertical)
+        colors.forEachIndexed { i, color ->
+            if (i == 0) {
+                canvas.translate(centerHorizontal, tickPositionVertical)
                 noColorDrawable?.draw(canvas)
-                canvas.translate(-centerHorizontal,-tickPositionVertical)
-            }else{
+                canvas.translate(-centerHorizontal, -tickPositionVertical)
+            } else {
                 paint.color = colors[i]
-                canvas.drawCircle(centerHorizontal,tickPositionVertical,tickSize,paint)
+                canvas.drawCircle(centerHorizontal, tickPositionVertical, tickSize, paint)
             }
-            canvas.rotate(angleBetweenColors,centerHorizontal,centerVertical)
+            canvas.rotate(angleBetweenColors, centerHorizontal, centerVertical)
         }
         canvas.restoreToCount(saveCount)
         canvas.translate(centerHorizontal, centerVertical)
         dialDrawable?.draw(canvas)
 
+    }
+
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        val width = resolveSizeAndState(horizontalSize.toInt(), widthMeasureSpec, 0)
+        val height = resolveSizeAndState(verticalSize.toInt(), heightMeasureSpec, 0)
+        setMeasuredDimension(width, height) // this is the size we want for our view
     }
 
     private fun dptoDisplayPixels(value: Int): Int {

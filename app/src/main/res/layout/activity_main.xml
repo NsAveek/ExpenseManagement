@@ -26,16 +26,28 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Aveek testing"/>
-        <aveek.com.management.customview.DialView
-            android:id="@+id/dialView"
-            android:layout_width="@dimen/fan_dimen"
-            android:layout_height="@dimen/fan_dimen"
+<!--        <aveek.com.management.customview.DialView-->
+<!--            android:id="@+id/dialView"-->
+<!--            android:layout_width="@dimen/fan_dimen"-->
+<!--            android:layout_height="@dimen/fan_dimen"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/customViewLabel"-->
+<!--            app:layout_constraintLeft_toLeftOf="parent"-->
+<!--            app:layout_constraintRight_toRightOf="parent"-->
+<!--            android:layout_marginLeft="@dimen/default_margin"-->
+<!--            android:layout_marginRight="@dimen/default_margin"-->
+<!--            android:layout_marginTop="@dimen/default_margin" />-->
+
+        <aveek.com.management.customview.ColorDialView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="60dp"
+            android:paddingBottom="40dp"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/customViewLabel"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            android:layout_marginLeft="@dimen/default_margin"
-            android:layout_marginRight="@dimen/default_margin"
-            android:layout_marginTop="@dimen/default_margin" />
+            app:layout_constraintVertical_bias="0.18" />
 
         <ImageView
             android:id="@+id/incomeImage"

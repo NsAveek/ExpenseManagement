@@ -10,8 +10,11 @@ import android.os.Build
 import android.support.annotation.RequiresApi
 import android.util.AttributeSet
 import android.util.TypedValue
+import android.view.MotionEvent
+import android.view.MotionEvent.*
 import android.view.View
 import aveek.com.management.R
+import kotlin.math.roundToInt
 
 
 /**
@@ -45,12 +48,23 @@ class ColorDialView @JvmOverloads constructor(context: Context,
     private var extraPadding = dptoDisplayPixels(30)
     private var tickSize = dptoDisplayPixels(10).toFloat()
     private var angleBetweenColors = 0f
+    private var scale : Float = 1f
+    private var tickSizeScaled = tickSize*scale
 
     // Pre computed padding values
     private var totalLeftPadding = 0f
     private var totalRightPadding = 0f
     private var totalTopPadding = 0f
     private var totalBottomPadding = 0f
+    private var scaleToFit = false
+
+    // View interaction values
+    private var dragStartX = 0f
+    private var dragStartY = 0f
+    private var dragging = false
+    private var snapAngle = 0f
+    private var selectedPosition = 0
+
 
 
     // automatically will get called when the view initialized
@@ -69,6 +83,7 @@ class ColorDialView @JvmOverloads constructor(context: Context,
                     dptoDisplayPixels(30).toFloat()).toInt()
             tickSize = typedArray.getDimension(R.styleable.ColorDialView_tickRadius,
                     dptoDisplayPixels(10).toFloat())
+            scaleToFit = typedArray.getBoolean(R.styleable.ColorDialView_scaleToFit,false)
 
 
         } finally {
@@ -85,25 +100,26 @@ class ColorDialView @JvmOverloads constructor(context: Context,
         }
         colors.add(0, Color.TRANSPARENT)
         angleBetweenColors = 360f / colors.size
-        refreshValues()
+        refreshValues(true)
     }
 
     // Method to compute, and call it when necessary
     // compute positions
-    private fun refreshValues() {
-        horizontalSize = paddingLeft + dialDiameter.toFloat() + paddingRight + (extraPadding * 2)
-        verticalSize = paddingTop + dialDiameter.toFloat() + paddingBottom + (extraPadding * 2)
+    private fun refreshValues(withScale : Boolean) {
+        val localScale = if (withScale) scale else 1f
+        horizontalSize = paddingLeft + dialDiameter * localScale + paddingRight + (extraPadding * localScale* 2)
+        verticalSize = paddingTop + dialDiameter * localScale + paddingBottom + (extraPadding * localScale* 2)
 
         centerHorizontal = totalLeftPadding + (horizontalSize - totalLeftPadding - totalRightPadding) / 2f
         centerVertical = totalTopPadding + (verticalSize - totalTopPadding - totalBottomPadding) / 2f
 
-        totalLeftPadding = (paddingLeft + extraPadding).toFloat()
-        totalRightPadding = (paddingRight + extraPadding).toFloat()
-        totalTopPadding = (paddingTop + extraPadding).toFloat()
-        totalBottomPadding = (paddingBottom + extraPadding).toFloat()
+        totalLeftPadding = (paddingLeft + extraPadding * localScale)
+        totalRightPadding = (paddingRight + extraPadding * localScale)
+        totalTopPadding = (paddingTop + extraPadding * localScale)
+        totalBottomPadding = (paddingBottom + extraPadding * localScale)
 
-        tickPositionVertical = paddingTop + extraPadding / 2f
-
+        tickPositionVertical = paddingTop + extraPadding * localScale / 2f
+        tickSizeScaled = tickSize * localScale
 
     }
 
@@ -122,24 +138,121 @@ class ColorDialView @JvmOverloads constructor(context: Context,
                 canvas.translate(-centerHorizontal, -tickPositionVertical)
             } else {
                 paint.color = colors[i]
-                canvas.drawCircle(centerHorizontal, tickPositionVertical, tickSize, paint)
+                canvas.drawCircle(centerHorizontal, tickPositionVertical, tickSizeScaled, paint)
             }
             canvas.rotate(angleBetweenColors, centerHorizontal, centerVertical)
         }
         canvas.restoreToCount(saveCount)
+        canvas.rotate(snapAngle, centerHorizontal, centerVertical)
         canvas.translate(centerHorizontal, centerVertical)
         dialDrawable?.draw(canvas)
 
     }
 
+
+    // region Listener to change the color and broadcast
+    var selectedColorValue : Int = android.R.color.transparent
+    set(value) {
+        val index = colors.indexOf(value)
+        selectedPosition = if(index == 1) 0 else index
+        snapAngle = (selectedPosition * angleBetweenColors).toFloat()
+        invalidate()
+    }
+    private var listeners : ArrayList<(Int) -> Unit> = arrayListOf()
+    fun addListener(function : (Int) -> Unit){
+        listeners.add(function)
+    }
+
+    private fun broadcastColorChange(){
+        listeners.forEach{
+            if(selectedPosition > colors.size -1){
+                it(colors[0])
+            }else{
+                it(colors[selectedPosition])
+            }
+        }
+    }
+
+    //endregion
+
+
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        val width = resolveSizeAndState(horizontalSize.toInt(), widthMeasureSpec, 0)
-        val height = resolveSizeAndState(verticalSize.toInt(), heightMeasureSpec, 0)
-        setMeasuredDimension(width, height) // this is the size we want for our view
+        if (scaleToFit){
+            refreshValues(false)
+            val specWidth = MeasureSpec.getSize(widthMeasureSpec)
+            val specHeight = MeasureSpec.getSize(heightMeasureSpec)
+            val workingWidth = specWidth - paddingLeft - paddingRight
+            val workingHeight = specHeight - paddingTop - paddingBottom
+            scale = if (workingWidth < workingHeight){
+                (workingWidth)/(horizontalSize - paddingLeft - paddingRight)
+            }else{
+                (workingHeight)/(verticalSize - paddingTop - paddingBottom)
+            }
+            dialDrawable?.let {
+                it.bounds = getCenteredBounds((dialDiameter * scale).toInt())
+            }
+            noColorDrawable?.let {
+                it.bounds = getCenteredBounds((tickSize * scale).toInt())
+            }
+            val width = resolveSizeAndState((horizontalSize * scale).toInt(),widthMeasureSpec, 0)
+            val height = resolveSizeAndState((verticalSize * scale).toInt(),heightMeasureSpec, 0)
+
+            refreshValues(true)
+            setMeasuredDimension(width,height)
+
+        }else{
+            val width = resolveSizeAndState(horizontalSize.toInt(), widthMeasureSpec, 0)
+            val height = resolveSizeAndState(verticalSize.toInt(), heightMeasureSpec, 0)
+            setMeasuredDimension(width, height) // this is the size we want for our view
+        }
     }
 
     private fun dptoDisplayPixels(value: Int): Int {
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, value.toFloat(), context.resources.displayMetrics).toInt()
+    }
+
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        dragStartX = event.x
+        dragStartY = event.y
+        if (event.action == ACTION_DOWN || event.action == ACTION_MOVE){
+            dragging = true
+            // figure out snap angle
+            if (getSnapAngle(dragStartX,dragStartY)){
+                broadcastColorChange()
+                invalidate()
+            }
+        }
+        if (event.action == ACTION_UP){
+            dragging = false
+        }
+        return true
+    }
+    private fun getSnapAngle(x : Float, y : Float) : Boolean{
+        var dragAngle = cartesianToPolar(x-horizontalSize/2 , (verticalSize - y) -verticalSize/2)
+        val nearest : Int = (getNearestAngle(dragAngle)/angleBetweenColors).roundToInt()
+        val newAngle :Float = nearest * angleBetweenColors
+        var shouldUpdate = false
+        if (newAngle != snapAngle){
+            shouldUpdate = true
+            selectedPosition =  nearest
+        }
+        snapAngle = newAngle
+        return shouldUpdate
+
+    }
+
+    private fun getNearestAngle(dragAngle : Float) : Float{
+        var adjustedAngle = (360-dragAngle) + 90
+        while (adjustedAngle >360) adjustedAngle-= 360
+        return adjustedAngle
+    }
+    private fun cartesianToPolar (x : Float, y : Float) : Float{
+        val angle = Math.toDegrees((Math.atan2(y.toDouble(),x.toDouble()))).toFloat()
+        return when(angle){
+            in 0..180 -> angle
+            in -180..0 -> angle +360
+            else -> angle
+        }
     }
 
 }

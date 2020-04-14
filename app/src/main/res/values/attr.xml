@@ -11,4 +11,9 @@
         <attr name="dialDiameter" format="dimension"></attr>
         <attr name="scaleToFit" format="boolean"></attr>
     </declare-styleable>
+
+    <declare-styleable name="CustomButtonShapeView">
+        <attr name="scaleToFitXY" format="boolean"/>
+        <attr name="color" format="color"/>
+    </declare-styleable>
 </resources>

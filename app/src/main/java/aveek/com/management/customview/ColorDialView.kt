@@ -227,6 +227,7 @@ class ColorDialView @JvmOverloads constructor(context: Context,
         }
         return true
     }
+
     private fun getSnapAngle(x : Float, y : Float) : Boolean{
         var dragAngle = cartesianToPolar(x-horizontalSize/2 , (verticalSize - y) -verticalSize/2)
         val nearest : Int = (getNearestAngle(dragAngle)/angleBetweenColors).roundToInt()
@@ -246,6 +247,7 @@ class ColorDialView @JvmOverloads constructor(context: Context,
         while (adjustedAngle >360) adjustedAngle-= 360
         return adjustedAngle
     }
+
     private fun cartesianToPolar (x : Float, y : Float) : Float{
         val angle = Math.toDegrees((Math.atan2(y.toDouble(),x.toDouble()))).toFloat()
         return when(angle){

@@ -1,17 +1,11 @@
 package aveek.com.management.customview
 
 import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
-import android.graphics.Rect
-import android.graphics.drawable.Drawable
+import android.graphics.*
 import android.os.Build
-import android.support.annotation.AttrRes
 import android.support.annotation.RequiresApi
-import android.support.annotation.StyleRes
-import android.text.TextPaint
 import android.util.AttributeSet
+import android.util.TypedValue
 import android.view.View
 import aveek.com.management.R
 
@@ -33,11 +27,15 @@ class CustomButtonShapeView @JvmOverloads constructor(context: Context,
     private var rectWidth = 0
     private var rectHeight = 0
     private var rectShape : Rect? = null
+    private var ovalShape : RectF? = null
     private var paint = Paint()?.also {
         it.isAntiAlias = true // Smoothing Surface
     }
     private var totalWidth = 0
     private var totalHeight = 0
+
+    private var extraPadding = dptoDisplayPixels(30)
+    private var totalLeftPadding = 0
     // endregion
 
     // TODO : 1. Take the screen width
@@ -52,31 +50,44 @@ class CustomButtonShapeView @JvmOverloads constructor(context: Context,
     // TODO : 8. screen height/2 = rect height
     // TODO : 9. screen height/2 = rect height
 
+    private var horizontalSize = 0f
+    private var centerHorizontal = 0f
+
     init {
         val typedArray = context.obtainStyledAttributes(attributeSet, R.styleable.CustomButtonShapeView)
         try {
             // Set color selected by the user
-            paint.color = typedArray.getColor(R.styleable.CustomButtonShapeView_color,Color.RED)
+            paint.color = typedArray.getColor(R.styleable.CustomButtonShapeView_color,Color.RED) // Default color is RED
+
         } finally {
             typedArray.recycle() // recycle attributes for memory management
         }
+        totalLeftPadding = extraPadding + paddingLeft
+        refreshValues()
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         rectWidth = MeasureSpec.getSize(widthMeasureSpec)/2
         rectHeight = MeasureSpec.getSize(heightMeasureSpec)/2
 
-        totalWidth = paddingLeft + rectWidth + paddingRight
+        totalWidth =  rectWidth + totalLeftPadding
         totalHeight = paddingTop + rectHeight + paddingBottom
 
-        rectShape = Rect(-totalWidth,-totalHeight, totalWidth, totalHeight)
+        refreshValues()
+
+//        rectShape = Rect(-totalWidth,-totalHeight, totalWidth, totalHeight)
+        rectShape = Rect(-horizontalSize.toInt(),-totalHeight, horizontalSize.toInt(), totalHeight)
 
         this.setMeasuredDimension(rectWidth,rectHeight)
     }
     override fun onDraw(canvas: Canvas) {
 
-        canvas.drawRect(rectShape,paint)
+        ovalShape = RectF(-horizontalSize/2,-totalHeight/2.toFloat(),horizontalSize/2,totalHeight/2.toFloat())
+        drawRectangle(canvas)
+        drawArc(canvas)
+        invalidate()
         canvas.save()
+
 
 //        super.onDraw(canvas)
 //
@@ -104,6 +115,41 @@ class CustomButtonShapeView @JvmOverloads constructor(context: Context,
 //                    paddingLeft + contentWidth, paddingTop + contentHeight)
 //            it.draw(canvas)
 //        }
+    }
+
+
+
+    private fun drawRectangle(canvas: Canvas) {
+        canvas.drawRect(rectShape,paint)
+//        canvas.save()
+    }
+
+    private fun drawArc(canvas: Canvas) {
+
+        val ovalPaint = Paint().also {
+            it.color = Color.YELLOW
+            it.style = Paint.Style.FILL
+            it.isAntiAlias = true
+        }
+        val startAngle = 90F
+        val endAngle = 0F
+
+        var sweepAngle = endAngle-startAngle
+        if (sweepAngle <0){
+            sweepAngle += 360
+        }
+//        canvas.drawOval(ovalShape,ovalPaint)
+        canvas.drawArc(ovalShape, startAngle, sweepAngle, false,ovalPaint )
+        canvas.save()
+
+    }
+
+    private fun refreshValues(){
+        horizontalSize = paddingLeft + rectWidth + paddingRight + (extraPadding * 2).toFloat()
+    }
+
+    private fun dptoDisplayPixels(value: Int): Int {
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, value.toFloat(), context.resources.displayMetrics).toInt()
     }
 
 

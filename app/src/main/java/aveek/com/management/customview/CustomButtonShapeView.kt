@@ -51,6 +51,8 @@ class CustomButtonShapeView @JvmOverloads constructor(context: Context,
 
     private var arcPosition = 0
     private lateinit var arcDirection : ArcDirection
+    private var startAngle = 90f
+    private var endAngle = 0f
 
     // endregion
 
@@ -76,8 +78,8 @@ class CustomButtonShapeView @JvmOverloads constructor(context: Context,
             // Set color selected by the user
             paint.color = typedArray.getColor(R.styleable.CustomButtonShapeView_color,Color.RED) // Default color is RED
 
-            arcDirection = ArcDirection.values()[typedArray.getInt(R.styleable.CustomButtonShapeView_color,0)]
-//            arcPosition = arcDirection.g
+            arcDirection = ArcDirection.values()[typedArray.getInt(R.styleable.CustomButtonShapeView_arcDirection,0)]
+
 
         } finally {
             typedArray.recycle() // recycle attributes for memory management
@@ -106,16 +108,24 @@ class CustomButtonShapeView @JvmOverloads constructor(context: Context,
 
         when(arcDirection){
             ArcDirection.TOP_LEFT -> {
-
+                ovalShape = RectF(-(rectWidth - rectWidth/2f),-(rectHeight/2f),rectWidth/2f,rectHeight/2f)
+                startAngle = 0f
+                endAngle = 90f
             }
             ArcDirection.TOP_RIGHT -> {
-
+                ovalShape = RectF(rectWidth/2f,-(rectHeight/2f),rectWidth + ((rectWidth/2))*1f,rectHeight/2f)
+                startAngle = 90f
+                endAngle = 0f
             }
             ArcDirection.BOTTOM_LEFT -> {
-
+                ovalShape = RectF(-(rectWidth - rectWidth/2f),rectHeight/2f,rectWidth/2f,(rectHeight + (rectHeight/2f)))
+                startAngle = 90f
+                endAngle = 0f
             }
             ArcDirection.BOTTOM_RIGHT -> {
                 ovalShape = RectF(rectWidth/2f,rectHeight/2f,rectWidth + ((rectWidth/2))*1f,(rectHeight + (rectHeight/2f)))
+                startAngle = 90f
+                endAngle = 0f
             }
         }
 
@@ -179,15 +189,13 @@ class CustomButtonShapeView @JvmOverloads constructor(context: Context,
 
         val ovalPaint = Paint().also {
             it.color = Color.YELLOW
-            it.style = Paint.Style.FILL_AND_STROKE
+            it.style = Paint.Style.FILL
             it.isAntiAlias = true
         }
 
 
-        val startAngle = 90F
-        val endAngle = 0F
-
         var sweepAngle = endAngle-startAngle
+
         if (sweepAngle <0){
             sweepAngle += 360
         }
@@ -195,7 +203,7 @@ class CustomButtonShapeView @JvmOverloads constructor(context: Context,
 //        canvas.drawPath(mPath,ovalPaint)
 //        canvas.drawOval(ovalShape,ovalPaint)
 
-        canvas.drawArc(ovalShape, startAngle, sweepAngle, false,ovalPaint )
+        canvas.drawArc(ovalShape, startAngle, sweepAngle, true,ovalPaint )
         invalidate()
 //        canvas.save()
 

@@ -17,24 +17,57 @@
         <!-- Transaction Expense Transaction Category Balance -->
 
         <aveek.com.management.customview.CustomButtonShapeView
+            android:id="@+id/customButtonShapeView5"
             android:layout_width="320dp"
             android:layout_height="320dp"
-            app:layout_constraintBottom_toTopOf="@+id/colorDialView"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:color="@color/colorPrimary"/>
-        <TextView
-            android:id="@+id/customViewLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@={viewmodel.balanceText}"
+            app:arcDirection="TOP_RIGHT"
+            app:color="@color/colorPrimary"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="Aveek testing"/>
-<!--        <aveek.com.management.customview.DialView-->
+            app:layout_constraintEnd_toEndOf="@+id/customButtonShapeView3"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/customButtonShapeView"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <aveek.com.management.customview.CustomButtonShapeView
+            android:id="@+id/customButtonShapeView"
+            android:layout_width="320dp"
+            android:layout_height="320dp"
+            app:arcDirection="BOTTOM_RIGHT"
+            app:color="@color/colorPrimary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <aveek.com.management.customview.CustomButtonShapeView
+            android:id="@+id/customButtonShapeView4"
+            android:layout_width="320dp"
+            android:layout_height="320dp"
+            app:arcDirection="BOTTOM_LEFT"
+            app:color="@color/colorPrimary"
+            app:layout_constraintBottom_toTopOf="@+id/customButtonShapeView3"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/customButtonShapeView"
+            app:layout_constraintTop_toTopOf="@+id/customButtonShapeView"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <aveek.com.management.customview.CustomButtonShapeView
+            android:id="@+id/customButtonShapeView3"
+            android:layout_width="320dp"
+            android:layout_height="320dp"
+            app:arcDirection="TOP_LEFT"
+            app:color="@color/colorPrimary"
+            app:layout_constraintBottom_toBottomOf="@+id/customButtonShapeView5"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/customButtonShapeView"
+            app:layout_constraintTop_toTopOf="@+id/customButtonShapeView5"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <!--        <aveek.com.management.customview.DialView-->
 <!--            android:id="@+id/dialView"-->
 <!--            android:layout_width="@dimen/fan_dimen"-->
 <!--            android:layout_height="@dimen/fan_dimen"-->
@@ -45,6 +78,17 @@
 <!--            android:layout_marginRight="@dimen/default_margin"-->
 <!--            android:layout_marginTop="@dimen/default_margin" />-->
 
+        <TextView
+            android:id="@+id/customViewLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@={viewmodel.balanceText}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Aveek testing" />
+
         <aveek.com.management.customview.ColorDialView
             android:id="@+id/colorDialView"
             android:layout_width="wrap_content"
@@ -54,9 +98,10 @@
             android:paddingBottom="40dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.578"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/customViewLabel"
-            app:layout_constraintVertical_bias="0.18" />
+            app:layout_constraintVertical_bias="0.439" />
 
         <ImageView
             android:id="@+id/incomeImage"

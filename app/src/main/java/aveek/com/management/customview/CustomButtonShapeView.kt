@@ -5,9 +5,11 @@ import android.graphics.*
 import android.os.Build
 import android.support.annotation.RequiresApi
 import android.util.AttributeSet
+import android.util.Log
 import android.util.TypedValue
 import android.view.View
 import aveek.com.management.R
+
 
 /**
  * A custom view class with rectangular shape .
@@ -16,6 +18,9 @@ import aveek.com.management.R
  * 2 = Top Right
  * 3 = Bottom Left
  * 4 = Bottom Right
+ *
+ * Y increases going downwards
+ * X increases going to the right
  */
 @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
 class CustomButtonShapeView @JvmOverloads constructor(context: Context,
@@ -28,6 +33,7 @@ class CustomButtonShapeView @JvmOverloads constructor(context: Context,
     private var rectHeight = 0
     private var rectShape : Rect? = null
     private var ovalShape : RectF? = null
+    private var mPath : Path ? = null
     private var paint = Paint()?.also {
         it.isAntiAlias = true // Smoothing Surface
     }
@@ -36,6 +42,11 @@ class CustomButtonShapeView @JvmOverloads constructor(context: Context,
 
     private var extraPadding = dptoDisplayPixels(30)
     private var totalLeftPadding = 0
+    private var totalRightPadding = 0
+    private var totalTopPadding = 0
+    private var totalBottomPadding = 0
+
+
     // endregion
 
     // TODO : 1. Take the screen width
@@ -51,7 +62,7 @@ class CustomButtonShapeView @JvmOverloads constructor(context: Context,
     // TODO : 9. screen height/2 = rect height
 
     private var horizontalSize = 0f
-    private var centerHorizontal = 0f
+    private var verticalSize = 0f
 
     init {
         val typedArray = context.obtainStyledAttributes(attributeSet, R.styleable.CustomButtonShapeView)
@@ -63,6 +74,8 @@ class CustomButtonShapeView @JvmOverloads constructor(context: Context,
             typedArray.recycle() // recycle attributes for memory management
         }
         totalLeftPadding = extraPadding + paddingLeft
+        totalRightPadding = extraPadding + paddingRight
+//        mPath = Path()
         refreshValues()
     }
 
@@ -70,22 +83,31 @@ class CustomButtonShapeView @JvmOverloads constructor(context: Context,
         rectWidth = MeasureSpec.getSize(widthMeasureSpec)/2
         rectHeight = MeasureSpec.getSize(heightMeasureSpec)/2
 
-        totalWidth =  rectWidth + totalLeftPadding
+        totalWidth =  paddingLeft + rectWidth + paddingRight
         totalHeight = paddingTop + rectHeight + paddingBottom
 
         refreshValues()
 
-//        rectShape = Rect(-totalWidth,-totalHeight, totalWidth, totalHeight)
-        rectShape = Rect(-horizontalSize.toInt(),-totalHeight, horizontalSize.toInt(), totalHeight)
+        rectShape = Rect(-horizontalSize.toInt(),-verticalSize.toInt(), horizontalSize.toInt(), verticalSize.toInt())
+
+        Log.i("co - ordinates", "Left : "+ rectShape!!.left +
+                "Right : " + rectShape!!.right +
+                "Top : " + rectShape!!.top +
+                "Bottom : " + rectShape!!.bottom)
+
+        ovalShape = RectF(rectWidth/2f,rectHeight/2f,rectWidth + ((rectWidth/2))*1f,(rectHeight + (rectHeight/2f)))
+        // Left = Distance of the LEFT of the New View from the LEFT of the Parent View
+        // Top =  Distance of the TOP of the New View from the TOP of the Parent View
+        // Right = Distance of the RIGHT of the New View from the LEFT of the Parent View
+        // Bottom = Distance of the BOTTOM of the New View from the TOP of the Parent View
 
         this.setMeasuredDimension(rectWidth,rectHeight)
     }
     override fun onDraw(canvas: Canvas) {
 
-        ovalShape = RectF(-horizontalSize/2,-totalHeight/2.toFloat(),horizontalSize/2,totalHeight/2.toFloat())
+
         drawRectangle(canvas)
         drawArc(canvas)
-        invalidate()
         canvas.save()
 
 
@@ -121,16 +143,23 @@ class CustomButtonShapeView @JvmOverloads constructor(context: Context,
 
     private fun drawRectangle(canvas: Canvas) {
         canvas.drawRect(rectShape,paint)
+        invalidate()
 //        canvas.save()
+    }
+
+    private fun getTopLeftCornerRoundedArc(top: Float, left: Float): RectF? {
+        ovalShape!!.set(left, top, left, top)
+        return ovalShape
     }
 
     private fun drawArc(canvas: Canvas) {
 
         val ovalPaint = Paint().also {
             it.color = Color.YELLOW
-            it.style = Paint.Style.FILL
+            it.style = Paint.Style.FILL_AND_STROKE
             it.isAntiAlias = true
         }
+
         val startAngle = 90F
         val endAngle = 0F
 
@@ -138,14 +167,19 @@ class CustomButtonShapeView @JvmOverloads constructor(context: Context,
         if (sweepAngle <0){
             sweepAngle += 360
         }
+//        mPath!!.arcTo(getTopLeftCornerRoundedArc(500f,200f),startAngle,sweepAngle)
+//        canvas.drawPath(mPath,ovalPaint)
 //        canvas.drawOval(ovalShape,ovalPaint)
+
         canvas.drawArc(ovalShape, startAngle, sweepAngle, false,ovalPaint )
-        canvas.save()
+        invalidate()
+//        canvas.save()
 
     }
 
     private fun refreshValues(){
         horizontalSize = paddingLeft + rectWidth + paddingRight + (extraPadding * 2).toFloat()
+        verticalSize = paddingTop + rectHeight + paddingBottom + (extraPadding * 2).toFloat()
     }
 
     private fun dptoDisplayPixels(value: Int): Int {

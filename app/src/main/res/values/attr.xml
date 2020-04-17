@@ -15,5 +15,11 @@
     <declare-styleable name="CustomButtonShapeView">
         <attr name="scaleToFitXY" format="boolean"/>
         <attr name="color" format="color"/>
+        <attr name="arcDirection" format="enum">
+            <enum name="TOP_LEFT">0</enum>
+            <enum name="TOP_RIGHT">1</enum>
+            <enum name="BOTTOM_LEFT">2</enum>
+            <enum name="BOTTOM_RIGHT">3</enum>
+        </attr>
     </declare-styleable>
 </resources>

@@ -22,6 +22,10 @@ import aveek.com.management.R
  * Y increases going downwards
  * X increases going to the right
  */
+
+enum class ArcDirection {
+    TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RIGHT
+}
 @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
 class CustomButtonShapeView @JvmOverloads constructor(context: Context,
                                                       attributeSet: AttributeSet,
@@ -33,7 +37,6 @@ class CustomButtonShapeView @JvmOverloads constructor(context: Context,
     private var rectHeight = 0
     private var rectShape : Rect? = null
     private var ovalShape : RectF? = null
-    private var mPath : Path ? = null
     private var paint = Paint()?.also {
         it.isAntiAlias = true // Smoothing Surface
     }
@@ -46,6 +49,8 @@ class CustomButtonShapeView @JvmOverloads constructor(context: Context,
     private var totalTopPadding = 0
     private var totalBottomPadding = 0
 
+    private var arcPosition = 0
+    private lateinit var arcDirection : ArcDirection
 
     // endregion
 
@@ -66,16 +71,20 @@ class CustomButtonShapeView @JvmOverloads constructor(context: Context,
 
     init {
         val typedArray = context.obtainStyledAttributes(attributeSet, R.styleable.CustomButtonShapeView)
+
         try {
             // Set color selected by the user
             paint.color = typedArray.getColor(R.styleable.CustomButtonShapeView_color,Color.RED) // Default color is RED
+
+            arcDirection = ArcDirection.values()[typedArray.getInt(R.styleable.CustomButtonShapeView_color,0)]
+//            arcPosition = arcDirection.g
 
         } finally {
             typedArray.recycle() // recycle attributes for memory management
         }
         totalLeftPadding = extraPadding + paddingLeft
         totalRightPadding = extraPadding + paddingRight
-//        mPath = Path()
+
         refreshValues()
     }
 
@@ -95,7 +104,21 @@ class CustomButtonShapeView @JvmOverloads constructor(context: Context,
                 "Top : " + rectShape!!.top +
                 "Bottom : " + rectShape!!.bottom)
 
-        ovalShape = RectF(rectWidth/2f,rectHeight/2f,rectWidth + ((rectWidth/2))*1f,(rectHeight + (rectHeight/2f)))
+        when(arcDirection){
+            ArcDirection.TOP_LEFT -> {
+
+            }
+            ArcDirection.TOP_RIGHT -> {
+
+            }
+            ArcDirection.BOTTOM_LEFT -> {
+
+            }
+            ArcDirection.BOTTOM_RIGHT -> {
+                ovalShape = RectF(rectWidth/2f,rectHeight/2f,rectWidth + ((rectWidth/2))*1f,(rectHeight + (rectHeight/2f)))
+            }
+        }
+
         // Left = Distance of the LEFT of the New View from the LEFT of the Parent View
         // Top =  Distance of the TOP of the New View from the TOP of the Parent View
         // Right = Distance of the RIGHT of the New View from the LEFT of the Parent View
@@ -159,6 +182,7 @@ class CustomButtonShapeView @JvmOverloads constructor(context: Context,
             it.style = Paint.Style.FILL_AND_STROKE
             it.isAntiAlias = true
         }
+
 
         val startAngle = 90F
         val endAngle = 0F

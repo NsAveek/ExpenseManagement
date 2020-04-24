@@ -12,60 +12,57 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.home.MainActivity">
+        tools:context=".ui.home.MainActivity"
+        android:background="@color/white">
 
         <!-- Transaction Expense Transaction Category Balance -->
 
         <aveek.com.management.customview.CustomButtonShapeView
             android:id="@+id/customButtonShapeView5"
-            android:layout_width="320dp"
-            android:layout_height="320dp"
-            app:arcDirection="TOP_RIGHT"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             app:color="@color/colorPrimary"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/customButtonShapeView3"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/customButtonShapeView"
-            app:layout_constraintVertical_bias="0.0" />
-
-        <aveek.com.management.customview.CustomButtonShapeView
-            android:id="@+id/customButtonShapeView"
-            android:layout_width="320dp"
-            android:layout_height="320dp"
-            app:arcDirection="BOTTOM_RIGHT"
-            app:color="@color/colorPrimary"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <aveek.com.management.customview.CustomButtonShapeView
-            android:id="@+id/customButtonShapeView4"
-            android:layout_width="320dp"
-            android:layout_height="320dp"
-            app:arcDirection="BOTTOM_LEFT"
-            app:color="@color/colorPrimary"
-            app:layout_constraintBottom_toTopOf="@+id/customButtonShapeView3"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/customButtonShapeView"
-            app:layout_constraintTop_toTopOf="@+id/customButtonShapeView"
-            app:layout_constraintVertical_bias="0.0" />
+<!--        <aveek.com.management.customview.CustomButtonShapeView-->
+<!--            android:id="@+id/customButtonShapeView"-->
+<!--            android:layout_width="320dp"-->
+<!--            android:layout_height="320dp"-->
+<!--            app:arcDirection="BOTTOM_RIGHT"-->
+<!--            app:color="@color/colorPrimary"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintHorizontal_bias="0.0"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent" />-->
 
-        <aveek.com.management.customview.CustomButtonShapeView
-            android:id="@+id/customButtonShapeView3"
-            android:layout_width="320dp"
-            android:layout_height="320dp"
-            app:arcDirection="TOP_LEFT"
-            app:color="@color/colorPrimary"
-            app:layout_constraintBottom_toBottomOf="@+id/customButtonShapeView5"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/customButtonShapeView"
-            app:layout_constraintTop_toTopOf="@+id/customButtonShapeView5"
-            app:layout_constraintVertical_bias="0.0" />
+<!--        <aveek.com.management.customview.CustomButtonShapeView-->
+<!--            android:id="@+id/customButtonShapeView4"-->
+<!--            android:layout_width="320dp"-->
+<!--            android:layout_height="320dp"-->
+<!--            app:arcDirection="BOTTOM_LEFT"-->
+<!--            app:color="@color/colorPrimary"-->
+<!--            app:layout_constraintBottom_toTopOf="@+id/customButtonShapeView3"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintHorizontal_bias="0.0"-->
+<!--            app:layout_constraintStart_toEndOf="@+id/customButtonShapeView"-->
+<!--            app:layout_constraintTop_toTopOf="@+id/customButtonShapeView"-->
+<!--            app:layout_constraintVertical_bias="0.0" />-->
+
+<!--        <aveek.com.management.customview.CustomButtonShapeView-->
+<!--            android:id="@+id/customButtonShapeView3"-->
+<!--            android:layout_width="320dp"-->
+<!--            android:layout_height="320dp"-->
+<!--            app:arcDirection="TOP_LEFT"-->
+<!--            app:color="@color/colorPrimary"-->
+<!--            app:layout_constraintBottom_toBottomOf="@+id/customButtonShapeView5"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintHorizontal_bias="0.0"-->
+<!--            app:layout_constraintStart_toEndOf="@+id/customButtonShapeView"-->
+<!--            app:layout_constraintTop_toTopOf="@+id/customButtonShapeView5"-->
+<!--            app:layout_constraintVertical_bias="0.0" />-->
 
         <!--        <aveek.com.management.customview.DialView-->
 <!--            android:id="@+id/dialView"-->

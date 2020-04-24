@@ -5,11 +5,9 @@ import android.graphics.*
 import android.os.Build
 import android.support.annotation.RequiresApi
 import android.util.AttributeSet
-import android.util.Log
 import android.util.TypedValue
 import android.view.View
 import aveek.com.management.R
-
 
 /**
  * A custom view class with rectangular shape .
@@ -23,9 +21,6 @@ import aveek.com.management.R
  * X increases going to the right
  */
 
-enum class ArcDirection {
-    TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RIGHT
-}
 @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
 class CustomButtonShapeView @JvmOverloads constructor(context: Context,
                                                       attributeSet: AttributeSet,
@@ -35,40 +30,44 @@ class CustomButtonShapeView @JvmOverloads constructor(context: Context,
     // region Member Variable
     private var rectWidth = 0
     private var rectHeight = 0
-    private var rectShape : Rect? = null
-    private var ovalShape : RectF? = null
+    private var rectShapeTopLeft : Rect? = null
+    private var rectShapeTopRight : Rect? = null
+    private var rectShapeBottomLeft : Rect? = null
+    private var rectShapeBottomRight : Rect? = null
+
+    private var ovalShapeTopLeft : RectF? = null
+    private var ovalShapeTopRight : RectF? = null
+    private var ovalShapeBottomLeft : RectF? = null
+    private var ovalShapeBottomRight : RectF? = null
+
+    private var innerOvalShape : RectF? = null
     private var paint = Paint()?.also {
         it.isAntiAlias = true // Smoothing Surface
     }
     private var totalWidth = 0
     private var totalHeight = 0
 
-    private var extraPadding = dptoDisplayPixels(30)
+    private var extraPadding = dptoDisplayPixels(10)
     private var totalLeftPadding = 0
     private var totalRightPadding = 0
     private var totalTopPadding = 0
     private var totalBottomPadding = 0
-
-    private var arcPosition = 0
-    private lateinit var arcDirection : ArcDirection
     private var startAngle = 90f
     private var endAngle = 0f
+    private var centerTop = 0f
+    private var centerLeft = 0f
+    private var centerRight = 0f
+    private var centerBottom = 0f
+    private var innerCenterTop = 0f
+    private var innerCenterLeft = 0f
+    private var innerCenterRight = 0f
+    private var innerCenterBottom = 0f
+
 
     // endregion
 
-    // TODO : 1. Take the screen width
-    // TODO : 2. Take the screen height
-    // TODO : 3. screen width/2 = rect width
-    // TODO : 4. screen height/2 = rect height
-
-    // TODO : 5. set color selected by the developer in XML
-
-    // TODO : 6. screen height/2 = rect height
-    // TODO : 7. screen height/2 = rect height
-    // TODO : 8. screen height/2 = rect height
-    // TODO : 9. screen height/2 = rect height
-
     private var horizontalSize = 0f
+
     private var verticalSize = 0f
 
     init {
@@ -78,57 +77,48 @@ class CustomButtonShapeView @JvmOverloads constructor(context: Context,
             // Set color selected by the user
             paint.color = typedArray.getColor(R.styleable.CustomButtonShapeView_color,Color.RED) // Default color is RED
 
-            arcDirection = ArcDirection.values()[typedArray.getInt(R.styleable.CustomButtonShapeView_arcDirection,0)]
-
-
         } finally {
             typedArray.recycle() // recycle attributes for memory management
         }
         totalLeftPadding = extraPadding + paddingLeft
         totalRightPadding = extraPadding + paddingRight
+        totalTopPadding = extraPadding + paddingTop
+        totalBottomPadding = extraPadding + paddingBottom
 
         refreshValues()
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        rectWidth = MeasureSpec.getSize(widthMeasureSpec)/2
-        rectHeight = MeasureSpec.getSize(heightMeasureSpec)/2
+        rectWidth = MeasureSpec.getSize(widthMeasureSpec)
+        rectHeight = MeasureSpec.getSize(heightMeasureSpec)
 
         totalWidth =  paddingLeft + rectWidth + paddingRight
         totalHeight = paddingTop + rectHeight + paddingBottom
 
         refreshValues()
 
-        rectShape = Rect(-horizontalSize.toInt(),-verticalSize.toInt(), horizontalSize.toInt(), verticalSize.toInt())
+//        rectShape = Rect(-horizontalSize.toInt(),-verticalSize.toInt(), horizontalSize.toInt(), verticalSize.toInt())
 
-        Log.i("co - ordinates", "Left : "+ rectShape!!.left +
-                "Right : " + rectShape!!.right +
-                "Top : " + rectShape!!.top +
-                "Bottom : " + rectShape!!.bottom)
+//        rectShape = Rect(totalLeftPadding,totalTopPadding, rectWidth-totalRightPadding, rectHeight-totalBottomPadding)
 
-        when(arcDirection){
-            ArcDirection.TOP_LEFT -> {
-                ovalShape = RectF(-(rectWidth - rectWidth/2f),-(rectHeight/2f),rectWidth/2f,rectHeight/2f)
-                startAngle = 0f
-                endAngle = 90f
-            }
-            ArcDirection.TOP_RIGHT -> {
-                ovalShape = RectF(rectWidth/2f,-(rectHeight/2f),rectWidth + ((rectWidth/2))*1f,rectHeight/2f)
-                startAngle = 90f
-                endAngle = 0f
-            }
-            ArcDirection.BOTTOM_LEFT -> {
-                ovalShape = RectF(-(rectWidth - rectWidth/2f),rectHeight/2f,rectWidth/2f,(rectHeight + (rectHeight/2f)))
-                startAngle = 90f
-                endAngle = 0f
-            }
-            ArcDirection.BOTTOM_RIGHT -> {
-                ovalShape = RectF(rectWidth/2f,rectHeight/2f,rectWidth + ((rectWidth/2))*1f,(rectHeight + (rectHeight/2f)))
-                startAngle = 90f
-                endAngle = 0f
-            }
-        }
 
+        rectShapeTopLeft = Rect(totalLeftPadding,totalTopPadding, rectWidth/2-totalRightPadding, rectHeight/2-totalBottomPadding)
+        rectShapeTopRight = Rect(totalLeftPadding+ rectShapeTopLeft!!.right,totalTopPadding, rectWidth-totalRightPadding, rectHeight/2-totalBottomPadding)
+        rectShapeBottomLeft = Rect(totalLeftPadding,rectShapeTopLeft!!.bottom+ totalBottomPadding, rectShapeTopLeft!!.right, rectHeight-totalBottomPadding)
+        rectShapeBottomRight = Rect(rectShapeTopRight!!.left,rectShapeBottomLeft!!.top, rectShapeTopRight!!.right, rectShapeBottomLeft!!.bottom)
+
+
+//        ovalShapeTopLeft = RectF(centerLeft,centerTop,rectWidth/2f+ rectWidth/4f,rectHeight/2f+rectHeight/4f)
+//
+//        ovalShapeTopRight = RectF(rectWidth/2f,centerTop,rectWidth/2f - rectWidth/4f,rectHeight/2f+rectHeight/4f)
+
+        ovalShapeBottomLeft = RectF(centerLeft,rectHeight/2f+rectHeight/4f,rectWidth/2f,rectHeight/2f)
+//        ovalShapeBottomRight = RectF(centerLeft,centerTop,centerRight,centerBottom)
+
+
+
+
+        innerOvalShape = RectF(innerCenterLeft,innerCenterTop,innerCenterRight,innerCenterBottom)
         // Left = Distance of the LEFT of the New View from the LEFT of the Parent View
         // Top =  Distance of the TOP of the New View from the TOP of the Parent View
         // Right = Distance of the RIGHT of the New View from the LEFT of the Parent View
@@ -136,131 +126,119 @@ class CustomButtonShapeView @JvmOverloads constructor(context: Context,
 
         this.setMeasuredDimension(rectWidth,rectHeight)
     }
+
     override fun onDraw(canvas: Canvas) {
 
 
-        drawRectangle(canvas)
-        drawArc(canvas)
+        drawRectangle(canvas,rectShapeTopLeft)
+//        drawArc(canvas, ovalShapeTopLeft)
+        drawRectangle(canvas,rectShapeTopRight)
+//        drawArc(canvas,ovalShapeTopRight)
+        drawRectangle(canvas,rectShapeBottomLeft)
+//        drawArc(canvas,ovalShapeBottomLeft)
+        drawRectangle(canvas,rectShapeBottomRight)
+//        drawArc(canvas,ovalShapeBottomRight)
+
+
+//        drawOvalTopLeft(canvas, ovalShapeTopLeft)
+//        drawInnerOval(canvas)
+//        drawCircle(canvas)
         canvas.save()
-
-
-//        super.onDraw(canvas)
-//
-//        // TODO: consider storing these as member variables to reduce
-//        // allocations per draw cycle.
-//        val paddingLeft = paddingLeft
-//        val paddingTop = paddingTop
-//        val paddingRight = paddingRight
-//        val paddingBottom = paddingBottom
-//
-//        val contentWidth = width - paddingLeft - paddingRight
-//        val contentHeight = height - paddingTop - paddingBottom
-//
-//        exampleString?.let {
-//            // Draw the text.
-//            canvas.drawText(it,
-//                    paddingLeft + (contentWidth - textWidth) / 2,
-//                    paddingTop + (contentHeight + textHeight) / 2,
-//                    textPaint)
-//        }
-//
-//        // Draw the example drawable on top of the text.
-//        exampleDrawable?.let {
-//            it.setBounds(paddingLeft, paddingTop,
-//                    paddingLeft + contentWidth, paddingTop + contentHeight)
-//            it.draw(canvas)
-//        }
     }
 
-
-
-    private fun drawRectangle(canvas: Canvas) {
-        canvas.drawRect(rectShape,paint)
-        invalidate()
-//        canvas.save()
-    }
-
-    private fun getTopLeftCornerRoundedArc(top: Float, left: Float): RectF? {
-        ovalShape!!.set(left, top, left, top)
-        return ovalShape
-    }
-
-    private fun drawArc(canvas: Canvas) {
-
+    private fun drawInnerOval(canvas: Canvas) {
         val ovalPaint = Paint().also {
             it.color = Color.YELLOW
             it.style = Paint.Style.FILL
             it.isAntiAlias = true
         }
+        canvas.drawOval(innerOvalShape,ovalPaint)
+    }
 
+    private fun drawOvalTopLeft(canvas: Canvas, ovalShapeTopLeft : RectF?) {
+        val ovalPaint = Paint().also {
+            it.color = Color.WHITE
+            it.style = Paint.Style.FILL
+            it.isAntiAlias = true
+        }
+        canvas.drawOval(ovalShapeTopLeft,ovalPaint)
+    }
+
+    private fun drawRectangle(canvas: Canvas, rectShape: Rect?) {
+//        canvas.drawRect(rectShape,paint)
+        canvas.drawRect(rectShape,paint)
+        invalidate()
+    }
+
+    private fun drawCircle(canvas: Canvas) {
+        val circlePaint = Paint().also {
+            it.color = Color.YELLOW
+            it.style = Paint.Style.FILL
+            it.isAntiAlias = true
+        }
+        canvas.drawCircle(rectWidth.toFloat(),rectHeight.toFloat(),100f,circlePaint)
+    }
+
+    private fun drawArc(canvas: Canvas, ovalShape: RectF?) {
+
+        val ovalPaint = Paint().also {
+            it.color = Color.WHITE
+            it.style = Paint.Style.FILL
+            it.isAntiAlias = true
+        }
+
+        when(ovalShape){
+            ovalShapeTopLeft -> {
+                startAngle = 180f
+                endAngle = 270f
+            }
+            ovalShapeTopRight -> {
+                startAngle = 270f
+                endAngle = 0f
+            }
+            ovalShapeBottomLeft -> {
+                startAngle = 90f
+                endAngle = 180f
+            }
+            ovalShapeBottomRight -> {
+                startAngle = 90f
+                endAngle = 0f
+            }
+        }
 
         var sweepAngle = endAngle-startAngle
 
         if (sweepAngle <0){
             sweepAngle += 360
         }
-//        mPath!!.arcTo(getTopLeftCornerRoundedArc(500f,200f),startAngle,sweepAngle)
-//        canvas.drawPath(mPath,ovalPaint)
-//        canvas.drawOval(ovalShape,ovalPaint)
 
+        // Both way works
         canvas.drawArc(ovalShape, startAngle, sweepAngle, true,ovalPaint )
+//        val arcPath : Path = Path().also {
+//            it.arcTo(ovalShape,startAngle,sweepAngle)
+//
+//        }
+//        canvas.drawPath(arcPath,ovalPaint)
         invalidate()
-//        canvas.save()
-
     }
 
     private fun refreshValues(){
-        horizontalSize = paddingLeft + rectWidth + paddingRight + (extraPadding * 2).toFloat()
-        verticalSize = paddingTop + rectHeight + paddingBottom + (extraPadding * 2).toFloat()
+        centerLeft = rectWidth/4f
+        centerTop = rectHeight/4f
+        centerRight = rectWidth/4f + rectWidth/2f
+        centerBottom = rectHeight/4f+rectHeight/2f
+
+        // For Oval shape the calculation is with 2:3 ratio
+        innerCenterLeft = centerLeft + rectWidth/88f
+        innerCenterTop = centerTop + rectHeight/132f
+        innerCenterRight = centerRight - rectWidth/88f
+        innerCenterBottom = centerBottom - rectHeight/132f
+
+        horizontalSize = (totalLeftPadding + rectWidth + totalRightPadding).toFloat()
+        verticalSize = (totalTopPadding + rectHeight + totalBottomPadding).toFloat()
     }
 
     private fun dptoDisplayPixels(value: Int): Int {
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, value.toFloat(), context.resources.displayMetrics).toInt()
     }
-
-
-//    private fun init(attrs: AttributeSet?, defStyle: Int) {
-//        // Load attributes
-//        val a = context.obtainStyledAttributes(
-//                attrs, R.styleable.CustomButtonShapeView, defStyle, 0)
-//
-//        _exampleString = a.getString(
-//                R.styleable.CustomButtonShapeView_exampleString)
-//        _exampleColor = a.getColor(
-//                R.styleable.CustomButtonShapeView_exampleColor,
-//                exampleColor)
-//        // Use getDimensionPixelSize or getDimensionPixelOffset when dealing with
-//        // values that should fall on pixel boundaries.
-//        _exampleDimension = a.getDimension(
-//                R.styleable.CustomButtonShapeView_exampleDimension,
-//                exampleDimension)
-//
-//        if (a.hasValue(R.styleable.CustomButtonShapeView_exampleDrawable)) {
-//            exampleDrawable = a.getDrawable(
-//                    R.styleable.CustomButtonShapeView_exampleDrawable)
-//            exampleDrawable?.callback = this
-//        }
-//
-//        a.recycle()
-//
-//        // Set up a default TextPaint object
-//        textPaint = TextPaint().apply {
-//            flags = Paint.ANTI_ALIAS_FLAG
-//            textAlign = Paint.Align.LEFT
-//        }
-//
-//        // Update TextPaint and text measurements from attributes
-//        invalidateTextPaintAndMeasurements()
-//    }
-
-//    private fun invalidateTextPaintAndMeasurements() {
-//        textPaint?.let {
-//            it.textSize = exampleDimension
-//            it.color = exampleColor
-//            textWidth = it.measureText(exampleString)
-//            textHeight = it.fontMetrics.bottom
-//        }
-//    }
-
-
 }

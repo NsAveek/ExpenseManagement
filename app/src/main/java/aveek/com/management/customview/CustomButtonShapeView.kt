@@ -102,17 +102,17 @@ class CustomButtonShapeView @JvmOverloads constructor(context: Context,
 //        rectShape = Rect(totalLeftPadding,totalTopPadding, rectWidth-totalRightPadding, rectHeight-totalBottomPadding)
 
 
-        rectShapeTopLeft = Rect(totalLeftPadding,totalTopPadding, rectWidth/2-totalRightPadding, rectHeight/2-totalBottomPadding)
-        rectShapeTopRight = Rect(totalLeftPadding+ rectShapeTopLeft!!.right,totalTopPadding, rectWidth-totalRightPadding, rectHeight/2-totalBottomPadding)
+        rectShapeTopLeft = Rect(totalLeftPadding,totalTopPadding, rectWidth/2-totalRightPadding/2, rectHeight/2-totalBottomPadding/2)
+        rectShapeTopRight = Rect(totalLeftPadding + rectShapeTopLeft!!.right,totalTopPadding, rectWidth-totalRightPadding, rectShapeTopLeft!!.bottom)
         rectShapeBottomLeft = Rect(totalLeftPadding,rectShapeTopLeft!!.bottom+ totalBottomPadding, rectShapeTopLeft!!.right, rectHeight-totalBottomPadding)
         rectShapeBottomRight = Rect(rectShapeTopRight!!.left,rectShapeBottomLeft!!.top, rectShapeTopRight!!.right, rectShapeBottomLeft!!.bottom)
 
 
-//        ovalShapeTopLeft = RectF(centerLeft,centerTop,rectWidth/2f+ rectWidth/4f,rectHeight/2f+rectHeight/4f)
+        ovalShapeTopLeft = RectF(centerLeft,centerTop,rectWidth/2f+ rectWidth/4f,rectHeight/2f+rectHeight/4f)
 //
 //        ovalShapeTopRight = RectF(rectWidth/2f,centerTop,rectWidth/2f - rectWidth/4f,rectHeight/2f+rectHeight/4f)
 
-        ovalShapeBottomLeft = RectF(centerLeft,rectHeight/2f+rectHeight/4f,rectWidth/2f,rectHeight/2f)
+//        ovalShapeBottomLeft = RectF(centerLeft,rectHeight/2f+rectHeight/4f,rectWidth/2f+ rectWidth/4f,rectHeight/2f+ rectHeight/4f)
 //        ovalShapeBottomRight = RectF(centerLeft,centerTop,centerRight,centerBottom)
 
 
@@ -138,10 +138,8 @@ class CustomButtonShapeView @JvmOverloads constructor(context: Context,
 //        drawArc(canvas,ovalShapeBottomLeft)
         drawRectangle(canvas,rectShapeBottomRight)
 //        drawArc(canvas,ovalShapeBottomRight)
-
-
-//        drawOvalTopLeft(canvas, ovalShapeTopLeft)
-//        drawInnerOval(canvas)
+        drawOvalTopLeft(canvas,ovalShapeTopLeft)
+        drawInnerOval(canvas)
 //        drawCircle(canvas)
         canvas.save()
     }
